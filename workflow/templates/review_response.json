@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "review_response",
+  "language": "zh-CN",
+  "reviewer_role": "只读反对线程：研究设计审稿人 + 实验公平性审计员 + RA 申请材料反对者",
+  "evidence_checked": [
+    "changed_files",
+    "key_artifacts",
+    "verification_commands",
+    "workflow/stages.json"
+  ],
+  "阻塞项": [],
+  "主要问题": [
+    "校验脚本只能保证结构完整，不能替代真实阅读和研究判断。"
+  ],
+  "次要问题": [
+    "后续真实 diagnostic 还需要记录 tokenizer revision、dtype、seed 和 parser version。"
+  ],
+  "必修复": [
+    "下一阶段实现真实 base diagnostic runner，并保存 raw outputs 与完整 run metadata。"
+  ],
+  "评分表": {
+    "test_leakage_split_contamination": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "流程已把泄漏审查设为硬门槛，但本阶段未运行新数据实验。"
+    },
+    "matched_random_baseline_fairness": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "流程已要求 overlap 和公平性审计，但本阶段未运行 baseline。"
+    },
+    "selection_signal_validity": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "流程要求 error-type-aware 或 ablation，能阻止只靠 metadata 的强声明。"
+    },
+    "result_overclaiming_risk": {
+      "score": 3,
+      "max_score": 3,
+      "reason": "明确禁止把 simulated、smoke 或流程升级写成真实模型效果。"
+    },
+    "reproducibility": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "有模板和校验命令，但真实实验 runner 仍待实现。"
+    },
+    "professor_facing_wording": {
+      "score": 2,
+      "max_score": 2,
+      "reason": "流程要求区分已完成、进行中和禁止声明。"
+    },
+    "actionability": {
+      "score": 2,
+      "max_score": 2,
+      "reason": "每个问题都能转成下一阶段修复任务。"
+    }
+  },
+  "total_score": 15,
+  "阶段判定": {
+    "verdict": "pass",
+    "allow_next_stage": true,
+    "allowed_next_stage": "real_base_diagnostic",
+    "结论说明": "流程升级可以通过；下一阶段只能做探索性真实 base diagnostic，不能做 LoRA 或 selection 效果声明。"
+  }
+}

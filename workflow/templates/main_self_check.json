@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "kind": "main_self_check",
+  "language": "zh-CN",
+  "stage_id": "workflow_upgrade",
+  "hard_blockers": [],
+  "scores": {
+    "goal_alignment": {
+      "score": 2,
+      "max_score": 2,
+      "reason": "本阶段只固化流程和评价体系，没有推进真实模型结论。"
+    },
+    "evidence_completeness": {
+      "score": 3,
+      "max_score": 3,
+      "reason": "新增中文文档、JSON 模板、校验脚本和测试。"
+    },
+    "reproducibility": {
+      "score": 3,
+      "max_score": 3,
+      "reason": "提供固定校验命令和 pytest 验证。"
+    },
+    "leakage_safety": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "本阶段不接触数据选择或测试集，但把泄漏审查写入硬门槛。"
+    },
+    "baseline_fairness": {
+      "score": 2,
+      "max_score": 3,
+      "reason": "本阶段不运行 baseline，但把 overlap 和公平性审计写入后续门槛。"
+    },
+    "claim_discipline": {
+      "score": 3,
+      "max_score": 3,
+      "reason": "明确禁止把流程升级、smoke 或 simulated placeholder 写成真实结果。"
+    },
+    "next_step_clarity": {
+      "score": 2,
+      "max_score": 2,
+      "reason": "下一阶段固定为 real_base_diagnostic，且规定所需产物和禁止声明。"
+    }
+  },
+  "total_score": 17,
+  "pass": true,
+  "next_action": "发送结构化审查包给审核线程，用中文 rubric 复审流程升级。"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "stage_plan",
+  "language": "zh-CN",
+  "stage_id": "workflow_upgrade",
+  "stage_goal": "把主线程推进、主线程自评、审核线程审查和阶段门槛固化为中文流程、JSON 模板、校验脚本和测试。",
+  "planned_changes": [
+    {
+      "area": "workflow_docs",
+      "description": "新增中文主线程 SOP 和审核线程 rubric。"
+    },
+    {
+      "area": "workflow_validation",
+      "description": "新增机器可读阶段配置、审查包模板和校验脚本。"
+    }
+  ],
+  "required_artifacts": [
+    "docs/workflow_cn.md",
+    "docs/adversarial_review_rubric_cn.md",
+    "workflow/stages.json",
+    "scripts/validate_workflow_packet.py",
+    "tests/test_workflow_validation.py"
+  ],
+  "required_checks": [
+    "python scripts/validate_workflow_packet.py --kind review_package --path workflow/templates/review_package.json",
+    "python scripts/validate_workflow_packet.py --kind review_response --path workflow/templates/review_response.json",
+    "pytest -q"
+  ],
+  "forbidden_claims": [
+    "不能声称流程升级证明 error-guided selection 有效。",
+    "不能声称真实 base diagnostic 或 LoRA 对比已经完成。"
+  ],
+  "stop_conditions": [
+    "模板无法通过校验。",
+    "审核线程指出 blocker。",
+    "pytest 失败。"
+  ],
+  "next_stage_if_passed": "real_base_diagnostic"
+}

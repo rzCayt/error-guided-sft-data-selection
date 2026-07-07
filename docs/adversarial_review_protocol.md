@@ -12,6 +12,8 @@ Thread id from the first implementation round:
 
 The reviewer is read-only. It must not edit files, commit, push, train models, or change repo state.
 
+The reviewer must output Chinese for all explanations and verdicts. The authoritative rubric is `docs/adversarial_review_rubric_cn.md`, and structured review responses should match `workflow/templates/review_response.json`.
+
 ## Review Cadence
 
 Use stage-level review. Send a review package after each major stage, not after every small command.
@@ -29,21 +31,10 @@ Stages:
 
 ## Review Package Template
 
-```text
-Stage goal:
-- ...
+Use `workflow/templates/review_package.json` as the required package shape. Validate it before sending:
 
-Changed files or planned changes:
-- ...
-
-Key outputs:
-- ...
-
-Known weaknesses:
-- ...
-
-Please return:
-Blockers / Major concerns / Minor concerns / Required fixes / Verdict.
+```powershell
+python scripts/validate_workflow_packet.py --kind review_package --path workflow/templates/review_package.json
 ```
 
 ## Required Reviewer Verdicts
@@ -55,6 +46,15 @@ Every review must explicitly cover:
 - whether the selection signal is more than task/difficulty resampling
 - placeholder or result-overclaiming risk
 - whether the project can proceed to the next stage
+
+Every review must also include:
+
+- `阻塞项`
+- `主要问题`
+- `次要问题`
+- `必修复`
+- `评分表`
+- `阶段判定`
 
 ## First Review Summary
 

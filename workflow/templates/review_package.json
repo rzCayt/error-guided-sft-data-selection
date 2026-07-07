@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "kind": "review_package",
+  "language": "zh-CN",
+  "stage_id": "workflow_upgrade",
+  "stage_goal": "把主线程与审核线程的工作流、评分标准、审查包和自动校验固定下来，避免后续推进错方向或做无意义推进。",
+  "stage_plan": "workflow/templates/stage_plan.json",
+  "main_self_check": "workflow/templates/main_self_check.json",
+  "changed_files": [
+    "docs/workflow_cn.md",
+    "docs/adversarial_review_rubric_cn.md",
+    "docs/workflow.md",
+    "docs/adversarial_review_protocol.md",
+    "workflow/stages.json",
+    "workflow/templates/stage_plan.json",
+    "workflow/templates/review_package.json",
+    "workflow/templates/review_response.json",
+    "workflow/templates/main_self_check.json",
+    "scripts/validate_workflow_packet.py",
+    "tests/test_workflow_validation.py"
+  ],
+  "key_artifacts": [
+    {
+      "path": "workflow/stages.json",
+      "evidence_type": "stage_gate_config",
+      "status": "present"
+    },
+    {
+      "path": "workflow/templates/review_response.json",
+      "evidence_type": "reviewer_output_template",
+      "status": "present"
+    },
+    {
+      "path": "docs/adversarial_review_rubric_cn.md",
+      "evidence_type": "review_rubric",
+      "status": "present"
+    }
+  ],
+  "verification_commands": [
+    {
+      "command": "python scripts/validate_workflow_packet.py --kind review_package --path workflow/templates/review_package.json",
+      "status": "passed",
+      "output_summary": "结构化审查包模板通过校验。"
+    },
+    {
+      "command": "python scripts/validate_workflow_packet.py --kind review_response --path workflow/templates/review_response.json",
+      "status": "passed",
+      "output_summary": "中文审核输出模板通过校验。"
+    },
+    {
+      "command": "pytest -q",
+      "status": "passed",
+      "output_summary": "全部测试通过。"
+    }
+  ],
+  "key_results": [
+    "审核线程输出语言固定为中文。",
+    "主线程必须先自评再发送结构化审查包。",
+    "结构化审查包必须覆盖 workflow/stages.json 中该阶段的 required artifacts 和 required checks。",
+    "结构化审查包中的验证命令必须全部是 passed，failed 或 not_run 不能通过校验。",
+    "review_response 有硬性评分阈值：无 blocker、总分至少 14、核心项至少 2 分。",
+    "main_self_check 有硬性评分阈值：无 blocker、总分至少 16、可复现性/泄漏安全/声明克制至少 2 分。"
+  ],
+  "known_weaknesses": [
+    "校验脚本只能校验结构和本地路径，不能替代真正的研究判断。",
+    "审核线程仍然需要实际阅读文件和结果，不能只依赖 JSON 模板。",
+    "下一阶段真实 base diagnostic 的 runner 尚未实现。"
+  ],
+  "questions_for_reviewer": [
+    "这套中文 rubric 是否足够阻止无意义推进？",
+    "评分阈值是否足够严格，是否存在可以低质量通过的漏洞？",
+    "主线程审查包是否已经比之前更可执行？",
+    "是否允许进入 real_base_diagnostic 实现阶段？"
+  ],
+  "required_output_language": "zh-CN",
+  "required_reviewer_steps": [
+    "只读检查 changed_files、key_artifacts、verification_commands。",
+    "按 docs/adversarial_review_rubric_cn.md 的评分表打分。",
+    "用中文输出阻塞项、主要问题、次要问题、必修复、评分表、阶段判定。"
+  ],
+  "requested_verdicts": [
+    "流程是否足够固定",
+    "评分门槛是否足够严格",
+    "是否仍存在过度推进风险",
+    "是否允许进入下一阶段"
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "version": 1,
+  "default_language": "zh-CN",
+  "adversarial_reviewer": {
+    "thread_title": "EG-SFT adversarial reviewer",
+    "thread_id": "019f3b8b-a025-7fe3-9dca-434d1e78cfa8",
+    "mode": "read_only",
+    "required_output_language": "zh-CN"
+  },
+  "current_allowed_stage": "real_base_diagnostic",
+  "reviewable_stage_ids": [
+    "workflow_upgrade",
+    "real_base_diagnostic"
+  ],
+  "stages": [
+    {
+      "id": "workflow_upgrade",
+      "name_zh": "主线程与审核线程流程固化",
+      "goal_zh": "把阶段计划、自评、审核包、审核输出和评分门槛固定为文档与机器可校验模板。",
+      "required_artifacts": [
+        "docs/workflow_cn.md",
+        "docs/adversarial_review_rubric_cn.md",
+        "workflow/templates/stage_plan.json",
+        "workflow/templates/review_package.json",
+        "workflow/templates/review_response.json",
+        "workflow/templates/main_self_check.json",
+        "scripts/validate_workflow_packet.py",
+        "tests/test_workflow_validation.py"
+      ],
+      "required_checks": [
+        "python scripts/validate_workflow_packet.py --kind review_package --path workflow/templates/review_package.json",
+        "python scripts/validate_workflow_packet.py --kind review_response --path workflow/templates/review_response.json",
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能声称流程升级证明研究方法有效。",
+        "不能声称真实 base diagnostic 已完成。",
+        "不能声称 Targeted selection 优于 Random。"
+      ],
+      "exit_criteria": [
+        "模板和校验脚本通过本地测试。",
+        "审核线程按中文 rubric 复审且没有 blocker。",
+        "README 或流程文档能指向新的中文流程。"
+      ],
+      "next_stage": "real_base_diagnostic"
+    },
+    {
+      "id": "real_base_diagnostic",
+      "name_zh": "真实 Qwen base diagnostic",
+      "goal_zh": "用 Qwen/Qwen2.5-0.5B 生成 dev_diagnostic 原始输出，并形成可复现错误画像。",
+      "required_artifacts": [
+        "results/real_base_diagnostic_outputs.jsonl",
+        "results/real_base_diagnostic_summary.csv",
+        "results/real_error_profile_by_type.csv"
+      ],
+      "required_checks": [
+        "python scripts/audit_splits.py",
+        "python scripts/run_real_base_diagnostic.py --model Qwen/Qwen2.5-0.5B",
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能声称 LoRA 或 selection 有提升。",
+        "不能把单条 smoke 结果当作 diagnostic 质量。",
+        "不能用 test split 调 prompt、parser 或选择策略。"
+      ],
+      "exit_criteria": [
+        "raw outputs、model revision、tokenizer revision、dtype、seed、prompt template、decoding config、parser version 已记录。",
+        "只使用 dev_diagnostic 做错误画像。",
+        "审核线程允许进入 selection/bias audit 阶段。"
+      ],
+      "next_stage": "selection_bias_audit"
+    },
+    {
+      "id": "selection_bias_audit",
+      "name_zh": "B128/B256 选择与公平性审计",
+      "goal_zh": "在固定预算下生成 Targeted 和 matched-random subsets，并审计 overlap、strata、answer scale、length 和泄漏风险。",
+      "required_artifacts": [
+        "results/selection_bias_summary.csv",
+        "results/split_leakage_audit.csv"
+      ],
+      "required_checks": [
+        "python scripts/audit_splits.py",
+        "python scripts/build_selection_sets.py --budget 128",
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "overlap_rate 非 0 时不能比较 Targeted 和 Random。",
+        "没有 error-type-aware ablation 时不能声称 selection signal 已被证明。"
+      ],
+      "exit_criteria": [
+        "overlap_rate=0 或明确标记比较无效。",
+        "matched-random strata delta 为 0。",
+        "审核线程允许进入 LoRA 阶段。"
+      ],
+      "next_stage": "lora_comparison"
+    },
+    {
+      "id": "lora_comparison",
+      "name_zh": "LoRA 对比实验",
+      "goal_zh": "在相同预算、相同训练配置、相同评估集下比较 Base、Random 和 Targeted。",
+      "required_artifacts": [
+        "results/lora_runs",
+        "results/main_results_real.csv"
+      ],
+      "required_checks": [
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能只用一次随机种子给强结论。",
+        "不能把 OOD template 结果说成真实世界泛化。"
+      ],
+      "exit_criteria": [
+        "训练配置、adapter 日志、eval raw outputs 和汇总表齐全。",
+        "审核线程允许写 professor-facing summary。"
+      ],
+      "next_stage": "professor_summary"
+    },
+    {
+      "id": "professor_summary",
+      "name_zh": "导师材料整理",
+      "goal_zh": "把已完成证据和未完成边界写成保守、清晰、可追问的 RA 项目说明。",
+      "required_artifacts": [
+        "docs/professor_summary_1p.md",
+        "docs/contribution_statement.md"
+      ],
+      "required_checks": [
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能隐藏模拟结果和真实结果的区别。",
+        "不能声称超出实验设置的泛化能力。"
+      ],
+      "exit_criteria": [
+        "材料区分 completed、in progress、not claimed。",
+        "审核线程确认 professor-facing wording 不夸大。"
+      ],
+      "next_stage": null
+    }
+  ],
+  "main_self_check_rubric": {
+    "threshold_total": 16,
+    "criteria": {
+      "goal_alignment": 2,
+      "evidence_completeness": 3,
+      "reproducibility": 3,
+      "leakage_safety": 3,
+      "baseline_fairness": 3,
+      "claim_discipline": 3,
+      "next_step_clarity": 2
+    },
+    "core_minimums": {
+      "reproducibility": 2,
+      "leakage_safety": 2,
+      "claim_discipline": 2
+    }
+  },
+  "reviewer_rubric": {
+    "threshold_total": 14,
+    "criteria": {
+      "test_leakage_split_contamination": 3,
+      "matched_random_baseline_fairness": 3,
+      "selection_signal_validity": 3,
+      "result_overclaiming_risk": 3,
+      "reproducibility": 3,
+      "professor_facing_wording": 2,
+      "actionability": 2
+    },
+    "core_minimums": {
+      "test_leakage_split_contamination": 2,
+      "matched_random_baseline_fairness": 2,
+      "selection_signal_validity": 2,
+      "result_overclaiming_risk": 2,
+      "reproducibility": 2
+    }
+  }
+}

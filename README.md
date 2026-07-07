@@ -52,8 +52,11 @@ python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
 - `docs/literature_review.md`: data-selection and LoRA positioning.
 - `docs/adversarial_review_protocol.md`: how the background reviewer is used.
 - `docs/workflow.md`: fixed stage-gated workflow.
+- `docs/workflow_cn.md`: Chinese main-thread SOP and scoring gate.
+- `docs/adversarial_review_rubric_cn.md`: Chinese reviewer rubric and required output format.
 - `docs/model_feasibility_qwen2_5.md`: Qwen2.5-0.5B feasibility check.
 - `docs/contribution_statement.md`: professor-facing contribution wording.
+- `workflow`: machine-readable stages, workflow templates, and validation fixtures.
 - `src/eg_sft/data`: generator, schemas, solver.
 - `src/eg_sft/eval`: parser, metrics, error taxonomy.
 - `src/eg_sft/selection`: selection policies and bias audit.

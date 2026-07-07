@@ -2,16 +2,26 @@
 
 This repository uses a stage-gated workflow. The goal is to keep the project credible enough for RA discussion by preventing silent leakage, weak baselines, and overclaimed results.
 
+The authoritative workflow is now the Chinese, machine-checkable workflow:
+
+- `docs/workflow_cn.md`: main-thread SOP and self-check rubric.
+- `docs/adversarial_review_rubric_cn.md`: read-only reviewer rubric and required Chinese output format.
+- `workflow/stages.json`: stage gates, required artifacts, checks, forbidden claims, and exit criteria.
+- `workflow/templates/*.json`: structured stage plan, self-check, review package, and review response templates.
+- `scripts/validate_workflow_packet.py`: local validator for workflow packets.
+
 ## Stage Gate
 
 Each stage follows the same order:
 
-1. State the stage goal.
+1. Fill a structured stage plan.
 2. Run or update the stage artifacts.
-3. Run local verification.
-4. Send a review package to the adversarial reviewer thread.
-5. Fix blockers before moving to the next claim-bearing stage.
-6. Commit and push only after verification passes.
+3. Fill a main-thread self-check.
+4. Build a structured review package.
+5. Validate the packet with `scripts/validate_workflow_packet.py`.
+6. Send the package to the adversarial reviewer thread.
+7. Fix blockers before moving to the next claim-bearing stage.
+8. Commit and push only after verification and review pass.
 
 ## Adversarial Reviewer
 
@@ -23,7 +33,7 @@ Thread id:
 019f3b8b-a025-7fe3-9dca-434d1e78cfa8
 ```
 
-The reviewer is read-only. It should attack:
+The reviewer is read-only and must answer in Chinese. It should attack:
 
 - test leakage and near-duplicate risk
 - matched-random fairness
@@ -34,22 +44,7 @@ The reviewer is read-only. It should attack:
 
 ## Required Review Package
 
-```text
-Stage goal:
-- ...
-
-Changed files or planned changes:
-- ...
-
-Key outputs:
-- ...
-
-Known weaknesses:
-- ...
-
-Please return:
-Blockers / Major concerns / Minor concerns / Required fixes / Verdict.
-```
+Use the JSON structure in `workflow/templates/review_package.json`. The reviewer response must follow `workflow/templates/review_response.json` and the Chinese rubric in `docs/adversarial_review_rubric_cn.md`.
 
 ## Current Gate Status
 
