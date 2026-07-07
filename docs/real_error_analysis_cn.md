@@ -40,4 +40,4 @@
 
 ## 你的参与方式
 
-你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接阅读 `results/real_parser_audit_examples.csv`，给每类错误写一句中文判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。
+你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接打开 `results/real_parser_audit_examples_cn.csv`，按中文表头逐条判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。

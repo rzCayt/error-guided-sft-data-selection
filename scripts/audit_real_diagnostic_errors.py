@@ -35,6 +35,19 @@ def write_csv_for_spreadsheets(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
+def write_titled_csv_for_spreadsheets(path: Path, title: str, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow([title])
+        writer.writerow([])
+        if not rows:
+            return
+        writer.writerow(list(rows[0].keys()))
+        for row in rows:
+            writer.writerow([row[key] for key in rows[0].keys()])
+
+
 def audit_category(row: dict) -> str:
     text = str(row.get("raw_continuation", ""))
     if bool(row.get("numeric_accuracy")):
@@ -120,6 +133,38 @@ def representative_examples(rows: list[dict], limit_per_category: int) -> list[d
     return selected
 
 
+def chinese_review_examples(rows: list[dict]) -> list[dict]:
+    category_zh = {
+        "parser_or_output_format_risk": "parser/输出格式风险",
+        "model_calculation_or_reasoning_error": "模型计算或推理错误",
+        "prompt_or_task_misunderstanding_risk": "prompt/题目理解风险",
+    }
+    family_zh = {
+        "multiplicative_relation": "乘法关系",
+        "ratio_change": "比例变化",
+        "temporal_numeric_constraint": "时间约束数值题",
+        "weighted_aggregation": "加权聚合",
+    }
+    difficulty_zh = {"easy": "简单", "medium": "中等", "hard": "困难"}
+    output = []
+    for row in rows:
+        output.append(
+            {
+                "样例编号": row["id"],
+                "任务类型": family_zh.get(row["task_family"], row["task_family"]),
+                "难度": difficulty_zh.get(row["difficulty_bucket"], row["difficulty_bucket"]),
+                "标准答案": row["answer"],
+                "解析出的模型答案": row["parsed_prediction"],
+                "自动初判类型": category_zh.get(row["audit_category"], row["audit_category"]),
+                "输出中的数字个数": row["number_token_count"],
+                "是否包含等式": "是" if row["has_equation"] else "否",
+                "请你人工判断": "这是真推理错误、parser/格式问题，还是题目理解问题？",
+                "模型原始输出": row["raw_continuation"],
+            }
+        )
+    return output
+
+
 def write_research_note(path: Path, rows: list[dict], summary: list[dict], examples: list[dict]) -> None:
     total = len(rows)
     correct = sum(bool(row["numeric_accuracy"]) for row in rows)
@@ -172,7 +217,7 @@ def write_research_note(path: Path, rows: list[dict], summary: list[dict], examp
 
 ## 你的参与方式
 
-你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接阅读 `results/real_parser_audit_examples.csv`，给每类错误写一句中文判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。
+你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接打开 `results/real_parser_audit_examples_cn.csv`，按中文表头逐条判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。
 """
     path.write_text(note, encoding="utf-8")
 
@@ -182,6 +227,7 @@ def main() -> None:
     parser.add_argument("--input", default="results/real_base_diagnostic_outputs.jsonl")
     parser.add_argument("--summary", default="results/real_parser_audit_summary.csv")
     parser.add_argument("--examples", default="results/real_parser_audit_examples.csv")
+    parser.add_argument("--examples-cn", default="results/real_parser_audit_examples_cn.csv")
     parser.add_argument("--note", default="docs/real_error_analysis_cn.md")
     parser.add_argument("--limit-per-category", type=int, default=10)
     args = parser.parse_args()
@@ -194,6 +240,11 @@ def main() -> None:
     examples = representative_examples(rows, args.limit_per_category)
     write_csv_for_spreadsheets(ROOT / args.summary, summary)
     write_csv_for_spreadsheets(ROOT / args.examples, examples)
+    write_titled_csv_for_spreadsheets(
+        ROOT / args.examples_cn,
+        "真实错误画像人工复核表：Qwen2.5-0.5B base diagnostic",
+        chinese_review_examples(examples),
+    )
     write_research_note(ROOT / args.note, rows, summary, examples)
     print(
         "wrote "

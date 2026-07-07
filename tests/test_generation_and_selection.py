@@ -20,6 +20,7 @@ _AUDIT_SPEC.loader.exec_module(_AUDIT_MODULE)
 audit_category = _AUDIT_MODULE.audit_category
 numeric_tokens = _AUDIT_MODULE.numeric_tokens
 write_csv_for_spreadsheets = _AUDIT_MODULE.write_csv_for_spreadsheets
+write_titled_csv_for_spreadsheets = _AUDIT_MODULE.write_titled_csv_for_spreadsheets
 
 
 def test_generator_is_deterministic() -> None:
@@ -131,3 +132,17 @@ def test_real_diagnostic_audit_csv_is_excel_friendly_utf8(tmp_path) -> None:
     raw = path.read_bytes()
     assert raw.startswith(b"\xef\xbb\xbf")
     assert "请判断这是真推理错误" in path.read_text(encoding="utf-8-sig")
+
+
+def test_chinese_review_csv_has_title_and_chinese_headers(tmp_path) -> None:
+    path = tmp_path / "audit_cn.csv"
+    write_titled_csv_for_spreadsheets(
+        path,
+        "真实错误画像人工复核表：Qwen2.5-0.5B base diagnostic",
+        [{"样例编号": "dev_diagnostic-0000", "任务类型": "比例变化"}],
+    )
+
+    lines = path.read_text(encoding="utf-8-sig").splitlines()
+    assert path.read_bytes().startswith(b"\xef\xbb\xbf")
+    assert lines[0] == "真实错误画像人工复核表：Qwen2.5-0.5B base diagnostic"
+    assert lines[2].startswith("样例编号,任务类型")
