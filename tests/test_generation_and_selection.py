@@ -18,6 +18,8 @@ assert _AUDIT_SPEC is not None and _AUDIT_SPEC.loader is not None
 _AUDIT_MODULE = importlib.util.module_from_spec(_AUDIT_SPEC)
 _AUDIT_SPEC.loader.exec_module(_AUDIT_MODULE)
 audit_category = _AUDIT_MODULE.audit_category
+clean_problem_prompt = _AUDIT_MODULE.clean_problem_prompt
+translate_problem_prompt = _AUDIT_MODULE.translate_problem_prompt
 numeric_tokens = _AUDIT_MODULE.numeric_tokens
 write_csv_for_spreadsheets = _AUDIT_MODULE.write_csv_for_spreadsheets
 write_titled_csv_for_spreadsheets = _AUDIT_MODULE.write_titled_csv_for_spreadsheets
@@ -104,25 +106,40 @@ def test_real_diagnostic_error_audit_categories() -> None:
         "numeric_accuracy": False,
         "parse_success": True,
         "task_family": "ratio_change",
+        "answer": 71.25,
+        "parsed_prediction": 3.0,
         "raw_continuation": " 75 - 5% of 75 = 75 - 3",
+    }
+    parser_tail_wrong = {
+        "numeric_accuracy": False,
+        "parse_success": True,
+        "task_family": "ratio_change",
+        "answer": 48.0,
+        "parsed_prediction": 4.0,
+        "raw_continuation": " 60 - 20% of 60 = 60 - 12 = 48 | What is the answer? 4",
     }
     weighted_wrong = {
         "numeric_accuracy": False,
         "parse_success": True,
         "task_family": "weighted_aggregation",
+        "answer": 72.87,
+        "parsed_prediction": 150.0,
         "raw_continuation": " 150.00000000000001",
     }
     direct_wrong = {
         "numeric_accuracy": False,
         "parse_success": True,
         "task_family": "multiplicative_relation",
+        "answer": 15120.0,
+        "parsed_prediction": 1260.0,
         "raw_continuation": " 1260",
     }
 
     assert len(numeric_tokens(multi_number_wrong["raw_continuation"])) >= 3
-    assert audit_category(multi_number_wrong) == "parser_or_output_format_risk"
-    assert audit_category(weighted_wrong) == "prompt_or_task_misunderstanding_risk"
-    assert audit_category(direct_wrong) == "model_calculation_or_reasoning_error"
+    assert audit_category(multi_number_wrong) == "percent_change_calculation_error"
+    assert audit_category(parser_tail_wrong) == "parser_tail_fragment_risk"
+    assert audit_category(weighted_wrong) == "weighted_formula_error"
+    assert audit_category(direct_wrong) == "multiplication_calculation_error"
 
 
 def test_real_diagnostic_audit_csv_is_excel_friendly_utf8(tmp_path) -> None:
@@ -146,3 +163,15 @@ def test_chinese_review_csv_has_title_and_chinese_headers(tmp_path) -> None:
     assert path.read_bytes().startswith(b"\xef\xbb\xbf")
     assert lines[0] == "真实错误画像人工复核表：Qwen2.5-0.5B base diagnostic"
     assert lines[2].startswith("样例编号,任务类型")
+
+
+def test_problem_prompt_translation_for_review_table() -> None:
+    prompt = (
+        "Problem: A metric starts at 36 and then has a 15% decrease. "
+        "What is the final value?\nFinal numeric answer ="
+    )
+
+    assert clean_problem_prompt(prompt) == (
+        "A metric starts at 36 and then has a 15% decrease. What is the final value?"
+    )
+    assert translate_problem_prompt(prompt) == "一个指标从 36 开始，随后下降 15%。最终值是多少？"

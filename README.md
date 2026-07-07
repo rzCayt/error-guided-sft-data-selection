@@ -24,7 +24,7 @@ This repository studies whether diagnostic failures from a small base language m
 - Raw outputs: `results/real_base_diagnostic_outputs.jsonl`
 - Error profile: `results/real_error_profile.csv`
 - 第一轮错误分析：`docs/real_error_analysis_cn.md`
-- 中文人工复核表：`results/real_parser_audit_examples_cn.csv`
+- 中文人工复核表：`results/real_parser_audit_examples_cn_with_prompts.csv`
 
 按任务族粗看：
 
@@ -84,7 +84,7 @@ python scripts/evaluate_results.py
 
 ## 你的参与方式
 
-这个阶段最需要的是研究判断，而不是继续堆功能。建议打开 `results/real_parser_audit_examples_cn.csv`，逐条判断：
+这个阶段最需要的是研究判断，而不是继续堆功能。建议打开 `results/real_parser_audit_examples_cn_with_prompts.csv`，逐条判断：
 
 - 这是真正的推理/计算错误吗？
 - 这是输出格式或 parser 问题吗？

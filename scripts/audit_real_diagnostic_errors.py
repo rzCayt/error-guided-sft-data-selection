@@ -16,12 +16,73 @@ from _bootstrap import add_src_to_path
 ROOT = add_src_to_path()
 
 from eg_sft.utils.io import read_jsonl  # noqa: E402
+from eg_sft.eval.metrics import numeric_equal  # noqa: E402
 
 NUMBER_RE = re.compile(r"[-+]?\d+(?:\.\d+)?(?:e[-+]?\d+)?%?", re.IGNORECASE)
+AUDIT_CATEGORIES = [
+    "parser_tail_fragment_risk",
+    "parse_failure",
+    "percent_change_calculation_error",
+    "weighted_formula_error",
+    "temporal_calculation_error",
+    "multiplication_calculation_error",
+    "direct_wrong_number_or_relation_error",
+]
 
 
 def numeric_tokens(text: str) -> list[str]:
     return NUMBER_RE.findall(text)
+
+
+def numeric_values(text: str) -> list[float]:
+    values = []
+    for token in numeric_tokens(text):
+        try:
+            values.append(float(token.rstrip("%")))
+        except ValueError:
+            continue
+    return values
+
+
+def clean_problem_prompt(prompt: str) -> str:
+    prompt = prompt.strip()
+    if prompt.startswith("Problem: "):
+        prompt = prompt[len("Problem: ") :]
+    marker = "\nFinal numeric answer ="
+    if marker in prompt:
+        prompt = prompt.split(marker, 1)[0]
+    return prompt.strip()
+
+
+def translate_problem_prompt(prompt: str) -> str:
+    problem = clean_problem_prompt(prompt)
+    ratio = re.fullmatch(
+        r"A metric starts at ([\d.]+) and then has a ([\d.]+)% (increase|decrease)\. "
+        r"What is the final value\?",
+        problem,
+    )
+    if ratio:
+        direction = "上升" if ratio.group(3) == "increase" else "下降"
+        return f"一个指标从 {ratio.group(1)} 开始，随后{direction} {ratio.group(2)}%。最终值是多少？"
+
+    multiply = re.fullmatch(r"Multiply the related counts (.+)\. What is the product\?", problem)
+    if multiply:
+        counts = multiply.group(1).replace(", ", "、")
+        return f"将相关数量 {counts} 相乘，乘积是多少？"
+
+    temporal = re.fullmatch(
+        r"Start from ([\d.]+) and apply ordered changes \[(.+)\]\. What is the final value\?",
+        problem,
+    )
+    if temporal:
+        changes = temporal.group(2).replace(", ", "、")
+        return f"从 {temporal.group(1)} 开始，按顺序应用变化 [{changes}]。最终值是多少？"
+
+    weighted = re.fullmatch(r"A weighted metric uses (.+)\. What is the weighted aggregate\?", problem)
+    if weighted:
+        return f"一个加权指标使用这些权重和值：{weighted.group(1)}。加权聚合值是多少？"
+
+    return problem
 
 
 def write_csv_for_spreadsheets(path: Path, rows: list[dict]) -> None:
@@ -53,18 +114,25 @@ def audit_category(row: dict) -> str:
     if bool(row.get("numeric_accuracy")):
         return "correct_output"
     if not bool(row.get("parse_success")):
-        return "parser_or_output_format_risk"
+        return "parse_failure"
 
-    numbers = numeric_tokens(text)
-    has_equation = "=" in text
-    if len(numbers) >= 3 or has_equation:
-        return "parser_or_output_format_risk"
+    answer = float(row["answer"])
+    parsed = row.get("parsed_prediction")
+    values = numeric_values(text)
+    if parsed not in {"", None} and any(numeric_equal(value, answer) for value in values):
+        return "parser_tail_fragment_risk"
 
     family = row.get("task_family")
-    if family == "weighted_aggregation" and len(numbers) <= 1:
-        return "prompt_or_task_misunderstanding_risk"
+    if family == "ratio_change":
+        return "percent_change_calculation_error"
+    if family == "weighted_aggregation":
+        return "weighted_formula_error"
+    if family == "temporal_numeric_constraint":
+        return "temporal_calculation_error"
+    if family == "multiplicative_relation":
+        return "multiplication_calculation_error"
 
-    return "model_calculation_or_reasoning_error"
+    return "direct_wrong_number_or_relation_error"
 
 
 def summarize(rows: list[dict]) -> list[dict]:
@@ -90,13 +158,7 @@ def summarize(rows: list[dict]) -> list[dict]:
                 "count": count,
                 "accuracy": round(stats["correct_count"] / count, 6) if count else 0,
                 "error_rate": round(errors / count, 6) if count else 0,
-                "parser_or_output_format_risk": stats["parser_or_output_format_risk"],
-                "model_calculation_or_reasoning_error": stats[
-                    "model_calculation_or_reasoning_error"
-                ],
-                "prompt_or_task_misunderstanding_risk": stats[
-                    "prompt_or_task_misunderstanding_risk"
-                ],
+                **{category: stats[category] for category in AUDIT_CATEGORIES},
                 "multi_number_output_rate": round(stats["multi_number_outputs"] / count, 6)
                 if count
                 else 0,
@@ -119,6 +181,8 @@ def representative_examples(rows: list[dict], limit_per_category: int) -> list[d
         selected.append(
             {
                 "id": row["id"],
+                "prompt": clean_problem_prompt(row["prompt"]),
+                "prompt_zh": translate_problem_prompt(row["prompt"]),
                 "task_family": row["task_family"],
                 "difficulty_bucket": row["difficulty_bucket"],
                 "answer": row["answer"],
@@ -135,9 +199,13 @@ def representative_examples(rows: list[dict], limit_per_category: int) -> list[d
 
 def chinese_review_examples(rows: list[dict]) -> list[dict]:
     category_zh = {
-        "parser_or_output_format_risk": "parser/输出格式风险",
-        "model_calculation_or_reasoning_error": "模型计算或推理错误",
-        "prompt_or_task_misunderstanding_risk": "prompt/题目理解风险",
+        "parser_tail_fragment_risk": "parser 尾部残片风险",
+        "parse_failure": "解析失败",
+        "percent_change_calculation_error": "百分比变化计算错误",
+        "weighted_formula_error": "加权公式/聚合方式错误",
+        "temporal_calculation_error": "时间顺序加减计算错误",
+        "multiplication_calculation_error": "乘法计算错误",
+        "direct_wrong_number_or_relation_error": "直接数值或关系理解错误",
     }
     family_zh = {
         "multiplicative_relation": "乘法关系",
@@ -151,6 +219,8 @@ def chinese_review_examples(rows: list[dict]) -> list[dict]:
         output.append(
             {
                 "样例编号": row["id"],
+                "题目中文说明": row["prompt_zh"],
+                "原始题目（英文）": row["prompt"],
                 "任务类型": family_zh.get(row["task_family"], row["task_family"]),
                 "难度": difficulty_zh.get(row["difficulty_bucket"], row["difficulty_bucket"]),
                 "标准答案": row["answer"],
@@ -160,6 +230,8 @@ def chinese_review_examples(rows: list[dict]) -> list[dict]:
                 "是否包含等式": "是" if row["has_equation"] else "否",
                 "请你人工判断": "这是真推理错误、parser/格式问题，还是题目理解问题？",
                 "模型原始输出": row["raw_continuation"],
+                "人工复核结论（你填写）": "",
+                "备注（你填写）": "",
             }
         )
     return output
@@ -189,6 +261,21 @@ def write_research_note(path: Path, rows: list[dict], summary: list[dict], examp
             f"category={row['audit_category']}; output: {row['raw_continuation']}"
         )
 
+    category_lines = []
+    category_zh = {
+        "parser_tail_fragment_risk": "parser 尾部残片风险",
+        "parse_failure": "解析失败",
+        "percent_change_calculation_error": "百分比变化计算错误",
+        "weighted_formula_error": "加权公式/聚合方式错误",
+        "temporal_calculation_error": "时间顺序加减计算错误",
+        "multiplication_calculation_error": "乘法计算错误",
+        "direct_wrong_number_or_relation_error": "直接数值或关系理解错误",
+    }
+    for category in AUDIT_CATEGORIES:
+        count = category_counts[category]
+        if count:
+            category_lines.append(f"- `{category}`（{category_zh[category]}）: {count} 条。")
+
     note = f"""# 真实错误画像第一轮研究笔记
 
 ## 当前观察
@@ -203,9 +290,7 @@ def write_research_note(path: Path, rows: list[dict], summary: list[dict], examp
 
 下面分类是自动启发式审计，不是人工标注真值。它的作用是帮助挑选需要人工复核的样例，而不是直接定义最终错误类型。
 
-- `parser_or_output_format_risk`: {category_counts['parser_or_output_format_risk']} 条。模型输出了多个数字或等式，当前 `parse_numeric_last_number_v1` 可能把中间值或尾部残片当作答案。
-- `model_calculation_or_reasoning_error`: {category_counts['model_calculation_or_reasoning_error']} 条。模型给出单一数值但与 solver label 不一致，更像直接算错或关系理解错误。
-- `prompt_or_task_misunderstanding_risk`: {category_counts['prompt_or_task_misunderstanding_risk']} 条。主要集中在 weighted aggregation，模型常把两个数相加，而不是按权重加权。
+{chr(10).join(category_lines)}
 
 ## 代表样例
 
@@ -217,7 +302,7 @@ def write_research_note(path: Path, rows: list[dict], summary: list[dict], examp
 
 ## 你的参与方式
 
-你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接打开 `results/real_parser_audit_examples_cn.csv`，按中文表头逐条判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。
+你在这个阶段最适合做研究负责人，而不是数据提供者。建议你直接打开 `results/real_parser_audit_examples_cn_with_prompts.csv`，按中文表头逐条判断：这是真推理错误、格式/parser 风险，还是题目理解问题。你的判断会决定下一步是改 parser、微调 prompt，还是进入 selection bias audit。
 """
     path.write_text(note, encoding="utf-8")
 
@@ -227,7 +312,10 @@ def main() -> None:
     parser.add_argument("--input", default="results/real_base_diagnostic_outputs.jsonl")
     parser.add_argument("--summary", default="results/real_parser_audit_summary.csv")
     parser.add_argument("--examples", default="results/real_parser_audit_examples.csv")
-    parser.add_argument("--examples-cn", default="results/real_parser_audit_examples_cn.csv")
+    parser.add_argument(
+        "--examples-cn",
+        default="results/real_parser_audit_examples_cn_with_prompts.csv",
+    )
     parser.add_argument("--note", default="docs/real_error_analysis_cn.md")
     parser.add_argument("--limit-per-category", type=int, default=10)
     args = parser.parse_args()
