@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# Local experiment outputs that can become large.
+data/generated/
+results/adapters/
+results/checkpoints/
+results/*.jsonl
+
+# Secrets and model artifacts must never be committed.
+.env
+*.token
+*.key
+*.safetensors
+*.bin
+*.pt
+*.pth

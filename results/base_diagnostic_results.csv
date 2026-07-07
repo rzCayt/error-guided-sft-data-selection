@@ -1,0 +1,101 @@
+id,split,task_family,difficulty_bucket,answer_magnitude_bucket,reasoning_length_bucket,answer,prediction,parsed_prediction,parse_success,numeric_accuracy,output_length,error_type
+dev_diagnostic-0000,dev_diagnostic,ratio_change,easy,small,short,30.6,The answer is 30.6.,30.6,True,True,4,correct
+dev_diagnostic-0001,dev_diagnostic,multiplicative_relation,easy,small,short,30.0,The answer is 30.0.,30.0,True,True,4,correct
+dev_diagnostic-0002,dev_diagnostic,weighted_aggregation,easy,small,long,65.25,The answer is 65.25.,65.25,True,True,4,correct
+dev_diagnostic-0003,dev_diagnostic,temporal_numeric_constraint,easy,medium,long,191.0,The answer is 191.0.,191.0,True,True,4,correct
+dev_diagnostic-0004,dev_diagnostic,ratio_change,medium,medium,medium,127.4,The answer is 127.4.,127.4,True,True,4,correct
+dev_diagnostic-0005,dev_diagnostic,multiplicative_relation,medium,large,medium,3042.0,The answer is 30420.0.,30420.0,True,False,4,unit_scale_error
+dev_diagnostic-0006,dev_diagnostic,weighted_aggregation,medium,small,long,70.8,"Using an average/sum shortcut, the answer is 86.6248.",86.6248,True,False,8,wrong_formula
+dev_diagnostic-0007,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,234.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0008,dev_diagnostic,ratio_change,hard,medium,long,110.16,The answer is 110.16.,110.16,True,True,4,correct
+dev_diagnostic-0009,dev_diagnostic,multiplicative_relation,hard,large,long,45360.0,"Using an average/sum shortcut, the answer is 58011.9194.",58011.9194,True,False,8,wrong_formula
+dev_diagnostic-0010,dev_diagnostic,weighted_aggregation,hard,small,long,56.783,The answer is 56.783.,56.783,True,True,4,correct
+dev_diagnostic-0011,dev_diagnostic,temporal_numeric_constraint,hard,medium,long,120.0,The answer is 131.0.,131.0,True,False,4,temporal_ordering
+dev_diagnostic-0012,dev_diagnostic,ratio_change,easy,medium,short,179.2,The answer is 179.2.,179.2,True,True,4,correct
+dev_diagnostic-0013,dev_diagnostic,multiplicative_relation,easy,small,short,22.0,The answer is 22.0.,22.0,True,True,4,correct
+dev_diagnostic-0014,dev_diagnostic,weighted_aggregation,easy,small,long,42.42,The answer is 42.42.,42.42,True,True,4,correct
+dev_diagnostic-0015,dev_diagnostic,temporal_numeric_constraint,easy,medium,long,138.0,The answer is 138.0.,138.0,True,True,4,correct
+dev_diagnostic-0016,dev_diagnostic,ratio_change,medium,medium,medium,132.0,The answer is 132.0.,132.0,True,True,4,correct
+dev_diagnostic-0017,dev_diagnostic,multiplicative_relation,medium,large,medium,1872.0,The answer is 1883.0.,1883.0,True,False,4,arithmetic_error
+dev_diagnostic-0018,dev_diagnostic,weighted_aggregation,medium,small,long,33.292,"Using an average/sum shortcut, the answer is 38.8647.",38.8647,True,False,8,wrong_formula
+dev_diagnostic-0019,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,164.0,The answer is 164.0.,164.0,True,True,4,correct
+dev_diagnostic-0020,dev_diagnostic,ratio_change,hard,small,long,59.5,The answer is 59.5.,59.5,True,True,4,correct
+dev_diagnostic-0021,dev_diagnostic,multiplicative_relation,hard,large,long,16320.0,The answer is 16311.0.,16311.0,True,False,4,arithmetic_error
+dev_diagnostic-0022,dev_diagnostic,weighted_aggregation,hard,small,long,59.95,The answer is 59.95.,59.95,True,True,4,correct
+dev_diagnostic-0023,dev_diagnostic,temporal_numeric_constraint,hard,small,long,98.0,"Using an average/sum shortcut, the answer is 99.2024.",99.2024,True,False,8,temporal_ordering
+dev_diagnostic-0024,dev_diagnostic,ratio_change,easy,medium,short,143.75,The answer is 143.75.,143.75,True,True,4,correct
+dev_diagnostic-0025,dev_diagnostic,multiplicative_relation,easy,medium,short,208.0,The answer is 20800.0.,20800.0,True,False,4,unit_scale_error
+dev_diagnostic-0026,dev_diagnostic,weighted_aggregation,easy,small,long,74.146,The answer is 85.146.,85.146,True,False,4,variable_binding
+dev_diagnostic-0027,dev_diagnostic,temporal_numeric_constraint,easy,small,long,9.0,The answer is 9.0.,9.0,True,True,4,correct
+dev_diagnostic-0028,dev_diagnostic,ratio_change,medium,medium,medium,171.15,The answer is 171.15.,171.15,True,True,4,correct
+dev_diagnostic-0029,dev_diagnostic,multiplicative_relation,medium,medium,medium,280.0,The answer is 280.0.,280.0,True,True,4,correct
+dev_diagnostic-0030,dev_diagnostic,weighted_aggregation,medium,small,long,74.043,The answer is 57.043.,57.043,True,False,4,variable_binding
+dev_diagnostic-0031,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,126.0,The answer is 124.496.,124.496,True,False,4,temporal_ordering
+dev_diagnostic-0032,dev_diagnostic,ratio_change,hard,medium,long,120.8,"Using an average/sum shortcut, the answer is 86.7558.",86.7558,True,False,8,wrong_formula
+dev_diagnostic-0033,dev_diagnostic,multiplicative_relation,hard,medium,long,120.0,The answer is 120.0.,120.0,True,True,4,correct
+dev_diagnostic-0034,dev_diagnostic,weighted_aggregation,hard,small,long,56.862,The answer is 57.8623.,57.8623,True,False,4,arithmetic_error
+dev_diagnostic-0035,dev_diagnostic,temporal_numeric_constraint,hard,medium,long,180.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0036,dev_diagnostic,ratio_change,easy,medium,short,162.15,The answer is 162.15.,162.15,True,True,4,correct
+dev_diagnostic-0037,dev_diagnostic,multiplicative_relation,easy,small,short,18.0,The answer is 18.0.,18.0,True,True,4,correct
+dev_diagnostic-0038,dev_diagnostic,weighted_aggregation,easy,small,long,67.0,The answer is 67.0.,67.0,True,True,4,correct
+dev_diagnostic-0039,dev_diagnostic,temporal_numeric_constraint,easy,small,long,58.0,The answer is 58.0.,58.0,True,True,4,correct
+dev_diagnostic-0040,dev_diagnostic,ratio_change,medium,small,medium,20.4,The answer is 2040.0.,2040.0,True,False,4,unit_scale_error
+dev_diagnostic-0041,dev_diagnostic,multiplicative_relation,medium,large,medium,1836.0,The answer is 1836.0.,1836.0,True,True,4,correct
+dev_diagnostic-0042,dev_diagnostic,weighted_aggregation,medium,small,long,69.156,The answer is 70.1993.,70.1993,True,False,4,arithmetic_error
+dev_diagnostic-0043,dev_diagnostic,temporal_numeric_constraint,medium,small,long,31.0,The answer is 22.0.,22.0,True,False,4,temporal_ordering
+dev_diagnostic-0044,dev_diagnostic,ratio_change,hard,medium,long,110.5,The answer is 110.5.,110.5,True,True,4,correct
+dev_diagnostic-0045,dev_diagnostic,multiplicative_relation,hard,large,long,25350.0,The answer is 2535.0.,2535.0,True,False,4,unit_scale_error
+dev_diagnostic-0046,dev_diagnostic,weighted_aggregation,hard,small,long,67.964,The answer is 67.9928.,67.9928,True,False,4,arithmetic_error
+dev_diagnostic-0047,dev_diagnostic,temporal_numeric_constraint,hard,small,long,73.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0048,dev_diagnostic,ratio_change,easy,medium,short,105.8,The answer is 88.8.,88.8,True,False,4,variable_binding
+dev_diagnostic-0049,dev_diagnostic,multiplicative_relation,easy,medium,short,238.0,The answer is 2380.0.,2380.0,True,False,4,unit_scale_error
+dev_diagnostic-0050,dev_diagnostic,weighted_aggregation,easy,small,long,97.62,The answer is 97.62.,97.62,True,True,4,correct
+dev_diagnostic-0051,dev_diagnostic,temporal_numeric_constraint,easy,medium,long,162.0,The answer is 162.0.,162.0,True,True,4,correct
+dev_diagnostic-0052,dev_diagnostic,ratio_change,medium,small,medium,70.35,The answer is 70.35.,70.35,True,True,4,correct
+dev_diagnostic-0053,dev_diagnostic,multiplicative_relation,medium,large,medium,1936.0,The answer is 1959.0.,1959.0,True,False,4,arithmetic_error
+dev_diagnostic-0054,dev_diagnostic,weighted_aggregation,medium,small,long,91.251,The answer is 91.251.,91.251,True,True,4,correct
+dev_diagnostic-0055,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,137.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0056,dev_diagnostic,ratio_change,hard,medium,long,188.75,The answer is 188.75.,188.75,True,True,4,correct
+dev_diagnostic-0057,dev_diagnostic,multiplicative_relation,hard,large,long,8415.0,The answer is 8415.0.,8415.0,True,True,4,correct
+dev_diagnostic-0058,dev_diagnostic,weighted_aggregation,hard,small,long,41.739,The answer is 41.739.,41.739,True,True,4,correct
+dev_diagnostic-0059,dev_diagnostic,temporal_numeric_constraint,hard,medium,long,109.0,The answer is 10.9.,10.9,True,False,4,unit_scale_error
+dev_diagnostic-0060,dev_diagnostic,ratio_change,easy,medium,short,141.48,The answer is 141.48.,141.48,True,True,4,correct
+dev_diagnostic-0061,dev_diagnostic,multiplicative_relation,easy,medium,short,272.0,The answer is 272.0.,272.0,True,True,4,correct
+dev_diagnostic-0062,dev_diagnostic,weighted_aggregation,easy,small,long,66.305,The answer is 66.305.,66.305,True,True,4,correct
+dev_diagnostic-0063,dev_diagnostic,temporal_numeric_constraint,easy,medium,long,118.0,The answer is 118.0.,118.0,True,True,4,correct
+dev_diagnostic-0064,dev_diagnostic,ratio_change,medium,small,medium,73.95,The answer is 73.95.,73.95,True,True,4,correct
+dev_diagnostic-0065,dev_diagnostic,multiplicative_relation,medium,medium,medium,153.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0066,dev_diagnostic,weighted_aggregation,medium,small,long,57.739,The answer is 57.739.,57.739,True,True,4,correct
+dev_diagnostic-0067,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,175.0,The answer is 175.0.,175.0,True,True,4,correct
+dev_diagnostic-0068,dev_diagnostic,ratio_change,hard,small,long,64.8,The answer is 648.0.,648.0,True,False,4,unit_scale_error
+dev_diagnostic-0069,dev_diagnostic,multiplicative_relation,hard,medium,long,720.0,The answer is 743.0.,743.0,True,False,4,arithmetic_error
+dev_diagnostic-0070,dev_diagnostic,weighted_aggregation,hard,small,long,97.052,The answer is 970.52.,970.52,True,False,4,unit_scale_error
+dev_diagnostic-0071,dev_diagnostic,temporal_numeric_constraint,hard,medium,long,120.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0072,dev_diagnostic,ratio_change,easy,medium,short,129.8,The answer is 129.8.,129.8,True,True,4,correct
+dev_diagnostic-0073,dev_diagnostic,multiplicative_relation,easy,medium,short,150.0,The answer is 150.0.,150.0,True,True,4,correct
+dev_diagnostic-0074,dev_diagnostic,weighted_aggregation,easy,small,long,67.252,The answer is 67.252.,67.252,True,True,4,correct
+dev_diagnostic-0075,dev_diagnostic,temporal_numeric_constraint,easy,small,long,80.0,The answer is 80.0.,80.0,True,True,4,correct
+dev_diagnostic-0076,dev_diagnostic,ratio_change,medium,small,medium,33.75,"Using an average/sum shortcut, the answer is 34.4043.",34.4043,True,False,8,wrong_formula
+dev_diagnostic-0077,dev_diagnostic,multiplicative_relation,medium,large,medium,2560.0,The answer is 2560.0.,2560.0,True,True,4,correct
+dev_diagnostic-0078,dev_diagnostic,weighted_aggregation,medium,small,long,70.6,The answer is 70.6.,70.6,True,True,4,correct
+dev_diagnostic-0079,dev_diagnostic,temporal_numeric_constraint,medium,medium,long,110.0,The answer is 110.0.,110.0,True,True,4,correct
+dev_diagnostic-0080,dev_diagnostic,ratio_change,hard,small,long,32.2,The answer is 23.2.,23.2,True,False,4,variable_binding
+dev_diagnostic-0081,dev_diagnostic,multiplicative_relation,hard,large,long,2592.0,The answer is 2592.0.,2592.0,True,True,4,correct
+dev_diagnostic-0082,dev_diagnostic,weighted_aggregation,hard,small,long,71.104,The answer is 711.04.,711.04,True,False,4,unit_scale_error
+dev_diagnostic-0083,dev_diagnostic,temporal_numeric_constraint,hard,medium,long,138.0,The answer is 129.0.,129.0,True,False,4,temporal_ordering
+dev_diagnostic-0084,dev_diagnostic,ratio_change,easy,small,short,96.05,The answer is 96.05.,96.05,True,True,4,correct
+dev_diagnostic-0085,dev_diagnostic,multiplicative_relation,easy,medium,short,198.0,The answer is 198.0.,198.0,True,True,4,correct
+dev_diagnostic-0086,dev_diagnostic,weighted_aggregation,easy,small,long,35.146,"Using an average/sum shortcut, the answer is 45.1093.",45.1093,True,False,8,wrong_formula
+dev_diagnostic-0087,dev_diagnostic,temporal_numeric_constraint,easy,medium,long,111.0,The answer is 11100.0.,11100.0,True,False,4,unit_scale_error
+dev_diagnostic-0088,dev_diagnostic,ratio_change,medium,medium,medium,176.4,The answer is 1764.0.,1764.0,True,False,4,unit_scale_error
+dev_diagnostic-0089,dev_diagnostic,multiplicative_relation,medium,medium,medium,100.0,The answer is 100.0.,100.0,True,True,4,correct
+dev_diagnostic-0090,dev_diagnostic,weighted_aggregation,medium,small,long,43.5,The answer is 43.5.,43.5,True,True,4,correct
+dev_diagnostic-0091,dev_diagnostic,temporal_numeric_constraint,medium,small,long,49.0,The answer is 49.0.,49.0,True,True,4,correct
+dev_diagnostic-0092,dev_diagnostic,ratio_change,hard,medium,long,147.25,The answer is 147.25.,147.25,True,True,4,correct
+dev_diagnostic-0093,dev_diagnostic,multiplicative_relation,hard,medium,long,660.0,I cannot determine the value from the given information.,,False,False,9,parse_failure
+dev_diagnostic-0094,dev_diagnostic,weighted_aggregation,hard,small,long,71.669,The answer is 71.669.,71.669,True,True,4,correct
+dev_diagnostic-0095,dev_diagnostic,temporal_numeric_constraint,hard,small,long,20.0,The answer is 3.0.,3.0,True,False,4,temporal_ordering
+dev_diagnostic-0096,dev_diagnostic,ratio_change,easy,small,short,74.2,The answer is 74.2.,74.2,True,True,4,correct
+dev_diagnostic-0097,dev_diagnostic,multiplicative_relation,easy,small,short,88.0,The answer is 88.0.,88.0,True,True,4,correct
+dev_diagnostic-0098,dev_diagnostic,weighted_aggregation,easy,small,long,81.0,The answer is 80.1714.,80.1714,True,False,4,arithmetic_error
+dev_diagnostic-0099,dev_diagnostic,temporal_numeric_constraint,easy,small,long,37.0,The answer is 37.0.,37.0,True,True,4,correct

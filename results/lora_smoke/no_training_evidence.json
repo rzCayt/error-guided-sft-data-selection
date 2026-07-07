@@ -1,0 +1,11 @@
+{
+  "status": "not_run",
+  "model": "Qwen/Qwen2.5-0.5B",
+  "reason": "Dependencies are installed, but full LoRA training is intentionally not launched by the scaffold.",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "next_steps": [
+    "Install train extras: python -m pip install -e .[train]",
+    "Run on a GPU machine with enough memory for Qwen/Qwen2.5-0.5B.",
+    "Save only logs and metrics; do not commit adapter checkpoints."
+  ]
+}
