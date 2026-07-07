@@ -1,0 +1,20 @@
+{
+  "budget": 128,
+  "profile_path": "results/error_profile_v0.csv",
+  "profile_is_default_simulated_placeholder": true,
+  "baseline_seeds": [
+    20260711,
+    20260712,
+    20260713
+  ],
+  "baseline_outputs": {
+    "exact_matched_random_seed_20260711": "data/samples/baseline_exact_matched_random_seed_20260711_b128.jsonl",
+    "exact_matched_random_seed_20260712": "data/samples/baseline_exact_matched_random_seed_20260712_b128.jsonl",
+    "exact_matched_random_seed_20260713": "data/samples/baseline_exact_matched_random_seed_20260713_b128.jsonl",
+    "stratified_random": "data/samples/baseline_stratified_random_b128.jsonl",
+    "metadata_hard_baseline": "data/samples/baseline_metadata_hard_baseline_b128.jsonl"
+  },
+  "summary_path": "results/strong_baseline_suite_summary.csv",
+  "created_by_command": "scripts/build_selection_sets.py --budget 128 --baseline-seeds 20260711,20260712,20260713",
+  "note": "Baselines built from results/error_profile_v0.csv are simulated-profile plumbing artifacts. Claim-bearing stages must use results/real_error_profile.csv."
+}

@@ -2,6 +2,12 @@ from eg_sft.data.generator import example_signature, generate_all, generate_spli
 from eg_sft.selection.bias_audit import audit_selection_bias, summarize_selection_bias
 from eg_sft.selection.error_guided import select_error_guided
 from eg_sft.selection.matched_random import select_matched_random
+from eg_sft.selection.strong_baselines import (
+    select_exact_matched_random_multi_seed,
+    select_metadata_hard_baseline,
+    select_stratified_random,
+    summarize_baseline_suite,
+)
 
 
 def test_generator_is_deterministic() -> None:
@@ -45,3 +51,36 @@ def test_selection_budget_and_matching() -> None:
     metrics = {row["metric"]: row for row in summary}
     assert "overlap_rate" in metrics
     assert "mean_abs_answer" in metrics
+
+
+def test_strong_baseline_suite_has_budget_and_audit_rows() -> None:
+    candidates = [row.to_dict() for row in generate_split("candidate_pool", n=120, seed=456)]
+    profile = [
+        {
+            "task_family": "temporal_numeric_constraint",
+            "difficulty_bucket": "hard",
+            "answer_magnitude_bucket": "medium",
+            "reasoning_length_bucket": "long",
+            "count": "10",
+            "failures": "9",
+            "error_rate": "0.9",
+        }
+    ]
+    targeted = select_error_guided(candidates, profile, budget=24, seed=3)
+    matched_many = select_exact_matched_random_multi_seed(candidates, targeted, seeds=[11, 12, 13])
+    stratified = select_stratified_random(candidates, budget=24, seed=14)
+    hard = select_metadata_hard_baseline(candidates, profile, budget=24, seed=15)
+    baselines = {
+        **{f"exact_matched_random_seed_{seed}": rows for seed, rows in matched_many.items()},
+        "stratified_random": stratified,
+        "metadata_hard_baseline": hard,
+    }
+
+    assert all(len(rows) == 24 for rows in baselines.values())
+    assert set(matched_many) == {11, 12, 13}
+    summary = summarize_baseline_suite(targeted, baselines)
+    summary_baselines = {row["baseline"] for row in summary}
+    assert set(baselines).issubset(summary_baselines)
+    assert "exact_matched_random_multi_seed" in summary_baselines
+    assert "strata_l1_delta" in {row["metric"] for row in summary}
+    assert any(str(row["metric"]).endswith("_variance") for row in summary)

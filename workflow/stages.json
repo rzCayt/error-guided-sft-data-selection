@@ -51,8 +51,10 @@
       "name_zh": "真实 Qwen base diagnostic",
       "goal_zh": "用 Qwen/Qwen2.5-0.5B 生成 dev_diagnostic 原始输出，并形成可复现错误画像。",
       "required_artifacts": [
+        "docs/strong_baseline_design.md",
         "results/real_base_diagnostic_outputs.jsonl",
         "results/real_base_diagnostic_summary.csv",
+        "results/real_error_profile.csv",
         "results/real_error_profile_by_type.csv"
       ],
       "required_checks": [
@@ -68,6 +70,7 @@
       "exit_criteria": [
         "raw outputs、model revision、tokenizer revision、dtype、seed、prompt template、decoding config、parser version 已记录。",
         "只使用 dev_diagnostic 做错误画像。",
+        "strong baseline design gate 已冻结，并明确主结论基线、辅助基线和 upper-bound analysis 的边界。",
         "审核线程已搜索 Qwen 模型卡和官方文档，并记录外部资料核验。",
         "审核线程允许进入 selection/bias audit 阶段。"
       ],
@@ -79,20 +82,27 @@
       "goal_zh": "在固定预算下生成 Targeted 和 matched-random subsets，并审计 overlap、strata、answer scale、length 和泄漏风险。",
       "required_artifacts": [
         "results/selection_bias_summary.csv",
+        "results/strong_baseline_suite_summary.csv",
+        "results/strong_baseline_suite_manifest.json",
         "results/split_leakage_audit.csv"
       ],
       "required_checks": [
         "python scripts/audit_splits.py",
-        "python scripts/build_selection_sets.py --budget 128",
+        "python scripts/build_selection_sets.py --budget 128 --profile results/real_error_profile.csv --baseline-seeds 20260711,20260712,20260713",
         "pytest -q"
       ],
       "forbidden_claims": [
         "overlap_rate 非 0 时不能比较 Targeted 和 Random。",
-        "没有 error-type-aware ablation 时不能声称 selection signal 已被证明。"
+        "没有 error-type-aware ablation 时不能声称 selection signal 已被证明。",
+        "没有 strong baseline audit 时不能声称 Targeted 优于 Random。"
       ],
       "exit_criteria": [
         "overlap_rate=0 或明确标记比较无效。",
         "matched-random strata delta 为 0。",
+        "strong baseline suite 必须使用 results/real_error_profile.csv，而不是 simulated placeholder profile。",
+        "strong baseline manifest 记录 profile_path、baseline seeds、输出文件和 placeholder 状态。",
+        "strong baseline suite 至少包含 exact matched random multi-seed、stratified random 和 metadata-hard baseline。",
+        "baseline audit 报告 overlap、strata delta、marginal distribution、multi-seed variance、预算一致性和 prompt/parser/eval 一致性。",
         "审核线程已搜索 data selection 文献并核对 baseline、公平比较和 selector evaluation 要求。",
         "审核线程允许进入 LoRA 阶段。"
       ],
@@ -111,10 +121,12 @@
       ],
       "forbidden_claims": [
         "不能只用一次随机种子给强结论。",
-        "不能把 OOD template 结果说成真实世界泛化。"
+        "不能把 OOD template 结果说成真实世界泛化。",
+        "不能在 baseline audit 未通过时声明 Targeted 优于 Random。"
       ],
       "exit_criteria": [
         "训练配置、adapter 日志、eval raw outputs 和汇总表齐全。",
+        "所有主结论 baseline 与 Targeted 使用相同训练预算、prompt、parser、训练配置和评估 split。",
         "审核线程已搜索 LoRA/SFT 资料并核对 rank、adapter placement、batch size、learning rate 和评估一致性。",
         "审核线程允许写 external-facing research summary。"
       ],

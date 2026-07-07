@@ -65,10 +65,12 @@ EG-SFT adversarial reviewer
 进入 LoRA 对比前必须完成：
 
 - 运行 split leakage audit。
-- 对准确预算运行 selection bias audit。
+- 对准确预算运行 selection bias audit 和 strong baseline audit。
 - 要求 `overlap_rate=0`，或明确把 comparison 标记为有独立性限制。
+- 至少完成 exact matched random multi-seed、stratified random 和 metadata-hard baseline。
 - 加入或消融 error-type-aware selector。
 - 用真实模型 raw outputs 和 run metadata 替换 simulated diagnostic rows。
+- 构建选择集时显式使用 `--profile results/real_error_profile.csv`，不能继续使用 simulated `error_profile_v0.csv`。
 - 把 Qwen smoke evidence 保存为机器可读 artifact，而不是只写 prose。
 
 <details>

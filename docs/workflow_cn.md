@@ -38,7 +38,7 @@
 - 必跑验证命令失败或未运行，却把审查包标记为可通过。
 - 审核线程没有外部资料核验，却允许进入真实模型、selection 或 LoRA 阶段。
 - 用 simulated placeholder 支撑真实模型结论。
-- 没有 overlap、bias、leakage audit，就比较 Targeted 和 Random。
+- 没有 overlap、bias、leakage audit 和 strong baseline audit，就比较 Targeted 和 Random。
 - 没有 raw outputs 和 run metadata，就宣称真实 diagnostic。
 - 只改展示材料、不增加证据，却推进到 external-facing claim。
 - 重复运行同一命令，但没有新假设、新失败分析或新修复。

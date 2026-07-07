@@ -33,6 +33,7 @@ This repository is a reproducible research scaffold for studying whether base-mo
 - 已固定 split：`candidate_pool`、`dev_diagnostic`、`test_id`、`test_ood_template`、`test_ood_range`。
 - 已实现 parser、metric、error taxonomy、base diagnostic 占位流程。
 - 已实现 error-guided selector 与 matched-random selector。
+- 已加入 strong baseline gate：matched random multi-seed、stratified random、metadata-hard baseline。
 - 已实现 selection bias audit 与 split leakage audit。
 - 已实现 LoRA smoke 接口；无 GPU/依赖时会生成 no-training evidence，而不是伪造训练结果。
 - 已建立中文主线程 workflow 与中文 adversarial reviewer 流程，要求审核线程搜索外部资料后再给阶段 verdict。
@@ -48,6 +49,7 @@ This repository is a reproducible research scaffold for studying whether base-mo
 - 保存 raw outputs、prompt template、decoding config、parser version、model/tokenizer revision、dtype、seed。
 - 在相同训练预算下比较 Base、Matched Random、Targeted。
 - 在比较前完成 leakage、overlap、bias audit。
+- 在任何 Targeted 优于 Random 的声明前完成 strong baseline audit。
 
 ## 快速开始
 
@@ -75,6 +77,7 @@ python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
 - `docs/project_spec.md`：中文研究设计、split 纪律、评估计划。
 - `docs/data_generation_spec.md`：中文数据生成规范、任务族、solver 保证。
 - `docs/selection_policy_spec.md`：中文 targeted/matched-random 选择策略。
+- `docs/strong_baseline_design.md`：强力基线门槛和审计标准。
 - `docs/literature_review.md`：数据选择与 LoRA 相关文献定位。
 - `docs/contribution_statement.md`：研究贡献与个人工作说明。
 - `docs/research_summary_1p.md`：一页研究摘要。
