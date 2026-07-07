@@ -13,7 +13,7 @@ Blockers found:
 Major concerns:
 
 - Bias audit originally checked only stratum counts.
-- Professor-facing wording could read as if a real small language model had already been evaluated.
+- External-facing wording could read as if a real small language model had already been evaluated.
 - LoRA training path is currently a no-training evidence path, not a reproducible training run.
 - Error profile documentation said error type was part of the profile, while the original profile was not grouped by error type.
 
@@ -24,7 +24,7 @@ Major concerns:
 - Added split-level leakage audit through `scripts/audit_splits.py`.
 - Updated generator-wide `generate_all` to avoid exact prompt/parameter/answer duplicates across generated splits.
 - Added `results/error_profile_by_error_type_v0.csv`.
-- Updated README, project spec, professor summary, and selection policy to mark simulated diagnostics as placeholders.
+- Updated README, project spec, research summary, and selection policy to mark simulated diagnostics as placeholders.
 - Added `docs/literature_review.md` and `docs/adversarial_review_protocol.md`.
 
 ## Remaining Risks

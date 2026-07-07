@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "review_response",
   "language": "zh-CN",
-  "reviewer_role": "只读反对线程：研究设计审稿人 + 实验公平性审计员 + RA 申请材料反对者",
+  "reviewer_role": "只读反对线程：研究设计审稿人 + 实验公平性审计员 + 对外研究表述审查者",
   "evidence_checked": [
     "changed_files",
     "key_artifacts",
@@ -102,7 +102,7 @@
       "max_score": 3,
       "reason": "有模板和校验命令，但真实实验 runner 仍待实现。"
     },
-    "professor_facing_wording": {
+    "external_facing_wording": {
       "score": 2,
       "max_score": 2,
       "reason": "流程要求区分已完成、进行中和禁止声明。"

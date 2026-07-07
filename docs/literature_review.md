@@ -1,6 +1,6 @@
 # 文献综述与研究定位
 
-## 为什么 data selection 是合理的 RA 项目
+## 为什么 data selection 是合理的研究问题
 
 近年的 fine-tuning data selection 研究通常把数据选择看成预算约束下的优化问题：目标不是简单地少用数据，而是在固定样本或 token 预算下选择更能提升目标能力的数据。
 
@@ -10,7 +10,7 @@
 
 **LESS: Selecting Influential Data for Targeted Instruction Tuning.** LESS 把 targeted instruction tuning 定义为选择能诱导目标能力的数据，例如 reasoning。它使用 low-rank gradient similarity 选择 influential examples，并报告小规模选中子集可以在下游任务上超过更大的训练集。本项目不实现 gradient influence，而是借用 targeted-capability framing，用 diagnostic error profile 作为更便宜、更透明的选择信号。来源：https://arxiv.org/abs/2402.04333
 
-**RL-Guided Data Selection for Language Model Finetuning.** 该工作把 fine-tuning data selection 建模为 budget-constrained optimization，并用 proxy reward 学习选择策略。本项目与它的联系主要是概念层面：error-guided selection 是更简单、可解释的策略，适合作为 RA 申请前的第一版项目。来源：https://arxiv.org/abs/2509.25850
+**RL-Guided Data Selection for Language Model Finetuning.** 该工作把 fine-tuning data selection 建模为 budget-constrained optimization，并用 proxy reward 学习选择策略。本项目与它的联系主要是概念层面：error-guided selection 是更简单、可解释的策略，适合作为小规模可审计实验的第一版方法。来源：https://arxiv.org/abs/2509.25850
 
 **Take the Essence and Discard the Dross.** 这篇 NAACL 2025 review 指出，data-selection 研究很难比较，原因之一是实验设置差异很大，因此需要结构化比较 efficiency 和 feasibility。这个提醒直接约束本项目：在解释任何提升前，candidate pool、budget、test set 和 baseline 必须固定。来源：https://aclanthology.org/2025.naacl-long.336/
 

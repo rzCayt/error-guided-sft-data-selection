@@ -77,6 +77,6 @@ Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reaso
 - 选择策略在任何锁定 test evaluation 前冻结。
 - `results/main_results_v0.csv` 由真实评估行重新生成，并记录模型名、seed、训练 run id。
 
-## RA 申请价值
+## 研究价值
 
-这个项目展示的是可复现 post-training 研究能力：问题定义、数据生成、诊断测量、数据选择、baseline 控制、泄漏审计、实验记录和克制表述。它适合用于说明自己能参与大模型训练、数据选择、可靠推理和高效实验相关 RA 工作。
+这个项目的价值在于把 error-guided data selection 变成一个可复现实验问题：问题定义、数据生成、诊断测量、数据选择、baseline 控制、泄漏审计、实验记录和克制表述都被显式化。即使最终结果为负，也能说明诊断错误是否不足以提供 metadata matching 之外的有效选择信号。

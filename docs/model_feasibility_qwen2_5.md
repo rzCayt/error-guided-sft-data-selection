@@ -74,4 +74,4 @@ Qwen/Qwen2.5-0.5B-Instruct
 
 ## 风险
 
-0.5B base model 可能很弱，completion 格式也可能不稳定。这对 diagnostic error profiling 是可以接受的，但也意味着导师材料必须聚焦 pipeline 和 controlled comparison。在真实 Random vs Targeted LoRA 结果出现前，不能做性能提升声明。
+0.5B base model 可能很弱，completion 格式也可能不稳定。这对 diagnostic error profiling 是可以接受的，但也意味着任何研究说明都必须聚焦 pipeline 和 controlled comparison。在真实 Random vs Targeted LoRA 结果出现前，不能做性能提升声明。

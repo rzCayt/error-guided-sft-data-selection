@@ -1,4 +1,4 @@
-# 一页导师汇报摘要
+# 一页研究摘要
 
 ## 项目
 
@@ -30,6 +30,6 @@ Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reaso
 
 运行 `Qwen/Qwen2.5-0.5B` 的真实 base diagnostic，并在 GPU 环境中做 LoRA smoke test。随后在 B128/B256 预算下比较 Base、Matched Random 和 Targeted。
 
-## 与 RA 工作的关系
+## 研究价值
 
-该项目展示的是 post-training 研究中的基础能力：数据构造、诊断评估、数据选择、baseline 公平性、泄漏控制、实验记录和克制汇报。适合用于和老师讨论大模型训练、数据效率、可靠推理和实验严谨性相关 RA 工作。
+该项目展示的是 post-training 研究中的基础能力：数据构造、诊断评估、数据选择、baseline 公平性、泄漏控制、实验记录和克制汇报。更重要的是，它把一个容易被讲成概念的方向落到了可检查的研究协议上：哪些证据已经存在、哪些结论还不能说、下一步实验需要满足什么最低标准，都被明确写入 workflow。

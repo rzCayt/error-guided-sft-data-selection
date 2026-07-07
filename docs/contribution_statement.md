@@ -13,7 +13,7 @@
 - 实现了 bias/leakage audit，包括 split duplicate check 和 targeted/matched overlap check。
 - 建立了阶段式 adversarial review workflow，用来在产生真实训练声明前检查泄漏、baseline 不公平和过度表述。
 - 整理了 data-efficient instruction tuning、data selection 和 LoRA 相关文献定位。
-- 将项目入口文档和导师汇报材料改为中文优先，并保留英文版本用于 GitHub/国际读者。
+- 将项目入口文档和研究说明改为中文优先，并保留英文版本用于 GitHub/国际读者。
 
 ## 我没有声称什么
 
@@ -22,13 +22,13 @@
 - 我没有声称合成任务能证明广义数学推理能力。
 - 我没有声称当前 selector 是最终方案；下一版应该加入 error-type-aware selector 和 ablation。
 
-## 和老师解释时可以这样说
+## 可以这样说明这个研究
 
 ```text
 我设计并实现了一个用于 error-guided SFT data selection 的可控 pilot pipeline。这个项目重点不是先追求漂亮结果，而是把实验流程做严谨：确定性数据生成、solver-verifiable labels、严格 split discipline、matched-random baseline、leakage audit、bias audit，以及每个阶段进入下一步前的 adversarial review。当前阶段已经验证了研究框架和本地 pipeline，下一步是用 Qwen2.5-0.5B 替换 simulated diagnostic，收集真实 base model 错误，再测试错误诊断驱动的数据选择是否比 metadata-matched random sampling 提供额外信号。
 ```
 
-## 导师沟通重点
+## 研究表述重点
 
 应该强调：
 
@@ -57,5 +57,5 @@
 可以回答：
 
 ```text
-我的核心贡献是把一个比较宽泛的 RA 想法变成可复现的实验协议：solver-verifiable task setup、严格 split discipline、diagnostic error profiling、公平 matched-random comparison，以及防止 premature claims 的 audit gate。后续真正的研究贡献要看真实模型 diagnostic 是否能证明 error-type-aware selection 在 matched random 之上带来额外信号。
+我的核心贡献是把一个比较宽泛的 data selection 想法变成可复现的实验协议：solver-verifiable task setup、严格 split discipline、diagnostic error profiling、公平 matched-random comparison，以及防止 premature claims 的 audit gate。后续真正的研究贡献要看真实模型 diagnostic 是否能证明 error-type-aware selection 在 matched random 之上带来额外信号。
 ```

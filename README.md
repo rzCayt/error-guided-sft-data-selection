@@ -1,7 +1,6 @@
 # Error-Guided SFT Data Selection
 
 > 中文项目名：基于错误诊断的 SFT 数据选择
-> 用途：港中深大模型 RA 申请项目材料与可复现实验脚手架
 
 本仓库研究一个小而可验证的问题：**能否用 base model 在诊断集上的错误，指导 SFT 训练样本选择，并在相同样本/训练预算下优于 carefully matched random baseline？**
 
@@ -77,8 +76,8 @@ python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
 - `docs/data_generation_spec.md`：中文数据生成规范、任务族、solver 保证。
 - `docs/selection_policy_spec.md`：中文 targeted/matched-random 选择策略。
 - `docs/literature_review.md`：数据选择与 LoRA 相关文献定位。
-- `docs/contribution_statement.md`：和老师说明“我做了什么”的中文表述。
-- `docs/professor_summary_1p.md`：一页中文导师汇报摘要。
+- `docs/contribution_statement.md`：研究贡献与个人工作说明。
+- `docs/research_summary_1p.md`：一页研究摘要。
 - `docs/workflow_cn.md`：中文主线程 SOP 与评分门槛。
 - `docs/adversarial_review_rubric_cn.md`：中文审核线程 rubric。
 - `docs/reviewer_external_evidence_policy_cn.md`：审核线程外部资料搜索规则。

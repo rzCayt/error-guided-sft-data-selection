@@ -1,6 +1,6 @@
 # 项目固定工作流
 
-本仓库使用 stage-gated workflow。目标是让项目在 RA 沟通中保持可信，避免隐性泄漏、弱 baseline 和过度声明。
+本仓库使用 stage-gated workflow。目标是让研究过程保持可信，避免隐性泄漏、弱 baseline 和过度声明。
 
 权威流程以中文、机器可校验版本为准：
 
@@ -45,7 +45,7 @@ EG-SFT adversarial reviewer
 - selection signal 是否超过 task/difficulty 重采样。
 - simulated result 是否被过度包装。
 - LoRA 实验是否可复现。
-- 面向导师的贡献表述是否夸大。
+- 对外研究表述是否夸大。
 
 ## 审查包要求
 
@@ -60,7 +60,7 @@ EG-SFT adversarial reviewer
 暂不允许：
 
 - 有 claim-bearing 含义的 Random vs Targeted LoRA comparison。
-- 面向导师的真实性能提升声明。
+- 对外真实性能提升声明。
 
 进入 LoRA 对比前必须完成：
 
@@ -74,6 +74,6 @@ EG-SFT adversarial reviewer
 <details>
 <summary>English note</summary>
 
-This file is Chinese-first because the project is currently prepared for a Chinese RA application context. Key English terms are retained to keep the research framing searchable and readable on GitHub.
+This file is Chinese-first while retaining key English research terms to keep the project searchable and readable on GitHub.
 
 </details>

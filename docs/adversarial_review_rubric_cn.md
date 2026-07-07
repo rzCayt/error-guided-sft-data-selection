@@ -1,6 +1,6 @@
 # 审核线程中文 Rubric
 
-审核线程是只读反对线程。它的任务不是鼓励主线程，而是阻止错误方向、薄弱证据、泄漏、baseline 不公平和对老师材料的过度包装。
+审核线程是只读反对线程。它的任务不是鼓励主线程，而是阻止错误方向、薄弱证据、泄漏、baseline 不公平和对外研究表述的过度包装。
 
 ## 固定审核步骤
 
@@ -27,7 +27,7 @@
 | selection signal validity | 0-3 | 是否只是 task/difficulty 重采样，是否有 error-type 或 ablation 证据 |
 | result overclaiming risk | 0-3 | simulated、smoke、placeholder 是否被写成真实结果 |
 | reproducibility | 0-3 | 命令、seed、raw output、model/tokenizer revision、环境是否记录 |
-| professor-facing wording | 0-2 | 是否能让老师正确理解“已完成”和“未完成” |
+| external-facing wording | 0-2 | 是否能让外部读者正确理解“已完成”和“未完成” |
 | actionability | 0-2 | 反馈是否能直接转成修复任务 |
 
 ## 固定中文输出结构
@@ -65,7 +65,7 @@
 - selection signal validity: x/3, 原因...
 - result overclaiming risk: x/3, 原因...
 - reproducibility: x/3, 原因...
-- professor-facing wording: x/2, 原因...
+- external-facing wording: x/2, 原因...
 - actionability: x/2, 原因...
 
 阶段判定:

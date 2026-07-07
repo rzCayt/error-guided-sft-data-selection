@@ -1,6 +1,6 @@
 # 审核线程外部资料核验策略
 
-审核线程不能只读本仓库。每个会影响研究设计、模型选择、训练配置、结果表述或导师材料的阶段，都必须做外部资料核验。
+审核线程不能只读本仓库。每个会影响研究设计、模型选择、训练配置、结果表述或对外研究说明的阶段，都必须做外部资料核验。
 
 ## 必须搜索的情况
 
@@ -10,7 +10,7 @@
 - `real_base_diagnostic`：核对模型卡、推理限制、base vs instruct 使用边界。
 - `selection_bias_audit`：核对 data selection 文献对 baseline、公平比较、selection signal 的要求。
 - `lora_comparison`：核对 LoRA/SFT 训练配置、可复现性和对比公平性。
-- `professor_summary`：核对材料是否把现有证据说成超出文献和实验支持的结论。
+- `research_summary`：核对材料是否把现有证据说成超出文献和实验支持的结论。
 
 ## 来源优先级
 

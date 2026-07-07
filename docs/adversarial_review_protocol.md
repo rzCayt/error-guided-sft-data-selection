@@ -22,7 +22,7 @@ EG-SFT adversarial reviewer
 
 采用阶段级审核。每个主要阶段结束后发送一次 review package，不对每个小命令审核。
 
-这是项目固定 workflow。任何后续 model diagnostic、selector 改动、LoRA run、结果表或导师材料，都必须经过这个 gate，才可以被视为可信项目证据。
+这是项目固定 workflow。任何后续 model diagnostic、selector 改动、LoRA run、结果表或对外研究说明，都必须经过这个 gate，才可以被视为可信项目证据。
 
 阶段包括：
 
@@ -31,7 +31,7 @@ EG-SFT adversarial reviewer
 3. B128 selection 和 bias audit。
 4. LoRA smoke/full run。
 5. Base/Random/Targeted comparison。
-6. 导师汇报 summary。
+6. 对外研究 summary。
 
 ## 审查包模板
 
@@ -67,7 +67,7 @@ python scripts/validate_workflow_packet.py --kind review_package --path workflow
 - Matched-random 实现和文档需要说明：为了严格 stratum matching，必要时可能与 targeted subset 重叠。
 - Bias audit 文档曾声称会报告 marginal 和 mean statistics，但早期输出只报告了 stratum counts。
 - Split seeds 虽然独立，但模板较窄，真实 test claim 前仍必须做 near-duplicate audit。
-- 面向导师的表述必须区分 pipeline placeholder 和真实模型结果。
+- 对外表述必须区分 pipeline placeholder 和真实模型结果。
 
 <details>
 <summary>English note</summary>

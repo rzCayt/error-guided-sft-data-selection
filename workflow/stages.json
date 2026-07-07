@@ -116,16 +116,16 @@
       "exit_criteria": [
         "训练配置、adapter 日志、eval raw outputs 和汇总表齐全。",
         "审核线程已搜索 LoRA/SFT 资料并核对 rank、adapter placement、batch size、learning rate 和评估一致性。",
-        "审核线程允许写 professor-facing summary。"
+        "审核线程允许写 external-facing research summary。"
       ],
-      "next_stage": "professor_summary"
+      "next_stage": "research_summary"
     },
     {
-      "id": "professor_summary",
-      "name_zh": "导师材料整理",
-      "goal_zh": "把已完成证据和未完成边界写成保守、清晰、可追问的 RA 项目说明。",
+      "id": "research_summary",
+      "name_zh": "研究摘要整理",
+      "goal_zh": "把已完成证据和未完成边界写成保守、清晰、可追问的研究说明。",
       "required_artifacts": [
-        "docs/professor_summary_1p.md",
+        "docs/research_summary_1p.md",
         "docs/contribution_statement.md"
       ],
       "required_checks": [
@@ -137,7 +137,7 @@
       ],
       "exit_criteria": [
         "材料区分 completed、in progress、not claimed。",
-        "审核线程确认 professor-facing wording 不夸大。"
+        "审核线程确认 external-facing wording 不夸大。"
       ],
       "next_stage": null
     }
@@ -167,7 +167,7 @@
       "selection_signal_validity": 3,
       "result_overclaiming_risk": 3,
       "reproducibility": 3,
-      "professor_facing_wording": 2,
+      "external_facing_wording": 2,
       "actionability": 2
     },
     "core_minimums": {

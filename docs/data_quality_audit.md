@@ -27,4 +27,4 @@ PY
 
 ## Current Verdict
 
-Pass for scaffold use. Before emailing professors, run a second review after real model diagnostic outputs are available.
+Pass for scaffold use. Before making external research claims, run a second review after real model diagnostic outputs are available.
