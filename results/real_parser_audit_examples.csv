@@ -1,4 +1,4 @@
-id,task_family,difficulty_bucket,answer,parsed_prediction,audit_category,number_token_count,has_equation,human_check_prompt,raw_continuation
+﻿id,task_family,difficulty_bucket,answer,parsed_prediction,audit_category,number_token_count,has_equation,human_check_prompt,raw_continuation
 dev_diagnostic-0000,ratio_change,easy,30.6,36.0,parser_or_output_format_risk,7,True,请判断这是真推理错误、parser/格式问题，还是题目理解问题。, 36 - 15% of 36 | = 36 - 0.15 * 36 | = 36
 dev_diagnostic-0002,weighted_aggregation,easy,72.87,150.0,prompt_or_task_misunderstanding_risk,1,False,请判断这是真推理错误、parser/格式问题，还是题目理解问题。, 150.00000000000001
 dev_diagnostic-0003,temporal_numeric_constraint,easy,93.0,106.0,model_calculation_or_reasoning_error,1,False,请判断这是真推理错误、parser/格式问题，还是题目理解问题。, 106

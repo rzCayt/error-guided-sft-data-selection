@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import re
 import sys
 from collections import Counter, defaultdict
@@ -14,13 +15,24 @@ from _bootstrap import add_src_to_path
 
 ROOT = add_src_to_path()
 
-from eg_sft.utils.io import read_jsonl, write_csv  # noqa: E402
+from eg_sft.utils.io import read_jsonl  # noqa: E402
 
 NUMBER_RE = re.compile(r"[-+]?\d+(?:\.\d+)?(?:e[-+]?\d+)?%?", re.IGNORECASE)
 
 
 def numeric_tokens(text: str) -> list[str]:
     return NUMBER_RE.findall(text)
+
+
+def write_csv_for_spreadsheets(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        path.write_text("", encoding="utf-8-sig")
+        return
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def audit_category(row: dict) -> str:
@@ -180,8 +192,8 @@ def main() -> None:
 
     summary = summarize(rows)
     examples = representative_examples(rows, args.limit_per_category)
-    write_csv(ROOT / args.summary, summary)
-    write_csv(ROOT / args.examples, examples)
+    write_csv_for_spreadsheets(ROOT / args.summary, summary)
+    write_csv_for_spreadsheets(ROOT / args.examples, examples)
     write_research_note(ROOT / args.note, rows, summary, examples)
     print(
         "wrote "

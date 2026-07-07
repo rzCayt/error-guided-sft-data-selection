@@ -19,6 +19,7 @@ _AUDIT_MODULE = importlib.util.module_from_spec(_AUDIT_SPEC)
 _AUDIT_SPEC.loader.exec_module(_AUDIT_MODULE)
 audit_category = _AUDIT_MODULE.audit_category
 numeric_tokens = _AUDIT_MODULE.numeric_tokens
+write_csv_for_spreadsheets = _AUDIT_MODULE.write_csv_for_spreadsheets
 
 
 def test_generator_is_deterministic() -> None:
@@ -121,3 +122,12 @@ def test_real_diagnostic_error_audit_categories() -> None:
     assert audit_category(multi_number_wrong) == "parser_or_output_format_risk"
     assert audit_category(weighted_wrong) == "prompt_or_task_misunderstanding_risk"
     assert audit_category(direct_wrong) == "model_calculation_or_reasoning_error"
+
+
+def test_real_diagnostic_audit_csv_is_excel_friendly_utf8(tmp_path) -> None:
+    path = tmp_path / "audit.csv"
+    write_csv_for_spreadsheets(path, [{"human_check_prompt": "请判断这是真推理错误"}])
+
+    raw = path.read_bytes()
+    assert raw.startswith(b"\xef\xbb\xbf")
+    assert "请判断这是真推理错误" in path.read_text(encoding="utf-8-sig")

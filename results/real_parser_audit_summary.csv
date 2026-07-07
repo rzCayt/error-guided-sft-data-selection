@@ -1,4 +1,4 @@
-task_family,difficulty_bucket,count,accuracy,error_rate,parser_or_output_format_risk,model_calculation_or_reasoning_error,prompt_or_task_misunderstanding_risk,multi_number_output_rate,equation_output_rate
+﻿task_family,difficulty_bucket,count,accuracy,error_rate,parser_or_output_format_risk,model_calculation_or_reasoning_error,prompt_or_task_misunderstanding_risk,multi_number_output_rate,equation_output_rate
 multiplicative_relation,easy,9,1.0,0.0,0,0,0,0.0,0.0
 multiplicative_relation,hard,8,0.0,1.0,0,8,0,0.0,0.0
 multiplicative_relation,medium,8,0.25,0.75,0,6,0,0.0,0.0
