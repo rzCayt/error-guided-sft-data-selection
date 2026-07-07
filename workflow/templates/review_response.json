@@ -69,12 +69,12 @@
       "checked_date": "2026-07-07",
       "source_summary": "Qwen2.5-0.5B 模型卡说明该模型是 base language model，适用于 post-training 工作流，而不是 chat 直接使用。",
       "key_claim": "Qwen2.5-0.5B 是 base language model，适合 post-training 工作流，不应当按 chat model 期待。",
-      "impact_on_project": "真实 base diagnostic 必须使用 completion-style prompt、记录 model/tokenizer revision 和 raw outputs。",
+      "impact_on_project": "parser/error audit 必须把自动启发式分类和人工标注真值区分开。",
       "blocker": false
     }
   ],
   "必修复": [
-    "下一阶段实现真实 base diagnostic runner，并保存 raw outputs 与完整 run metadata。"
+    "下一阶段复核真实错误样例，并明确哪些错误是模型推理问题、parser/格式风险或 prompt/题目理解风险。"
   ],
   "评分表": {
     "test_leakage_split_contamination": {
@@ -117,7 +117,7 @@
   "阶段判定": {
     "verdict": "pass",
     "allow_next_stage": true,
-    "allowed_next_stage": "real_base_diagnostic",
-    "结论说明": "流程升级可以通过；下一阶段只能做探索性真实 base diagnostic，不能做 LoRA 或 selection 效果声明。"
+    "allowed_next_stage": "parser_error_audit",
+    "结论说明": "流程升级可以通过；下一阶段只能做 parser/error audit 和人工错误样例复核，不能做 LoRA 或 selection 效果声明。"
   }
 }

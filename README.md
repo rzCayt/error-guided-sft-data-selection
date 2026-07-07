@@ -2,114 +2,92 @@
 
 > 中文项目名：基于错误诊断的 SFT 数据选择
 
-本仓库研究一个小而可验证的问题：**能否用 base model 在诊断集上的错误，指导 SFT 训练样本选择，并在相同样本/训练预算下优于 carefully matched random baseline？**
+这个仓库研究一个具体问题：**小型 base model 在诊断集上暴露出的错误，能不能变成 SFT 数据选择信号？**
 
-这个项目不是金融大模型、不是投资建议系统，也不是金融问答 benchmark。仓库中的“收益率、比例、加权、时间序列”等表述只是可控的数值推理外壳，核心目标是验证 post-training/data selection 研究流程是否严谨。
-
-启用 GitHub Pages 后，双语项目主页通常位于 `https://rzcayt.github.io/error-guided-sft-data-selection/`，并提供中文/英文切换按钮；启用步骤见 [GitHub 设置说明](docs/github_setup.md)。仓库内的 [docs/index.html](docs/index.html) 是 Pages 源文件，如果 Pages 尚未启用，在 GitHub 上点击它只会看到源码。GitHub README 本身不能运行 JavaScript，所以 README 采用中文优先、英文折叠保留的形式。
+当前项目还没有声称方法有效。已经完成的是第一轮真实诊断：用 `Qwen/Qwen2.5-0.5B` 跑 `dev_diagnostic`，保存原始输出，并把错误整理成可检查的研究笔记。
 
 <details>
 <summary>English short description</summary>
 
-This repository is a reproducible research scaffold for studying whether base-model diagnostic errors can guide data selection for data-efficient LoRA SFT on small numerical-reasoning language models. Finance-style variables are only used as controlled wording for solver-verifiable numerical tasks. Current result files are pipeline placeholders unless explicitly marked as real model outputs.
+This repository studies whether diagnostic failures from a small base language model can guide SFT data selection. The current evidence is a first real base-model diagnostic with Qwen2.5-0.5B, not a claim that targeted selection improves LoRA SFT.
 
 </details>
 
-## 研究问题
+## 当前观察
 
-小模型在数值推理中常见失败包括变量绑定错误、公式选择错误、尺度/单位错误、时间顺序错误和输出无法解析。本项目把这些 base diagnostic 失败转成数据选择信号：
+真实 base diagnostic 只在 `dev_diagnostic` 上运行，不使用 test split 调整策略。
 
-1. 先在锁定的 `dev_diagnostic` 上评估 base model。
-2. 把失败样本映射到 error taxonomy。
-3. 从独立的 `candidate_pool` 中选择与弱点匹配的 SFT 样本。
-4. 构造 matched-random baseline，控制任务类型、难度、答案量级和推理长度。
-5. 只在锁定的 ID/OOD test split 上做最终评估。
+- Model: `Qwen/Qwen2.5-0.5B`
+- Samples: 100
+- Numeric accuracy: 0.21
+- Parser: `parse_numeric_last_number_v1`
+- Raw outputs: `results/real_base_diagnostic_outputs.jsonl`
+- Error profile: `results/real_error_profile.csv`
+- 第一轮错误分析：`docs/real_error_analysis_cn.md`
 
-预期贡献不是“已经证明 targeted selection 更好”，而是建立一个可审计、可复现、能防止泄漏和过度声明的实验流程。
+按任务族粗看：
 
-## 当前状态
+- `multiplicative_relation`: 11/25 correct
+- `ratio_change`: 6/25 correct
+- `temporal_numeric_constraint`: 4/25 correct
+- `weighted_aggregation`: 0/25 correct
 
-- 已实现确定性数据生成器与 solver。
-- 已固定 split：`candidate_pool`、`dev_diagnostic`、`test_id`、`test_ood_template`、`test_ood_range`。
-- 已实现 parser、metric、error taxonomy、base diagnostic 占位流程。
-- 已实现 error-guided selector 与 matched-random selector。
-- 已加入 strong baseline gate：matched random multi-seed、stratified random、metadata-hard baseline。
-- 已实现 selection bias audit 与 split leakage audit。
-- 已实现 LoRA smoke 接口；无 GPU/依赖时会生成 no-training evidence，而不是伪造训练结果。
-- 已建立中文主线程 workflow 与中文 adversarial reviewer 流程，要求审核线程搜索外部资料后再给阶段 verdict。
+这提示错误信号值得继续分析，但不能直接说明 error-guided selection 会优于 random baseline。
 
-## 证据边界
+## 第一轮错误分析
 
-当前 `results/main_results_v0.csv` 是 **simulated diagnostic placeholder**，只能用于验证文件格式、parser、selector 和评估管线是否连通。它不能作为“error-guided selection 真实提升模型”的证据。
+当前 parser/error audit 是自动启发式分类，不是人工标注真值。它提示错误可能混合了三类问题：
 
-第一个可对外讨论的真实实验必须满足：
+- 模型确实算错或关系理解错误。
+- 模型输出多个数字或等式，last-number parser 可能取到中间值或尾部残片。
+- 部分 weighted aggregation 题目中，模型像是在相加，而不是做加权平均。
 
-- 使用真实模型输出替代 simulated diagnostic。
-- 起点模型至少为 `Qwen/Qwen2.5-0.5B` 或同级小型开源模型。
-- 保存 raw outputs、prompt template、decoding config、parser version、model/tokenizer revision、dtype、seed。
-- 在相同训练预算下比较 Base、Matched Random、Targeted。
-- 在比较前完成 leakage、overlap、bias audit。
-- 在任何 Targeted 优于 Random 的声明前完成 strong baseline audit。
+因此下一步不是马上训练 LoRA，而是先人工看 20-30 条真实错误样例，判断哪些错误适合用 SFT 数据修复，哪些应先改 parser 或 prompt。
 
-## 快速开始
+## 不能下的结论
+
+- 不能说 Targeted selection 已经优于 Random。
+- 不能说 LoRA 已经带来提升。
+- 不能把 simulated placeholder 表格当成真实模型结果。
+- 不能用 `dev_diagnostic` 调整后再把它当最终测试集。
+
+## 快速复现
 
 ```powershell
 cd E:\RA准备\07_error_guided_sft_repo
 python -m pip install -e .[dev]
 python scripts/generate_data.py --all
 python scripts/audit_splits.py
-python scripts/run_base_diagnostic.py
-python scripts/build_selection_sets.py --budget 128
-python scripts/evaluate_results.py
+python scripts/run_real_base_diagnostic.py --model Qwen/Qwen2.5-0.5B --max-new-tokens 32
+python scripts/audit_real_diagnostic_errors.py
+python scripts/build_selection_sets.py --budget 128 --profile results/real_error_profile.csv --baseline-seeds 20260711,20260712,20260713
 pytest -q
 ```
 
-可选训练/模型 smoke test：
+如果只是检查 pipeline，也可以运行 simulated diagnostic：
 
 ```powershell
-python -m pip install -e .[train]
-python scripts/run_qwen_smoke.py
-python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
+python scripts/run_base_diagnostic.py
+python scripts/build_selection_sets.py --budget 128
+python scripts/evaluate_results.py
 ```
 
-## 仓库结构
+## 主要文件
 
-- `docs/project_spec.md`：中文研究设计、split 纪律、评估计划。
-- `docs/data_generation_spec.md`：中文数据生成规范、任务族、solver 保证。
-- `docs/selection_policy_spec.md`：中文 targeted/matched-random 选择策略。
-- `docs/strong_baseline_design.md`：强力基线门槛和审计标准。
-- `docs/literature_review.md`：数据选择与 LoRA 相关文献定位。
-- `docs/contribution_statement.md`：研究贡献与个人工作说明。
-- `docs/research_summary_1p.md`：一页研究摘要。
-- `docs/workflow_cn.md`：中文主线程 SOP 与评分门槛。
-- `docs/adversarial_review_rubric_cn.md`：中文审核线程 rubric。
-- `docs/reviewer_external_evidence_policy_cn.md`：审核线程外部资料搜索规则。
-- `docs/index.html`：可切换中英文的 GitHub Pages 项目主页。
-- `workflow`：阶段门槛、外部来源种子、审查包模板和校验 fixture。
-- `src/eg_sft/data`：生成器、schema、solver。
-- `src/eg_sft/eval`：parser、metric、error taxonomy。
-- `src/eg_sft/selection`：error-guided selection、matched random、bias audit。
-- `scripts`：可复现实验入口。
+- `scripts/run_real_base_diagnostic.py`: 运行真实 Qwen base diagnostic。
+- `scripts/audit_real_diagnostic_errors.py`: 生成 parser/error audit 和中文研究笔记。
+- `docs/real_error_analysis_cn.md`: 第一轮真实错误画像分析。
+- `docs/research_summary_1p.md`: 一页研究摘要。
+- `docs/contribution_statement.md`: 如何说明个人研究贡献。
+- `docs/index.html`: 可切换中英文的 GitHub Pages 项目页。
 
-## 固定工作流
+## 你的参与方式
 
-本项目后续按阶段推进：
+这个阶段最需要的是研究判断，而不是继续堆功能。建议阅读 `results/real_parser_audit_examples.csv`，逐条判断：
 
-1. 主线程生成阶段计划。
-2. 实施本阶段任务。
-3. 主线程填写自评。
-4. 生成结构化 review package。
-5. 本地校验 review package。
-6. 发给只读中文审核线程。
-7. 审核线程必须搜索资料、检查证据、给 blocker/verdict。
-8. 修复 blocker 后再进入下一阶段。
+- 这是真正的推理/计算错误吗？
+- 这是输出格式或 parser 问题吗？
+- 这是题目表达让模型误解了吗？
+- 这种错误是否适合用 SFT 数据修复？
 
-当前允许进入的下一阶段是 `real_base_diagnostic`：用真实 `Qwen/Qwen2.5-0.5B` 或同级模型跑 base diagnostic。当前仍禁止宣称 Targeted 优于 Random。
-
-## 质量规则
-
-- 不用 test split 调 prompt、parser、selection policy 或训练策略。
-- 不混用 `dev_diagnostic` 和 test split。
-- 不把 simulated/smoke/no-training placeholder 写成真实模型结论。
-- 不提交模型权重、adapter、大型生成文件或 token。
-- 失败训练也要记录环境、命令、错误和下一步，而不是删除失败证据。
+这些判断会决定项目下一步是修 parser、调整 prompt，还是进入 selection bias audit 和后续 LoRA 对比。

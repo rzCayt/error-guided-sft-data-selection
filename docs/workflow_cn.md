@@ -46,4 +46,4 @@
 
 ## 当前允许方向
 
-当前允许进入的下一阶段是 `real_base_diagnostic`，只限探索性真实 base diagnostic。仍然禁止声明 Targeted selection 优于 Random，也禁止把 simulated diagnostic 当成真实模型证据。
+当前允许进入的下一阶段是 `parser_error_audit`：复核真实 Qwen base diagnostic 的错误样例，区分模型推理错误、parser/格式风险和 prompt/题目理解风险。仍然禁止声明 Targeted selection 优于 Random，也禁止把真实 diagnostic 当成 LoRA 或 selection 提升证据。

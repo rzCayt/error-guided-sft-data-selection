@@ -1,35 +1,40 @@
 # 一页研究摘要
 
-## 项目
-
-**基于错误诊断的数据选择：面向小型数值推理语言模型的高效 LoRA SFT**
-
-英文题目：
-
-```text
-Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reasoning Language Models
-```
-
 ## 研究问题
 
-在相同样本预算和训练预算下，base model 的诊断错误能否指导 SFT 数据选择，并比 matched random selection 更有效？
+小型 base language model 在诊断集上暴露出的错误，能否用于指导 SFT 数据选择？更具体地说，这些错误画像是否能提供超出 matched random sampling 的有效信号？
 
-## 方法概述
+## 当前实验
 
-项目构建了一个可控的合成数值推理 benchmark，每条样本都有 deterministic solver 生成的可验证答案。流程先让小型 base language model 在独立的 `dev_diagnostic` split 上作答，再把失败解析为 error taxonomy，例如算术错误、公式错误、单位/尺度错误、时间顺序错误、解析失败和变量绑定错误。
+我构建了一个可控的数值推理数据集，每条样本都有 solver 生成的确定答案。数据被拆成独立的 `candidate_pool`、`dev_diagnostic` 和 ID/OOD test split。当前只使用 `dev_diagnostic` 做 base model 诊断，不用 test split 调整策略。
 
-随后，项目根据错误画像从独立 `candidate_pool` 中选择 SFT 样本。对照组是 matched-random baseline，会匹配任务族、难度、答案量级和推理长度。如果严格 stratum matching 需要与 targeted subset 重叠，系统会报告 overlap，并把它作为 baseline 独立性限制，而不是隐藏。
+第一轮真实诊断使用 `Qwen/Qwen2.5-0.5B`：
 
-锁定的 ID/OOD test split 不参与策略调整。
+- 样本数：100
+- 数值准确率：0.21
+- 原始输出：`results/real_base_diagnostic_outputs.jsonl`
+- 错误画像：`results/real_error_profile.csv`
+- 错误分析笔记：`docs/real_error_analysis_cn.md`
 
-## 当前证据
+按任务族看，`weighted_aggregation` 最弱，25 条全错；`multiplicative_relation` 相对最好，25 条中 11 条正确。
 
-仓库已经包含可复现 generator、solver、模拟 diagnostic path、selection policies、bias audit 和 workflow validator。模拟路径只是为了在没有模型/GPU 的环境中验证 pipeline，不支持任何真实训练增益声明。
+## 初步发现
+
+错误不是单一类型。当前自动审计只是启发式分类，不是人工标注真值；它提示至少有三类信号混在一起：
+
+- 模型确实不会算，或者没有学会某类数值关系。
+- 模型输出多个数字或等式，当前 parser 可能取到错误数字。
+- 部分题目表达可能诱导模型使用错误公式，例如把 weighted aggregation 当成普通相加。
+
+这提示 error-guided selection 有继续分析的价值，但也说明不能直接把错误画像当成训练数据选择证据。
 
 ## 下一步
 
-运行 `Qwen/Qwen2.5-0.5B` 的真实 base diagnostic，并在 GPU 环境中做 LoRA smoke test。随后在 B128/B256 预算下比较 Base、Matched Random 和 Targeted。
+先做 20-30 条真实错误样例的人工复核，判断哪些错误适合用 SFT 数据修复，哪些应该先处理 prompt/parser。只有当错误画像被确认是稳定的模型弱点，而不只是解析或题目表达问题，才进入 selection bias audit 和 LoRA 对比。
 
-## 研究价值
+## 当前不能声称
 
-该项目展示的是 post-training 研究中的基础能力：数据构造、诊断评估、数据选择、baseline 公平性、泄漏控制、实验记录和克制汇报。更重要的是，它把一个容易被讲成概念的方向落到了可检查的研究协议上：哪些证据已经存在、哪些结论还不能说、下一步实验需要满足什么最低标准，都被明确写入 workflow。
+- 不能声称 Targeted selection 已经优于 Random。
+- 不能声称 LoRA 已经提升模型。
+- 不能把 simulated placeholder 当成真实实验结果。
+- 不能把 `dev_diagnostic` 当最终测试集。

@@ -38,7 +38,7 @@
     "next_step_clarity": {
       "score": 2,
       "max_score": 2,
-      "reason": "下一阶段固定为 real_base_diagnostic，且规定所需产物和禁止声明。"
+      "reason": "下一阶段固定为 parser_error_audit，且规定所需产物和禁止声明。"
     }
   },
   "total_score": 17,

@@ -7,10 +7,11 @@
     "mode": "read_only",
     "required_output_language": "zh-CN"
   },
-  "current_allowed_stage": "real_base_diagnostic",
+  "current_allowed_stage": "parser_error_audit",
   "reviewable_stage_ids": [
     "workflow_upgrade",
-    "real_base_diagnostic"
+    "real_base_diagnostic",
+    "parser_error_audit"
   ],
   "stages": [
     {
@@ -73,6 +74,31 @@
         "strong baseline design gate 已冻结，并明确主结论基线、辅助基线和 upper-bound analysis 的边界。",
         "审核线程已搜索 Qwen 模型卡和官方文档，并记录外部资料核验。",
         "审核线程允许进入 selection/bias audit 阶段。"
+      ],
+      "next_stage": "parser_error_audit"
+    },
+    {
+      "id": "parser_error_audit",
+      "name_zh": "真实错误样例与 parser 风险复核",
+      "goal_zh": "分析 Qwen base diagnostic 的真实错误输出，区分模型推理错误、parser/格式风险和 prompt/题目理解风险。",
+      "required_artifacts": [
+        "docs/real_error_analysis_cn.md",
+        "results/real_parser_audit_summary.csv",
+        "results/real_parser_audit_examples.csv"
+      ],
+      "required_checks": [
+        "python scripts/audit_real_diagnostic_errors.py",
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能声称 parser audit 已证明 Targeted selection 有效。",
+        "不能把多数字输出全部当作模型推理错误。",
+        "不能在人工复核前进入 claim-bearing LoRA 对比。"
+      ],
+      "exit_criteria": [
+        "错误样例至少覆盖 parser/格式风险、模型推理错误和 prompt/题目理解风险。",
+        "研究笔记明确说明哪些结论不能下。",
+        "下一步说明以人工复核和 selection bias audit 为主，而不是直接训练。"
       ],
       "next_stage": "selection_bias_audit"
     },

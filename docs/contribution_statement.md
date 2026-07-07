@@ -1,61 +1,57 @@
-# 如何说明我的项目贡献
+# 如何说明我的研究贡献
 
 ## 简短版本
 
-我搭建了一个小型、可复现的研究脚手架，用来研究 base model 的诊断错误能否指导 SFT 数据选择。我的贡献重点是实验设计和可审计 pipeline，而不是声称当前方法已经提升真实模型。
+我不是只做了一个代码 demo，而是在做一个可复核的小型研究：先让 base model 在独立诊断集上真实出错，再分析这些错误能不能成为 SFT 数据选择信号。
 
-## 我具体做了什么
+当前最重要的贡献不是“模型已经提升”，而是把研究问题拆成了可检查的步骤，并且保留了原始输出、错误画像和不能下结论的边界。
 
-- 设计并实现了一个确定性的数值推理数据生成器，每条样本都有 solver-verified label。
-- 设计了独立 split：训练候选池、base diagnostic、ID test、OOD template test、OOD range test。
-- 实现了 diagnostic pipeline，记录预测、解析成功率、数值准确率、输出长度和错误类型。
-- 实现了 error-guided data selector 和 matched-random baseline。
-- 实现了 bias/leakage audit，包括 split duplicate check 和 targeted/matched overlap check。
-- 建立了阶段式 adversarial review workflow，用来在产生真实训练声明前检查泄漏、baseline 不公平和过度表述。
-- 整理了 data-efficient instruction tuning、data selection 和 LoRA 相关文献定位。
-- 将项目入口文档和研究说明改为中文优先，并保留英文版本用于 GitHub/国际读者。
+## 我具体完成了什么
 
-## 我没有声称什么
+- 设计了一个 solver-verifiable 的数值推理数据集，每条样本都有确定答案。
+- 固定了 `candidate_pool`、`dev_diagnostic` 和 ID/OOD test split，避免把诊断集和测试集混用。
+- 用 `Qwen/Qwen2.5-0.5B` 跑了第一轮真实 base diagnostic，保存 raw outputs、model/tokenizer revision、prompt、decoding config 和 parser version。
+- 生成了 `results/real_error_profile.csv`，并用真实错误画像重跑 strong baseline selection artifacts。
+- 新增 parser/error audit，把错误初步分成推理错误、parser/格式风险、prompt/题目理解风险。
+- 保留 matched random、stratified random 和 metadata-hard baseline，用来防止后续把普通难度重采样误说成方法提升。
 
-- 我没有声称 error-guided selection 已经优于 matched random。
-- 我没有声称已经完成真实 LoRA 训练结果。
-- 我没有声称合成任务能证明广义数学推理能力。
-- 我没有声称当前 selector 是最终方案；下一版应该加入 error-type-aware selector 和 ablation。
+## 我的研究判断在哪里
 
-## 可以这样说明这个研究
+这个阶段最能体现研究能力的部分，是判断错误画像是否可信：
+
+- `weighted_aggregation` 全错，可能是模型不会加权，也可能是题目措辞或输出解析造成的现象。
+- `ratio_change` 经常输出多个数字和等式，说明 last-number parser 可能影响结论。
+- `multiplicative_relation` 在 easy 上表现好，但 hard 上全错，提示难度分层可能是真信号，但仍需要人工样例复核。
+
+因此我不会直接进入 LoRA 训练，而是先做人工错误复核。这个决策本身就是研究判断：先确认信号质量，再决定是否训练。
+
+## 如何说明 AI 的角色
+
+可以直接说明使用了 AI，但要区分角色：
 
 ```text
-我设计并实现了一个用于 error-guided SFT data selection 的可控 pilot pipeline。这个项目重点不是先追求漂亮结果，而是把实验流程做严谨：确定性数据生成、solver-verifiable labels、严格 split discipline、matched-random baseline、leakage audit、bias audit，以及每个阶段进入下一步前的 adversarial review。当前阶段已经验证了研究框架和本地 pipeline，下一步是用 Qwen2.5-0.5B 替换 simulated diagnostic，收集真实 base model 错误，再测试错误诊断驱动的数据选择是否比 metadata-matched random sampling 提供额外信号。
+我把 AI 当成 coding assistant 和 review assistant。研究问题、证据边界、强基线要求、是否暂缓 LoRA、以及哪些错误需要人工复核，是我主导判断的部分。AI 帮我把这些判断落实成脚本、文档和可复现产物。
 ```
 
-## 研究表述重点
-
-应该强调：
-
-- 研究问题清楚。
-- comparison design 可控。
-- baseline 公平性和泄漏风险被显式处理。
-- 项目可复现、可审计。
-- 愿意报告负结果或不显著结果。
-- 已准备进入真实 base diagnostic 和 LoRA 对比。
-
-避免说：
-
-- “我做了一个金融大模型。”
-- “模型已经提升了。”
-- “Targeted 方法已经被证明有效。”
-- “这个数据集证明了模型推理能力。”
+这样的说法比回避 AI 更可信，也更符合现在的研究工作方式。
 
 ## 一分钟口头版本
 
 ```text
-我在做一个小型 post-training 研究项目，问题是 base model 的诊断错误能不能指导 SFT 数据选择。具体来说，我先让 base model 在独立诊断集上暴露错误，再把错误画像转成 candidate pool 的选择信号，然后和严格 matched random baseline 在相同预算下比较。我已经实现了 generator、solver、split discipline、parser、error taxonomy、targeted/matched-random selection 和 audit reports。项目还设置了一个只读审核流程，专门检查 leakage、baseline fairness 和 overclaiming。当前阶段还不声明训练增益，下一步是用 Qwen2.5-0.5B 跑真实 base diagnostic。
+我现在做的是一个小型 post-training 研究，问题是 base model 的诊断错误能不能指导 SFT 数据选择。我已经用 Qwen2.5-0.5B 跑了第一轮真实诊断，100 条 dev diagnostic 里数值准确率是 0.21。现在我没有直接说方法有效，而是在分析错误画像：哪些是真推理错误，哪些是 parser 或输出格式问题，哪些可能是题目表达导致的误解。下一步我会人工复核 20-30 条错误样例，再决定是否进入 selection bias audit 和 LoRA 对比。
 ```
 
-## 如果被问“你的核心贡献是什么”
+## 如果被问“你在项目中是什么身份”
 
 可以回答：
 
 ```text
-我的核心贡献是把一个比较宽泛的 data selection 想法变成可复现的实验协议：solver-verifiable task setup、严格 split discipline、diagnostic error profiling、公平 matched-random comparison，以及防止 premature claims 的 audit gate。后续真正的研究贡献要看真实模型 diagnostic 是否能证明 error-type-aware selection 在 matched random 之上带来额外信号。
+我不是数据提供者，也不是只给 AI 提意见的人。我在这个项目里的角色是研究问题负责人和错误分析者：我负责定义问题、控制 split 和 baseline、公平解释结果，并判断下一步实验是否有意义。
 ```
+
+## 避免的说法
+
+- “模型已经提升了。”
+- “Targeted selection 已经被证明有效。”
+- “我做了一个金融大模型。”
+- “这个结果已经能说明 LoRA 有用。”

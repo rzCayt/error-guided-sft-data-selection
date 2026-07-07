@@ -55,7 +55,7 @@ EG-SFT adversarial reviewer
 
 允许的下一步：
 
-- `real_base_diagnostic`：探索性真实 base diagnostic。
+- `parser_error_audit`：复核真实 Qwen base diagnostic 的错误样例，区分模型推理错误、parser/格式风险和 prompt/题目理解风险。
 
 暂不允许：
 
@@ -70,6 +70,7 @@ EG-SFT adversarial reviewer
 - 至少完成 exact matched random multi-seed、stratified random 和 metadata-hard baseline。
 - 加入或消融 error-type-aware selector。
 - 用真实模型 raw outputs 和 run metadata 替换 simulated diagnostic rows。
+- 完成真实错误样例和 parser 风险复核，避免把格式问题当作推理提升空间。
 - 构建选择集时显式使用 `--profile results/real_error_profile.csv`，不能继续使用 simulated `error_profile_v0.csv`。
 - 把 Qwen smoke evidence 保存为机器可读 artifact，而不是只写 prose。
 

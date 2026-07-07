@@ -6,14 +6,12 @@
   <title>Error-Guided SFT Data Selection</title>
   <style>
     :root {
-      --bg: #f6f7f4;
-      --text: #1c2420;
-      --muted: #5c6862;
-      --line: #d7ded7;
+      --bg: #f7f8f5;
+      --text: #18211d;
+      --muted: #5a655f;
+      --line: #d8ded7;
       --accent: #0f766e;
-      --accent-dark: #115e59;
       --panel: #ffffff;
-      --warn: #8a5a00;
     }
     * { box-sizing: border-box; }
     body {
@@ -23,25 +21,22 @@
       background: var(--bg);
       line-height: 1.65;
     }
-    header {
-      border-bottom: 1px solid var(--line);
-      background: var(--panel);
-    }
     .wrap {
-      width: min(1040px, calc(100% - 32px));
+      width: min(980px, calc(100% - 32px));
       margin: 0 auto;
+    }
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
     }
     .topbar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 16px;
       padding: 18px 0;
     }
-    .brand {
-      font-weight: 700;
-      letter-spacing: 0;
-    }
+    .brand { font-weight: 700; }
     .toggle {
       display: inline-flex;
       border: 1px solid var(--line);
@@ -61,18 +56,16 @@
       background: var(--accent);
       color: #fff;
     }
-    .hero {
-      padding: 56px 0 34px;
-    }
+    .hero { padding: 54px 0 42px; }
     h1 {
       margin: 0;
-      max-width: 920px;
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1.08;
+      max-width: 900px;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1.1;
       letter-spacing: 0;
     }
     .lead {
-      max-width: 820px;
+      max-width: 780px;
       margin: 22px 0 0;
       color: var(--muted);
       font-size: 1.08rem;
@@ -91,7 +84,7 @@
       border-radius: 8px;
       text-decoration: none;
       border: 1px solid var(--accent);
-      color: var(--accent-dark);
+      color: var(--accent);
       background: #fff;
       font-weight: 600;
     }
@@ -99,37 +92,34 @@
       background: var(--accent);
       color: #fff;
     }
-    main {
-      padding: 28px 0 64px;
-    }
+    main { padding: 26px 0 64px; }
     section {
-      padding: 28px 0;
+      padding: 26px 0;
       border-bottom: 1px solid var(--line);
     }
     h2 {
       margin: 0 0 12px;
-      font-size: 1.35rem;
+      font-size: 1.34rem;
       letter-spacing: 0;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
       margin-top: 16px;
     }
-    .card {
+    .metric {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 16px;
+      padding: 14px;
     }
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
+    .metric strong {
+      display: block;
+      font-size: 1.42rem;
+      line-height: 1.2;
     }
-    .card p, li {
-      color: var(--muted);
-    }
+    .metric span, p, li { color: var(--muted); }
     ul {
       padding-left: 1.2rem;
       margin: 10px 0 0;
@@ -142,38 +132,10 @@
       font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
       font-size: 0.92em;
     }
-    pre {
-      overflow-x: auto;
-      background: #111815;
-      color: #e8f1ec;
-      border-radius: 8px;
-      padding: 14px;
-    }
-    pre code {
-      background: transparent;
-      border: 0;
-      padding: 0;
-      color: inherit;
-    }
-    .note {
-      border-left: 4px solid var(--warn);
-      padding: 10px 14px;
-      background: #fff8e6;
-      color: #3f320b;
-    }
-    [data-lang="en"] {
-      display: none;
-    }
-    body.en [data-lang="zh"] {
-      display: none;
-    }
-    body.en [data-lang="en"] {
-      display: block;
-    }
-    body.en span[data-lang="en"],
-    body.en a[data-lang="en"] {
-      display: inline-flex;
-    }
+    [data-lang="en"] { display: none; }
+    body.en [data-lang="zh"] { display: none; }
+    body.en [data-lang="en"] { display: block; }
+    body.en a[data-lang="en"] { display: inline-flex; }
     footer {
       padding: 24px 0 44px;
       color: var(--muted);
@@ -183,12 +145,8 @@
         align-items: flex-start;
         flex-direction: column;
       }
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      .hero {
-        padding-top: 34px;
-      }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .hero { padding-top: 34px; }
     }
   </style>
 </head>
@@ -202,88 +160,75 @@
       </div>
     </div>
     <div class="wrap hero">
-      <h1 data-lang="zh">基于错误诊断的 SFT 数据选择实验脚手架</h1>
-      <h1 data-lang="en">Error-Guided SFT Data Selection for Small Reasoning Models</h1>
-      <p class="lead" data-lang="zh">本项目研究能否把 base model 的诊断错误转化为数据选择信号，并在相同样本和训练预算下与 matched random baseline 做可审计比较。</p>
-      <p class="lead" data-lang="en">This project studies whether base-model diagnostic failures can guide SFT data selection more effectively than a carefully matched random baseline under the same sample and training budget.</p>
+      <h1 data-lang="zh">base model 错在哪里，这些错误能不能指导 SFT 数据选择？</h1>
+      <h1 data-lang="en">Can base-model mistakes guide SFT data selection?</h1>
+      <p class="lead" data-lang="zh">这是一个小型、可复核的研究项目。当前阶段只分析 Qwen2.5-0.5B 在诊断集上的真实错误画像，还不声称 Targeted selection 或 LoRA 已经有效。</p>
+      <p class="lead" data-lang="en">This is a small, auditable research project. The current stage analyzes real diagnostic errors from Qwen2.5-0.5B and does not claim that targeted selection or LoRA is effective yet.</p>
       <div class="actions">
-        <a class="button primary" href="https://github.com/rzCayt/error-guided-sft-data-selection#readme" data-lang="zh">查看 README</a>
-        <a class="button primary" href="https://github.com/rzCayt/error-guided-sft-data-selection#readme" data-lang="en">Open README</a>
-        <a class="button" href="project_spec.md" data-lang="zh">研究设计</a>
-        <a class="button" href="project_spec.md" data-lang="en">Project Spec</a>
+        <a class="button primary" href="https://github.com/rzCayt/error-guided-sft-data-selection#readme" data-lang="zh">查看仓库</a>
+        <a class="button primary" href="https://github.com/rzCayt/error-guided-sft-data-selection#readme" data-lang="en">Open Repository</a>
+        <a class="button" href="real_error_analysis_cn.md" data-lang="zh">真实错误分析</a>
+        <a class="button" href="research_summary_1p.md" data-lang="zh">一页摘要</a>
         <a class="button" href="contribution_statement.md" data-lang="zh">贡献说明</a>
-        <a class="button" href="contribution_statement.md" data-lang="en">Contribution Statement</a>
       </div>
     </div>
   </header>
 
   <main class="wrap">
     <section>
-      <h2 data-lang="zh">研究问题</h2>
-      <h2 data-lang="en">Research Question</h2>
-      <p data-lang="zh">小模型在数值推理中会出现变量绑定、公式选择、尺度处理和时间顺序等错误。本项目先用锁定诊断集识别这些失败，再从独立候选池中选择更针对弱点的 SFT 样本，并与严格匹配的随机选择比较。</p>
-      <p data-lang="en">Small models often fail through variable-binding mistakes, wrong formulas, scale errors, and temporal-ordering mistakes. The project profiles those failures on a locked diagnostic split, selects targeted SFT examples from a separate candidate pool, and compares them against a matched-random baseline.</p>
-    </section>
-
-    <section>
-      <h2 data-lang="zh">当前能说明什么</h2>
-      <h2 data-lang="en">Current Evidence Boundary</h2>
-      <p class="note" data-lang="zh">当前结果表仍包含 simulated diagnostic placeholder，只能证明 pipeline、parser、selector 和 audit 能跑通，不能证明 targeted selection 已经提升真实模型。</p>
-      <p class="note" data-lang="en">Current result tables include simulated diagnostic placeholders. They validate the pipeline, parser, selector, and audits, but they do not prove real model improvement.</p>
+      <h2 data-lang="zh">当前真实观察</h2>
+      <h2 data-lang="en">Current Observation</h2>
+      <p data-lang="zh">第一轮真实诊断只使用锁定的 <code>dev_diagnostic</code>，不使用 test split 调整策略。结果是一个错误画像，不是方法有效性结论。</p>
+      <p data-lang="en">The first real diagnostic uses only the locked <code>dev_diagnostic</code> split. It is an error profile, not a method-effectiveness claim.</p>
       <div class="grid">
-        <div class="card">
-          <h3 data-lang="zh">已完成</h3>
-          <h3 data-lang="en">Implemented</h3>
-          <p data-lang="zh">确定性数据生成器、solver、split、parser、error taxonomy、selector、bias/leakage audit。</p>
-          <p data-lang="en">Deterministic generator, solver, splits, parser, error taxonomy, selectors, and bias/leakage audits.</p>
-        </div>
-        <div class="card">
-          <h3 data-lang="zh">下一阶段</h3>
-          <h3 data-lang="en">Next Stage</h3>
-          <p data-lang="zh">用真实 <code>Qwen/Qwen2.5-0.5B</code> 跑 base diagnostic，并保存 raw outputs 与完整 run metadata。</p>
-          <p data-lang="en">Run a real base diagnostic with <code>Qwen/Qwen2.5-0.5B</code> and save raw outputs plus full run metadata.</p>
-        </div>
-        <div class="card">
-          <h3 data-lang="zh">禁止声明</h3>
-          <h3 data-lang="en">Forbidden Claim</h3>
-          <p data-lang="zh">在真实 diagnostic 和 LoRA 对比完成前，不能声称 Targeted 已经优于 Random。</p>
-          <p data-lang="en">Do not claim Targeted beats Random before real diagnostics and LoRA comparisons are complete.</p>
-        </div>
+        <div class="metric"><strong>100</strong><span data-lang="zh">诊断样本</span><span data-lang="en">diagnostic samples</span></div>
+        <div class="metric"><strong>0.21</strong><span data-lang="zh">数值准确率</span><span data-lang="en">numeric accuracy</span></div>
+        <div class="metric"><strong>0/25</strong><span data-lang="zh">weighted aggregation 正确数</span><span data-lang="en">weighted aggregation correct</span></div>
+        <div class="metric"><strong>11/25</strong><span data-lang="zh">multiplicative relation 正确数</span><span data-lang="en">multiplicative relation correct</span></div>
       </div>
     </section>
 
     <section>
-      <h2 data-lang="zh">快速运行</h2>
-      <h2 data-lang="en">Quick Start</h2>
-      <pre><code>cd E:\RA准备\07_error_guided_sft_repo
-python -m pip install -e .[dev]
-python scripts/generate_data.py --all
-python scripts/audit_splits.py
-python scripts/run_base_diagnostic.py
-python scripts/build_selection_sets.py --budget 128
-python scripts/evaluate_results.py
-pytest -q</code></pre>
+      <h2 data-lang="zh">目前看到的问题</h2>
+      <h2 data-lang="en">What the Errors Suggest</h2>
+      <ul data-lang="zh">
+        <li>有些错误像是真正的计算或关系理解失败。</li>
+        <li>有些输出包含多个数字和等式，last-number parser 可能取错数字。</li>
+        <li>weighted aggregation 题目可能诱导模型把两个数相加，而不是按权重计算。</li>
+      </ul>
+      <ul data-lang="en">
+        <li>Some failures look like genuine calculation or relation-understanding errors.</li>
+        <li>Some generations contain multiple numbers and equations, so the last-number parser may pick the wrong value.</li>
+        <li>Weighted aggregation prompts may lead the model to sum values instead of applying weights.</li>
+      </ul>
     </section>
 
     <section>
-      <h2 data-lang="zh">工作流</h2>
-      <h2 data-lang="en">Workflow</h2>
+      <h2 data-lang="zh">下一步</h2>
+      <h2 data-lang="en">Next Step</h2>
+      <p data-lang="zh">先人工复核 20-30 条真实错误样例，判断哪些错误适合用 SFT 数据修复，哪些应先处理 prompt 或 parser。只有错误画像被确认是稳定模型弱点后，才进入 selection bias audit 和 LoRA 对比。</p>
+      <p data-lang="en">Manually review 20-30 real error examples first. Decide which failures are suitable for SFT data repair and which should be treated as prompt or parser issues before moving to selection-bias audits and LoRA comparisons.</p>
+    </section>
+
+    <section>
+      <h2 data-lang="zh">当前不能声称</h2>
+      <h2 data-lang="en">Claims Not Made</h2>
       <ul data-lang="zh">
-        <li>每个阶段先写计划，再实施、自检、生成 review package。</li>
-        <li>审核线程只读，必须中文输出，并必须搜索外部资料。</li>
-        <li>没有 raw outputs、run metadata、leakage/bias audit 时，不允许进入 claim-bearing 阶段。</li>
+        <li>不能声称 Targeted selection 已经优于 Random。</li>
+        <li>不能声称 LoRA 已经提升模型。</li>
+        <li>不能把 simulated placeholder 当成真实实验结果。</li>
       </ul>
       <ul data-lang="en">
-        <li>Each stage requires planning, implementation, self-check, and a structured review package.</li>
-        <li>The reviewer is read-only, must answer in Chinese, and must search external sources.</li>
-        <li>No claim-bearing stage is allowed without raw outputs, run metadata, and leakage/bias audits.</li>
+        <li>No claim that Targeted selection beats Random.</li>
+        <li>No claim that LoRA improves the model.</li>
+        <li>No use of simulated placeholders as real experimental results.</li>
       </ul>
     </section>
   </main>
 
   <footer class="wrap">
-    <span data-lang="zh">本页面可作为 GitHub Pages 项目主页。README 仍然是 GitHub 仓库首页的默认展示。</span>
-    <span data-lang="en">This page can be served with GitHub Pages. The README remains the default repository landing content.</span>
+    <span data-lang="zh">公开页面只展示研究主线；完整 workflow、baseline 和审核细节保留在仓库文档中。</span>
+    <span data-lang="en">This public page shows the research thread; detailed workflow, baseline, and review documents remain in the repository.</span>
   </footer>
 
   <script>

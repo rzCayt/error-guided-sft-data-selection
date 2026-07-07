@@ -18,7 +18,7 @@ Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reaso
 
 如果 base model 在某些任务族、难度、答案量级、推理长度或错误类型上有稳定弱点，那么从独立候选池中选择更针对这些弱点的样本，可能比只按粗粒度 metadata 随机匹配的样本更有效。
 
-这个假设目前还没有被真实模型实验验证。当前仓库先建立可复现流程，真实结论必须等 `real_base_diagnostic` 和 LoRA 对比完成后才能讨论。
+这个假设目前还没有被 LoRA 或 Targeted-vs-Random 对比验证。当前仓库已经完成第一轮真实 `Qwen/Qwen2.5-0.5B` base diagnostic，但它只说明 base model 错误画像；方法有效性结论必须等 parser/error audit、selection bias audit 和后续 LoRA 对比完成后才能讨论。
 
 ## 非目标
 

@@ -91,13 +91,13 @@
   "known_weaknesses": [
     "校验脚本只能校验结构和本地路径，不能替代真正的研究判断。",
     "审核线程仍然需要实际阅读文件和结果，不能只依赖 JSON 模板。",
-    "下一阶段真实 base diagnostic 的 runner 尚未实现。"
+    "下一阶段仍需要人工复核真实错误样例，自动启发式分类不能当作人工标注真值。"
   ],
   "questions_for_reviewer": [
     "这套中文 rubric 是否足够阻止无意义推进？",
     "评分阈值是否足够严格，是否存在可以低质量通过的漏洞？",
     "主线程审查包是否已经比之前更可执行？",
-    "是否允许进入 real_base_diagnostic 实现阶段？"
+    "是否允许进入 parser_error_audit / 真实错误样例复核阶段？"
   ],
   "required_output_language": "zh-CN",
   "required_reviewer_steps": [
