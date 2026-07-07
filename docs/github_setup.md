@@ -8,7 +8,7 @@ Attempted methods in this Codex thread:
 
 1. Searched current GitHub connector tools for repository creation support. Available tools cover existing repository metadata, files, issues, PRs, blobs, trees, commits, and file operations, but no direct create-repository tool was exposed.
 2. Checked `gh --version`. The local GitHub CLI is not installed or not on `PATH`.
-3. Attempted to open `https://github.com/new` through the in-app browser. Browser navigation timed out during the attempt, so repository creation through logged-in browser state was not completed in this thread.
+3. Attempted to open `https://github.com/new` through the in-app browser. A retry reached `https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Fnew`, so there was no usable logged-in browser state for creating a private repository in this thread.
 
 ## Local Repository
 
