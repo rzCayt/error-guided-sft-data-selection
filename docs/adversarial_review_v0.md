@@ -32,3 +32,14 @@ Major concerns:
 - The real model diagnostic still needs to replace simulated predictions.
 - The selector is still primarily metadata-weighted; the next research iteration should add an error-type-aware variant or ablation.
 - OOD template coverage is narrow and should be expanded before making robust generalization claims.
+
+## Second Review Verdict After Fixes
+
+The reviewer rechecked the updated artifacts and gave this verdict:
+
+- Blockers: none for the next stage if the next stage is real base diagnostic as exploratory data collection only.
+- Matched random: passes for the current B128 artifact; `overlap_rate=0.0` and exact stratum delta is `0`.
+- Fairness: acceptable for exploratory diagnostic, but not enough for causal gain claims because `mean_abs_answer` still differs inside buckets.
+- Leakage: exact-overlap blocker is fixed; near-duplicate/template-family risk remains.
+- Result wording: substantially fixed; placeholder language is now strong enough.
+- Overall: proceed to real base diagnostic, but do not make claim-bearing LoRA comparison until remaining audit and selector issues are handled.
