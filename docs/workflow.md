@@ -6,6 +6,7 @@ The authoritative workflow is now the Chinese, machine-checkable workflow:
 
 - `docs/workflow_cn.md`: main-thread SOP and self-check rubric.
 - `docs/adversarial_review_rubric_cn.md`: read-only reviewer rubric and required Chinese output format.
+- `docs/reviewer_external_evidence_policy_cn.md`: external-source search and citation policy for reviewer checks.
 - `workflow/stages.json`: stage gates, required artifacts, checks, forbidden claims, and exit criteria.
 - `workflow/templates/*.json`: structured stage plan, self-check, review package, and review response templates.
 - `scripts/validate_workflow_packet.py`: local validator for workflow packets.

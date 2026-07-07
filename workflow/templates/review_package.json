@@ -9,9 +9,11 @@
   "changed_files": [
     "docs/workflow_cn.md",
     "docs/adversarial_review_rubric_cn.md",
+    "docs/reviewer_external_evidence_policy_cn.md",
     "docs/workflow.md",
     "docs/adversarial_review_protocol.md",
     "workflow/stages.json",
+    "workflow/external_sources_seed.json",
     "workflow/templates/stage_plan.json",
     "workflow/templates/review_package.json",
     "workflow/templates/review_response.json",
@@ -34,6 +36,30 @@
       "path": "docs/adversarial_review_rubric_cn.md",
       "evidence_type": "review_rubric",
       "status": "present"
+    },
+    {
+      "path": "workflow/external_sources_seed.json",
+      "evidence_type": "external_source_seed",
+      "status": "present"
+    }
+  ],
+  "external_search_required": true,
+  "external_search_queries": [
+    {
+      "query": "LESS Selecting Influential Data for Targeted Instruction Tuning arXiv",
+      "purpose": "核对 data selection 是否需要超过表层 metadata 的 selection signal。"
+    },
+    {
+      "query": "Take the Essence and Discard the Dross data selection fine-tuning LLM NAACL 2025",
+      "purpose": "核对 fine-tuning data selection review 对 baseline、公平比较和 selector evaluation 的要求。"
+    },
+    {
+      "query": "Qwen/Qwen2.5-0.5B Hugging Face model card base model post-training",
+      "purpose": "核对下一阶段 Qwen base diagnostic 的模型使用边界。"
+    },
+    {
+      "query": "LoRA Without Regret LoRA SFT training configuration",
+      "purpose": "核对后续 LoRA 阶段需要记录的训练配置和比较风险。"
     }
   ],
   "verification_commands": [
@@ -55,6 +81,7 @@
   ],
   "key_results": [
     "审核线程输出语言固定为中文。",
+    "审核线程以后必须搜索外部资料，并在 review_response 中记录检索记录和外部资料核验。",
     "主线程必须先自评再发送结构化审查包。",
     "结构化审查包必须覆盖 workflow/stages.json 中该阶段的 required artifacts 和 required checks。",
     "结构化审查包中的验证命令必须全部是 passed，failed 或 not_run 不能通过校验。",
@@ -75,6 +102,7 @@
   "required_output_language": "zh-CN",
   "required_reviewer_steps": [
     "只读检查 changed_files、key_artifacts、verification_commands。",
+    "搜索外部资料，并记录至少 3 条检索和 3 条资料核验。",
     "按 docs/adversarial_review_rubric_cn.md 的评分表打分。",
     "用中文输出阻塞项、主要问题、次要问题、必修复、评分表、阶段判定。"
   ],

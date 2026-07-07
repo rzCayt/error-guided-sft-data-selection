@@ -11,7 +11,7 @@
 3. 主线程自评：填写 `workflow/templates/main_self_check.json` 的同结构文件，按评分表打分。
 4. 生成审查包：填写 `workflow/templates/review_package.json` 的同结构文件，列出证据、命令、结果、弱点和要求审核线程回答的问题。
 5. 自动校验审查包：运行 `scripts/validate_workflow_packet.py`，校验结构、证据路径、验证命令和中文要求。审查包必须覆盖该阶段在 `workflow/stages.json` 中列出的 required artifacts 和 required checks。
-6. 发送给审核线程：审核线程必须只读、中文输出、按 rubric 审查。
+6. 发送给审核线程：审核线程必须只读、中文输出、按 rubric 审查，并按 `docs/reviewer_external_evidence_policy_cn.md` 搜索外部资料。
 7. 修复 blocker：如果审核线程给出 blocker，主线程必须先修复并重新发审查包，不能进入下一阶段。
 8. 提交和推送：只有本地验证通过、审核通过、工作树范围明确时才提交推送。
 9. 记录下一阶段：在汇报中明确下一阶段 id、允许做什么、禁止声称什么。
@@ -36,6 +36,7 @@
 
 - 没有新 artifact，却声称阶段完成。
 - 必跑验证命令失败或未运行，却把审查包标记为可通过。
+- 审核线程没有外部资料核验，却允许进入真实模型、selection 或 LoRA 阶段。
 - 用 simulated placeholder 支撑真实模型结论。
 - 没有 overlap、bias、leakage audit，就比较 Targeted 和 Random。
 - 没有 raw outputs 和 run metadata，就宣称真实 diagnostic。

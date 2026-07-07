@@ -12,7 +12,7 @@ Thread id from the first implementation round:
 
 The reviewer is read-only. It must not edit files, commit, push, train models, or change repo state.
 
-The reviewer must output Chinese for all explanations and verdicts. The authoritative rubric is `docs/adversarial_review_rubric_cn.md`, and structured review responses should match `workflow/templates/review_response.json`.
+The reviewer must output Chinese for all explanations and verdicts. The authoritative rubric is `docs/adversarial_review_rubric_cn.md`, external-source checks are governed by `docs/reviewer_external_evidence_policy_cn.md`, and structured review responses should match `workflow/templates/review_response.json`.
 
 ## Review Cadence
 

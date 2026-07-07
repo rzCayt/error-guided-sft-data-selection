@@ -16,6 +16,63 @@
   "次要问题": [
     "后续真实 diagnostic 还需要记录 tokenizer revision、dtype、seed 和 parser version。"
   ],
+  "检索记录": [
+    {
+      "query": "LESS Selecting Influential Data for Targeted Instruction Tuning arXiv",
+      "purpose": "核对 targeted instruction tuning 的 data selection 信号是否应超过表层特征。",
+      "affected_verdict": true
+    },
+    {
+      "query": "Take the Essence and Discard the Dross data selection fine-tuning LLM NAACL 2025",
+      "purpose": "核对 fine-tuning data selection review 对公平比较和 selector evaluation 的要求。",
+      "affected_verdict": true
+    },
+    {
+      "query": "Qwen/Qwen2.5-0.5B Hugging Face model card base model post-training",
+      "purpose": "核对 Qwen base model 使用边界和下一阶段 diagnostic 记录要求。",
+      "affected_verdict": true
+    },
+    {
+      "query": "LoRA Without Regret LoRA SFT training configuration",
+      "purpose": "核对 LoRA 阶段训练配置和比较公平性要求。",
+      "affected_verdict": false
+    }
+  ],
+  "外部资料核验": [
+    {
+      "title": "LESS: Selecting Influential Data for Targeted Instruction Tuning",
+      "url": "https://arxiv.org/abs/2402.04333",
+      "source_type": "paper",
+      "primary_source": true,
+      "checked_date": "2026-07-07",
+      "source_summary": "LESS 将 targeted instruction tuning 作为选择与目标能力相关数据的问题，并强调选择信号不应停留在表层形式。",
+      "key_claim": "targeted instruction tuning 需要识别与目标能力相关的数据，而不只是表层形式匹配。",
+      "impact_on_project": "审核 selection signal 时必须检查是否超过 task/difficulty/metadata 重采样。",
+      "blocker": false
+    },
+    {
+      "title": "Take the Essence and Discard the Dross",
+      "url": "https://aclanthology.org/2025.naacl-long.336/",
+      "source_type": "paper",
+      "primary_source": true,
+      "checked_date": "2026-07-07",
+      "source_summary": "NAACL 2025 review 指出 fine-tuning data selection 需要系统比较 feature extraction、criteria design 和 selector evaluation。",
+      "key_claim": "fine-tuning data selection 研究需要关注实验设置一致性、选择标准和 selector evaluation。",
+      "impact_on_project": "审核时必须检查 candidate pool、预算、baseline、评估集和比较设置是否一致。",
+      "blocker": false
+    },
+    {
+      "title": "Qwen/Qwen2.5-0.5B model card",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-0.5B",
+      "source_type": "model_card",
+      "primary_source": true,
+      "checked_date": "2026-07-07",
+      "source_summary": "Qwen2.5-0.5B 模型卡说明该模型是 base language model，适用于 post-training 工作流，而不是 chat 直接使用。",
+      "key_claim": "Qwen2.5-0.5B 是 base language model，适合 post-training 工作流，不应当按 chat model 期待。",
+      "impact_on_project": "真实 base diagnostic 必须使用 completion-style prompt、记录 model/tokenizer revision 和 raw outputs。",
+      "blocker": false
+    }
+  ],
   "必修复": [
     "下一阶段实现真实 base diagnostic runner，并保存 raw outputs 与完整 run metadata。"
   ],

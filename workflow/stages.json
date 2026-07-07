@@ -24,6 +24,8 @@
         "workflow/templates/review_package.json",
         "workflow/templates/review_response.json",
         "workflow/templates/main_self_check.json",
+        "docs/reviewer_external_evidence_policy_cn.md",
+        "workflow/external_sources_seed.json",
         "scripts/validate_workflow_packet.py",
         "tests/test_workflow_validation.py"
       ],
@@ -66,6 +68,7 @@
       "exit_criteria": [
         "raw outputs、model revision、tokenizer revision、dtype、seed、prompt template、decoding config、parser version 已记录。",
         "只使用 dev_diagnostic 做错误画像。",
+        "审核线程已搜索 Qwen 模型卡和官方文档，并记录外部资料核验。",
         "审核线程允许进入 selection/bias audit 阶段。"
       ],
       "next_stage": "selection_bias_audit"
@@ -90,6 +93,7 @@
       "exit_criteria": [
         "overlap_rate=0 或明确标记比较无效。",
         "matched-random strata delta 为 0。",
+        "审核线程已搜索 data selection 文献并核对 baseline、公平比较和 selector evaluation 要求。",
         "审核线程允许进入 LoRA 阶段。"
       ],
       "next_stage": "lora_comparison"
@@ -111,6 +115,7 @@
       ],
       "exit_criteria": [
         "训练配置、adapter 日志、eval raw outputs 和汇总表齐全。",
+        "审核线程已搜索 LoRA/SFT 资料并核对 rank、adapter placement、batch size、learning rate 和评估一致性。",
         "审核线程允许写 professor-facing summary。"
       ],
       "next_stage": "professor_summary"

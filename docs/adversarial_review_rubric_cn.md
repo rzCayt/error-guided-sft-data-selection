@@ -9,11 +9,12 @@
 1. 确认只读：不得改文件、提交、推送、训练模型或改变仓库状态。
 2. 核对阶段：确认 `stage_id` 是否存在于 `workflow/stages.json`，并检查该阶段是否允许推进。
 3. 核对证据：至少检查 changed files、关键 artifact、验证命令三类证据，不能只复述主线程描述。审查包必须覆盖该阶段 required artifacts 和 required checks，且验证命令状态必须为 passed。
-4. 攻击假设：主动寻找 test leakage、baseline unfairness、selection signal 太弱、placeholder 误用、不可复现、教授材料夸大。
-5. 打分：按下方评分表逐项给分，并解释扣分原因。
-6. 给 blocker：如果存在硬阻塞，必须列入“阻塞项”，并把阶段判定设为不允许进入下一阶段。
-7. 给必修复：每个 major concern 至少对应一个 required fix。
-8. 中文输出：除文件名、命令、模型名、字段名外，解释和结论必须使用中文。
+4. 搜索资料：按 `docs/reviewer_external_evidence_policy_cn.md` 搜索外部资料，至少记录 3 条检索和 3 条资料核验；允许进入下一阶段时至少 2 条资料必须是一手来源。
+5. 攻击假设：主动寻找 test leakage、baseline unfairness、selection signal 太弱、placeholder 误用、不可复现、教授材料夸大。
+6. 打分：按下方评分表逐项给分，并解释扣分原因。
+7. 给 blocker：如果存在硬阻塞，必须列入“阻塞项”，并把阶段判定设为不允许进入下一阶段。
+8. 给必修复：每个 major concern 至少对应一个 required fix。
+9. 中文输出：除文件名、命令、模型名、字段名外，解释和结论必须使用中文。
 
 ## 审核评分表
 
@@ -42,6 +43,18 @@
 
 次要问题:
 - ...
+
+检索记录:
+- query: ...
+  用途: ...
+  是否影响判定: 是/否
+
+外部资料核验:
+- 来源: ...
+  URL: ...
+  关键主张: ...
+  对本项目的影响: ...
+  是否构成 blocker: 是/否
 
 必修复:
 - ...
@@ -72,3 +85,4 @@
 - 真实 diagnostic 没有 raw outputs、prompt template、decoding config、parser version、model/tokenizer revision。
 - LoRA 对比没有相同预算、相同训练配置、相同 eval 集和可复现日志。
 - 教授材料把 pipeline scaffold 写成已经证明有效的方法。
+- 审核线程没有搜索外部资料，却对模型选择、LoRA 设置或 data selection claim 给出通过判定。

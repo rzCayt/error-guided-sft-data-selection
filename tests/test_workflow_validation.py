@@ -142,6 +142,57 @@ def test_review_response_requires_core_evidence_checked(tmp_path: Path) -> None:
     assert "evidence_checked" in result.stderr
 
 
+def test_review_response_requires_search_records(tmp_path: Path) -> None:
+    payload = load_template("review_response.json")
+    payload["检索记录"] = []
+
+    result = run_validator("review_response", write_packet(tmp_path, "no_search_response.json", payload))
+
+    assert result.returncode != 0
+    assert "检索记录" in result.stderr
+
+
+def test_review_response_requires_external_sources(tmp_path: Path) -> None:
+    payload = load_template("review_response.json")
+    payload["外部资料核验"] = []
+
+    result = run_validator("review_response", write_packet(tmp_path, "no_sources_response.json", payload))
+
+    assert result.returncode != 0
+    assert "外部资料核验" in result.stderr
+
+
+def test_review_response_requires_primary_sources_to_allow_next_stage(tmp_path: Path) -> None:
+    payload = load_template("review_response.json")
+    for source in payload["外部资料核验"]:
+        source["primary_source"] = False
+
+    result = run_validator("review_response", write_packet(tmp_path, "weak_sources_response.json", payload))
+
+    assert result.returncode != 0
+    assert "2 primary sources" in result.stderr
+
+
+def test_review_response_requires_source_checked_date_and_summary(tmp_path: Path) -> None:
+    payload = load_template("review_response.json")
+    del payload["外部资料核验"][0]["checked_date"]
+
+    result = run_validator("review_response", write_packet(tmp_path, "weak_sources_response.json", payload))
+
+    assert result.returncode != 0
+    assert "checked_date" in result.stderr
+
+
+def test_review_package_requires_external_search_queries(tmp_path: Path) -> None:
+    payload = load_template("review_package.json")
+    payload["external_search_queries"] = []
+
+    result = run_validator("review_package", write_packet(tmp_path, "no_queries_package.json", payload))
+
+    assert result.returncode != 0
+    assert "external_search_queries" in result.stderr
+
+
 def test_review_response_with_blocker_cannot_allow_next_stage(tmp_path: Path) -> None:
     payload = load_template("review_response.json")
     payload["阻塞项"] = ["审查包没有验证命令。"]

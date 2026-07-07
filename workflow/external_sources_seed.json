@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "kind": "external_sources_seed",
+  "language": "zh-CN",
+  "sources": [
+    {
+      "id": "less_2024",
+      "title": "LESS: Selecting Influential Data for Targeted Instruction Tuning",
+      "url": "https://arxiv.org/abs/2402.04333",
+      "source_type": "paper",
+      "primary_source": true,
+      "relevance": "目标式 instruction tuning 和 data selection 的直接参考；用于审查 selection signal 是否超过表层 metadata。"
+    },
+    {
+      "id": "naacl_data_selection_review_2025",
+      "title": "Take the Essence and Discard the Dross: A Rethinking on Data Selection for Fine-Tuning Large Language Models",
+      "url": "https://aclanthology.org/2025.naacl-long.336/",
+      "source_type": "paper",
+      "primary_source": true,
+      "relevance": "用于审查 data selection 实验设置、baseline、公平比较和 selector evaluation 是否一致。"
+    },
+    {
+      "id": "qwen2_5_0_5b_model_card",
+      "title": "Qwen/Qwen2.5-0.5B model card",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-0.5B",
+      "source_type": "model_card",
+      "primary_source": true,
+      "relevance": "用于审查 base model 使用边界、模型 revision、tokenizer 和 post-training 适用性。"
+    },
+    {
+      "id": "qwen2_5_blog",
+      "title": "Qwen2.5 release blog",
+      "url": "https://qwenlm.github.io/blog/qwen2.5/",
+      "source_type": "official_doc",
+      "primary_source": true,
+      "relevance": "用于审查 Qwen2.5 系列模型范围和 Transformers 使用路径。"
+    },
+    {
+      "id": "lora_without_regret",
+      "title": "LoRA Without Regret",
+      "url": "https://thinkingmachines.ai/blog/lora/",
+      "source_type": "research_blog",
+      "primary_source": false,
+      "relevance": "用于审查 LoRA 对比实验是否记录 rank、adapter placement、batch size、learning rate 等训练设置。"
+    }
+  ]
+}

@@ -11,6 +11,7 @@ STAGES_PATH = ROOT / "workflow" / "stages.json"
 
 VALID_KINDS = {"stage_plan", "review_package", "review_response", "self_check"}
 VALID_VERDICTS = {"pass", "conditional_pass", "fail"}
+VALID_SOURCE_TYPES = {"paper", "model_card", "official_doc", "official_repo", "research_blog"}
 
 
 class ValidationError(Exception):
@@ -143,6 +144,8 @@ def validate_review_package(data: dict[str, Any], config: dict[str, Any]) -> Non
             "required_output_language",
             "required_reviewer_steps",
             "requested_verdicts",
+            "external_search_required",
+            "external_search_queries",
         ],
     )
     require_language_zh(data)
@@ -209,6 +212,16 @@ def validate_review_package(data: dict[str, Any], config: dict[str, Any]) -> Non
     require_nonempty_list(data, "questions_for_reviewer")
     require_nonempty_list(data, "required_reviewer_steps")
     require_nonempty_list(data, "requested_verdicts")
+    if data.get("external_search_required") is not True:
+        raise ValidationError("review package must require external search")
+    search_queries = require_nonempty_list(data, "external_search_queries")
+    if len(search_queries) < 3:
+        raise ValidationError("external_search_queries must include at least 3 queries")
+    for item in search_queries:
+        if not isinstance(item, dict) or not item.get("query") or not item.get("purpose"):
+            raise ValidationError("each external_search_queries item needs query and purpose")
+        if not contains_cjk(item["purpose"]):
+            raise ValidationError("each external_search_queries purpose must be Chinese")
     if data.get("required_output_language") != "zh-CN":
         raise ValidationError("review package must require zh-CN reviewer output")
 
@@ -278,6 +291,8 @@ def validate_review_response(data: dict[str, Any], config: dict[str, Any]) -> No
             "阻塞项",
             "主要问题",
             "次要问题",
+            "检索记录",
+            "外部资料核验",
             "必修复",
             "评分表",
             "total_score",
@@ -312,13 +327,81 @@ def validate_review_response(data: dict[str, Any], config: dict[str, Any]) -> No
         raise ValidationError("阶段判定.结论说明 must be Chinese")
 
     has_blockers = bool(data["阻塞项"])
+    search_records = validate_search_records(data["检索记录"])
+    external_sources = validate_external_sources(data["外部资料核验"])
     pass_allowed = not has_blockers and total >= rubric["threshold_total"] and core_ok
+    if decision["allow_next_stage"]:
+        primary_count = sum(1 for source in external_sources if source["primary_source"])
+        if len(search_records) < 3 or len(external_sources) < 3 or primary_count < 2:
+            raise ValidationError(
+                "review_response cannot allow next stage without at least 3 searches, "
+                "3 external sources, and 2 primary sources"
+            )
     if decision["allow_next_stage"] and not pass_allowed:
         raise ValidationError("review_response cannot allow next stage with blockers or low scores")
     if has_blockers and decision["allow_next_stage"]:
         raise ValidationError("review_response cannot allow next stage when blockers exist")
     if decision["verdict"] == "pass" and not pass_allowed:
         raise ValidationError("pass verdict requires no blockers, threshold total, and core minimums")
+
+
+def validate_search_records(records: Any) -> list[dict[str, Any]]:
+    if not isinstance(records, list) or len(records) < 3:
+        raise ValidationError("检索记录 must include at least 3 records")
+    for record in records:
+        if not isinstance(record, dict):
+            raise ValidationError("each 检索记录 item must be an object")
+        require_fields(record, ["query", "purpose", "affected_verdict"])
+        if not isinstance(record["query"], str) or len(record["query"].strip()) < 8:
+            raise ValidationError("each 检索记录 query must be specific")
+        if not contains_cjk(record["purpose"]):
+            raise ValidationError("each 检索记录 purpose must be Chinese")
+        if not isinstance(record["affected_verdict"], bool):
+            raise ValidationError("each 检索记录 affected_verdict must be boolean")
+    return records
+
+
+def validate_external_sources(sources: Any) -> list[dict[str, Any]]:
+    if not isinstance(sources, list) or len(sources) < 3:
+        raise ValidationError("外部资料核验 must include at least 3 sources")
+    for source in sources:
+        if not isinstance(source, dict):
+            raise ValidationError("each 外部资料核验 item must be an object")
+        require_fields(
+            source,
+            [
+                "title",
+                "url",
+                "source_type",
+                "primary_source",
+                "checked_date",
+                "source_summary",
+                "key_claim",
+                "impact_on_project",
+                "blocker",
+            ],
+        )
+        if not str(source["url"]).startswith(("https://", "http://")):
+            raise ValidationError("each external source needs http(s) url")
+        if source["source_type"] not in VALID_SOURCE_TYPES:
+            raise ValidationError(f"invalid external source_type: {source['source_type']}")
+        if not isinstance(source["primary_source"], bool):
+            raise ValidationError("external source primary_source must be boolean")
+        if not valid_date(source["checked_date"]):
+            raise ValidationError("external source checked_date must be YYYY-MM-DD")
+        for field in ["source_summary", "key_claim", "impact_on_project"]:
+            if not contains_cjk(source[field]):
+                raise ValidationError(f"external source {field} must be Chinese")
+        if not isinstance(source["blocker"], bool):
+            raise ValidationError("external source blocker must be boolean")
+    return sources
+
+
+def valid_date(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 10:
+        return False
+    year, sep1, month, sep2, day = value[:4], value[4], value[5:7], value[7], value[8:]
+    return sep1 == "-" and sep2 == "-" and year.isdigit() and month.isdigit() and day.isdigit()
 
 
 def validate(kind: str, path: Path) -> None:

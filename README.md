@@ -54,9 +54,10 @@ python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
 - `docs/workflow.md`: fixed stage-gated workflow.
 - `docs/workflow_cn.md`: Chinese main-thread SOP and scoring gate.
 - `docs/adversarial_review_rubric_cn.md`: Chinese reviewer rubric and required output format.
+- `docs/reviewer_external_evidence_policy_cn.md`: Chinese external-evidence policy for reviewer searches.
 - `docs/model_feasibility_qwen2_5.md`: Qwen2.5-0.5B feasibility check.
 - `docs/contribution_statement.md`: professor-facing contribution wording.
-- `workflow`: machine-readable stages, workflow templates, and validation fixtures.
+- `workflow`: machine-readable stages, external source seeds, workflow templates, and validation fixtures.
 - `src/eg_sft/data`: generator, schemas, solver.
 - `src/eg_sft/eval`: parser, metrics, error taxonomy.
 - `src/eg_sft/selection`: selection policies and bias audit.
