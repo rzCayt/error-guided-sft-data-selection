@@ -65,8 +65,8 @@ def main() -> None:
             "baseline_value": args.profile,
             "delta": "",
             "note": (
-                "Current default profile is a simulated diagnostic placeholder unless replaced "
-                "with a real base diagnostic profile."
+                "If profile_path is results/error_profile_v0.csv, this is simulated-profile "
+                "plumbing only. Claim-bearing stages must use results/real_error_profile.csv."
             ),
         },
     )

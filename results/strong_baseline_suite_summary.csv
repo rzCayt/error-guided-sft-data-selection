@@ -1,11 +1,11 @@
 baseline,metric,targeted,baseline_value,delta,note
-suite_metadata,profile_path,,results/error_profile_v0.csv,,Current default profile is a simulated diagnostic placeholder unless replaced with a real base diagnostic profile.
+suite_metadata,profile_path,,results/real_error_profile.csv,,"If profile_path is results/error_profile_v0.csv, this is simulated-profile plumbing only. Claim-bearing stages must use results/real_error_profile.csv."
 exact_matched_random_seed_20260711,targeted_count,128,,,Number of selected error-guided examples.
 exact_matched_random_seed_20260711,baseline_count,,128,,Number of selected baseline examples.
 exact_matched_random_seed_20260711,overlap_count,0,0,0,Shared examples; nonzero overlap is allowed only to preserve exact stratum matching.
 exact_matched_random_seed_20260711,overlap_rate,0.0,0.0,0,Fraction of each subset shared with the other subset.
-exact_matched_random_seed_20260711,mean_abs_answer,2105.739047,1774.248586,331.490461,Checks whether answer scale differs beyond bucket matching.
-exact_matched_random_seed_20260711,mean_reasoning_length_score,2.75,2.75,0.0,"short=1, medium=2, long=3."
+exact_matched_random_seed_20260711,mean_abs_answer,1986.06618,1653.368453,332.697727,Checks whether answer scale differs beyond bucket matching.
+exact_matched_random_seed_20260711,mean_reasoning_length_score,2.859375,2.859375,0.0,"short=1, medium=2, long=3."
 exact_matched_random_seed_20260711,task_family_marginal_l1_delta,,,0,Zero means exact task-family marginal matching.
 exact_matched_random_seed_20260711,difficulty_marginal_l1_delta,,,0,Zero means exact difficulty marginal matching.
 exact_matched_random_seed_20260711,strata_l1_delta,,,0,L1 count distance between targeted and baseline matching strata.
@@ -13,8 +13,8 @@ exact_matched_random_seed_20260712,targeted_count,128,,,Number of selected error
 exact_matched_random_seed_20260712,baseline_count,,128,,Number of selected baseline examples.
 exact_matched_random_seed_20260712,overlap_count,0,0,0,Shared examples; nonzero overlap is allowed only to preserve exact stratum matching.
 exact_matched_random_seed_20260712,overlap_rate,0.0,0.0,0,Fraction of each subset shared with the other subset.
-exact_matched_random_seed_20260712,mean_abs_answer,2105.739047,1782.225672,323.513375,Checks whether answer scale differs beyond bucket matching.
-exact_matched_random_seed_20260712,mean_reasoning_length_score,2.75,2.75,0.0,"short=1, medium=2, long=3."
+exact_matched_random_seed_20260712,mean_abs_answer,1986.06618,1653.331633,332.734547,Checks whether answer scale differs beyond bucket matching.
+exact_matched_random_seed_20260712,mean_reasoning_length_score,2.859375,2.859375,0.0,"short=1, medium=2, long=3."
 exact_matched_random_seed_20260712,task_family_marginal_l1_delta,,,0,Zero means exact task-family marginal matching.
 exact_matched_random_seed_20260712,difficulty_marginal_l1_delta,,,0,Zero means exact difficulty marginal matching.
 exact_matched_random_seed_20260712,strata_l1_delta,,,0,L1 count distance between targeted and baseline matching strata.
@@ -22,33 +22,33 @@ exact_matched_random_seed_20260713,targeted_count,128,,,Number of selected error
 exact_matched_random_seed_20260713,baseline_count,,128,,Number of selected baseline examples.
 exact_matched_random_seed_20260713,overlap_count,0,0,0,Shared examples; nonzero overlap is allowed only to preserve exact stratum matching.
 exact_matched_random_seed_20260713,overlap_rate,0.0,0.0,0,Fraction of each subset shared with the other subset.
-exact_matched_random_seed_20260713,mean_abs_answer,2105.739047,1767.186008,338.553039,Checks whether answer scale differs beyond bucket matching.
-exact_matched_random_seed_20260713,mean_reasoning_length_score,2.75,2.75,0.0,"short=1, medium=2, long=3."
+exact_matched_random_seed_20260713,mean_abs_answer,1986.06618,1652.600023,333.466157,Checks whether answer scale differs beyond bucket matching.
+exact_matched_random_seed_20260713,mean_reasoning_length_score,2.859375,2.859375,0.0,"short=1, medium=2, long=3."
 exact_matched_random_seed_20260713,task_family_marginal_l1_delta,,,0,Zero means exact task-family marginal matching.
 exact_matched_random_seed_20260713,difficulty_marginal_l1_delta,,,0,Zero means exact difficulty marginal matching.
 exact_matched_random_seed_20260713,strata_l1_delta,,,0,L1 count distance between targeted and baseline matching strata.
 metadata_hard_baseline,targeted_count,128,,,Number of selected error-guided examples.
 metadata_hard_baseline,baseline_count,,128,,Number of selected baseline examples.
-metadata_hard_baseline,overlap_count,63,63,0,Shared examples between targeted and this auxiliary baseline.
-metadata_hard_baseline,overlap_rate,0.492188,0.492188,0,Shared examples between targeted and this auxiliary baseline.
-metadata_hard_baseline,mean_abs_answer,2105.739047,3531.927461,-1426.188414,Checks whether answer scale differs beyond bucket matching.
-metadata_hard_baseline,mean_reasoning_length_score,2.75,3.0,-0.25,"short=1, medium=2, long=3."
-metadata_hard_baseline,task_family_marginal_l1_delta,,,30,Zero means exact task-family marginal matching.
-metadata_hard_baseline,difficulty_marginal_l1_delta,,,116,Zero means exact difficulty marginal matching.
-metadata_hard_baseline,strata_l1_delta,,,116,L1 count distance between targeted and baseline matching strata.
+metadata_hard_baseline,overlap_count,62,62,0,Shared examples between targeted and this auxiliary baseline.
+metadata_hard_baseline,overlap_rate,0.484375,0.484375,0,Shared examples between targeted and this auxiliary baseline.
+metadata_hard_baseline,mean_abs_answer,1986.06618,3453.379023,-1467.312843,Checks whether answer scale differs beyond bucket matching.
+metadata_hard_baseline,mean_reasoning_length_score,2.859375,3.0,-0.140625,"short=1, medium=2, long=3."
+metadata_hard_baseline,task_family_marginal_l1_delta,,,42,Zero means exact task-family marginal matching.
+metadata_hard_baseline,difficulty_marginal_l1_delta,,,124,Zero means exact difficulty marginal matching.
+metadata_hard_baseline,strata_l1_delta,,,124,L1 count distance between targeted and baseline matching strata.
 stratified_random,targeted_count,128,,,Number of selected error-guided examples.
 stratified_random,baseline_count,,128,,Number of selected baseline examples.
-stratified_random,overlap_count,26,26,0,Shared examples between targeted and this auxiliary baseline.
-stratified_random,overlap_rate,0.203125,0.203125,0,Shared examples between targeted and this auxiliary baseline.
-stratified_random,mean_abs_answer,2105.739047,757.688961,1348.050086,Checks whether answer scale differs beyond bucket matching.
-stratified_random,mean_reasoning_length_score,2.75,2.507812,0.242188,"short=1, medium=2, long=3."
-stratified_random,task_family_marginal_l1_delta,,,40,Zero means exact task-family marginal matching.
-stratified_random,difficulty_marginal_l1_delta,,,70,Zero means exact difficulty marginal matching.
-stratified_random,strata_l1_delta,,,114,L1 count distance between targeted and baseline matching strata.
+stratified_random,overlap_count,32,32,0,Shared examples between targeted and this auxiliary baseline.
+stratified_random,overlap_rate,0.25,0.25,0,Shared examples between targeted and this auxiliary baseline.
+stratified_random,mean_abs_answer,1986.06618,757.688961,1228.377219,Checks whether answer scale differs beyond bucket matching.
+stratified_random,mean_reasoning_length_score,2.859375,2.507812,0.351563,"short=1, medium=2, long=3."
+stratified_random,task_family_marginal_l1_delta,,,54,Zero means exact task-family marginal matching.
+stratified_random,difficulty_marginal_l1_delta,,,48,Zero means exact difficulty marginal matching.
+stratified_random,strata_l1_delta,,,118,L1 count distance between targeted and baseline matching strata.
 exact_matched_random_multi_seed,baseline_count_baseline_value_variance,,0.0,,Population variance across exact matched-random seeds.
 exact_matched_random_multi_seed,difficulty_marginal_l1_delta_delta_variance,,0.0,,Population variance across exact matched-random seeds.
-exact_matched_random_multi_seed,mean_abs_answer_baseline_value_variance,,37.745045,,Population variance across exact matched-random seeds.
-exact_matched_random_multi_seed,mean_abs_answer_delta_variance,,37.745045,,Population variance across exact matched-random seeds.
+exact_matched_random_multi_seed,mean_abs_answer_baseline_value_variance,,0.125233,,Population variance across exact matched-random seeds.
+exact_matched_random_multi_seed,mean_abs_answer_delta_variance,,0.125233,,Population variance across exact matched-random seeds.
 exact_matched_random_multi_seed,mean_reasoning_length_score_baseline_value_variance,,0.0,,Population variance across exact matched-random seeds.
 exact_matched_random_multi_seed,mean_reasoning_length_score_delta_variance,,0.0,,Population variance across exact matched-random seeds.
 exact_matched_random_multi_seed,overlap_count_baseline_value_variance,,0.0,,Population variance across exact matched-random seeds.

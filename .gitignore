@@ -12,6 +12,7 @@ data/generated/
 results/adapters/
 results/checkpoints/
 results/*.jsonl
+!results/real_base_diagnostic_outputs.jsonl
 
 # Secrets and model artifacts must never be committed.
 .env

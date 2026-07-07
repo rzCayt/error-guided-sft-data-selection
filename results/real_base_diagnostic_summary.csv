@@ -1,0 +1,3 @@
+condition,split,n,parse_success_rate,numeric_accuracy,model,model_revision,tokenizer_revision,dtype,device,seed,prompt_template,decoding_config,parser_version,note
+base_real_diagnostic,dev_diagnostic,100,1.0,0.21,Qwen/Qwen2.5-0.5B,060db6499f32faf8b98477b0a26969ef7d8b9987,060db6499f32faf8b98477b0a26969ef7d8b9987,torch.bfloat16,cuda,20260714,"Problem: {prompt}
+Final numeric answer =","{""do_sample"": false, ""max_new_tokens"": 32}",parse_numeric_last_number_v1,Real base-model diagnostic on dev_diagnostic only. This is not a LoRA comparison and does not show Targeted selection beats Random.
