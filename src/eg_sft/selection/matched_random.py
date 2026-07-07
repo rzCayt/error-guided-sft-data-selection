@@ -25,14 +25,16 @@ def select_matched_random(
     target_ids = {row["id"] for row in target_rows}
 
     for row in candidates:
-        if row["id"] not in target_ids:
-            by_key[matching_key(row)].append(row)
+        by_key[matching_key(row)].append(row)
     for row in target_rows:
         target_counts[matching_key(row)] += 1
 
     selected: list[dict] = []
     for key, count in sorted(target_counts.items()):
         pool = by_key.get(key, [])
+        non_target_pool = [row for row in pool if row["id"] not in target_ids]
+        if len(non_target_pool) >= count:
+            pool = non_target_pool
         rng.shuffle(pool)
         selected.extend(pool[:count])
 

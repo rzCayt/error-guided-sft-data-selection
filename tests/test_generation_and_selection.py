@@ -1,6 +1,7 @@
 from eg_sft.data.generator import generate_split
+from eg_sft.selection.bias_audit import audit_selection_bias
 from eg_sft.selection.error_guided import select_error_guided
-from eg_sft.selection.matched_random import select_matched_random, matching_key
+from eg_sft.selection.matched_random import select_matched_random
 
 
 def test_generator_is_deterministic() -> None:
@@ -27,5 +28,5 @@ def test_selection_budget_and_matching() -> None:
     matched = select_matched_random(candidates, targeted, seed=2)
     assert len(targeted) == 16
     assert len(matched) == 16
-    assert {row["id"] for row in targeted}.isdisjoint({row["id"] for row in matched})
-    assert len({matching_key(row) for row in targeted}) >= 1
+    audit = audit_selection_bias(targeted, matched)
+    assert all(row["count_delta"] == 0 for row in audit)
