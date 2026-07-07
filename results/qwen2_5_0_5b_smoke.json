@@ -1,0 +1,34 @@
+{
+  "status": "ok",
+  "created_at_utc": "2026-07-07T08:01:43.657549+00:00",
+  "model": "Qwen/Qwen2.5-0.5B",
+  "prompt": "Problem: A metric starts at 100 and increases by 15%. Final value =",
+  "expected": 115.0,
+  "generation_config": {
+    "max_new_tokens": 16,
+    "do_sample": false
+  },
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.2"
+  },
+  "device": {
+    "type": "cuda",
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU"
+  },
+  "model_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+  "raw_continuation": " 115. What is the initial value?\nWhat is the step-by",
+  "full_text": "Problem: A metric starts at 100 and increases by 15%. Final value = 115. What is the initial value?\nWhat is the step-by",
+  "continuation_numbers": [
+    115.0
+  ],
+  "first_continuation_number": 115.0,
+  "first_number_matches_expected": true,
+  "cuda_memory": {
+    "allocated_mb": 958.29,
+    "peak_allocated_mb": 960.31
+  },
+  "note": "This smoke only proves that the base model loads and can produce a short completion on this machine. It is not a full diagnostic or LoRA result."
+}

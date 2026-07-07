@@ -38,10 +38,11 @@ Optional training dependencies can be installed with:
 
 ```powershell
 python -m pip install -e .[train]
+python scripts/run_qwen_smoke.py
 python scripts/run_lora_smoke.py --model Qwen/Qwen2.5-0.5B
 ```
 
-If local GPU or training packages are unavailable, `run_lora_smoke.py` writes a no-training evidence package instead of blocking the project.
+`run_qwen_smoke.py` writes a machine-readable feasibility artifact to `results/qwen2_5_0_5b_smoke.json`. If local GPU or training packages are unavailable, `run_lora_smoke.py` writes a no-training evidence package instead of blocking the project.
 
 ## Repository Map
 
@@ -50,6 +51,9 @@ If local GPU or training packages are unavailable, `run_lora_smoke.py` writes a 
 - `docs/selection_policy_spec.md`: targeted and matched-random policies.
 - `docs/literature_review.md`: data-selection and LoRA positioning.
 - `docs/adversarial_review_protocol.md`: how the background reviewer is used.
+- `docs/workflow.md`: fixed stage-gated workflow.
+- `docs/model_feasibility_qwen2_5.md`: Qwen2.5-0.5B feasibility check.
+- `docs/contribution_statement.md`: professor-facing contribution wording.
 - `src/eg_sft/data`: generator, schemas, solver.
 - `src/eg_sft/eval`: parser, metrics, error taxonomy.
 - `src/eg_sft/selection`: selection policies and bias audit.

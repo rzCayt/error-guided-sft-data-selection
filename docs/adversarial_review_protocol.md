@@ -16,6 +16,8 @@ The reviewer is read-only. It must not edit files, commit, push, train models, o
 
 Use stage-level review. Send a review package after each major stage, not after every small command.
 
+This protocol is a fixed workflow for the project. Any future model diagnostic, selector change, LoRA run, result table, or professor-facing summary should go through this gate before being treated as credible project evidence.
+
 Stages:
 
 1. Repo/spec/documentation update.
