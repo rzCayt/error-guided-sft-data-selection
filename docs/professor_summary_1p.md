@@ -1,25 +1,35 @@
-# One-Page Professor Summary
+# 一页导师汇报摘要
 
-## Project
+## 项目
 
-**Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reasoning Language Models**
+**基于错误诊断的数据选择：面向小型数值推理语言模型的高效 LoRA SFT**
 
-## Research Question
+英文题目：
 
-Can base-model diagnostic errors guide SFT data selection more effectively than matched random selection under the same sample and token budget?
+```text
+Error-Guided Data Selection for Data-Efficient LoRA SFT in Small Numerical Reasoning Language Models
+```
 
-## Pipeline
+## 研究问题
 
-The project builds a controlled synthetic numerical-reasoning benchmark with deterministic solver labels. A base small language model is evaluated on a diagnostic split that is separate from training candidates and locked tests. Its failures are parsed into an error taxonomy covering arithmetic error, wrong formula, unit/scale error, temporal ordering, parse failure, and variable binding. The resulting error profile is used to select SFT examples from a separate candidate pool. A matched-random baseline is constructed to match task family, difficulty, answer magnitude, and reasoning length strata. If exact matching requires overlap with the targeted subset, the overlap is reported as a limitation rather than hidden. Locked ID and OOD tests are kept out of policy tuning.
+在相同样本预算和训练预算下，base model 的诊断错误能否指导 SFT 数据选择，并比 matched random selection 更有效？
 
-## Current Evidence
+## 方法概述
 
-The repository contains a reproducible generator, solver, simulated diagnostic path, selection policies, and bias audit. The simulated path is only a placeholder for local environments where model loading is unavailable; it validates the pipeline but does not support any claim of training gain.
+项目构建了一个可控的合成数值推理 benchmark，每条样本都有 deterministic solver 生成的可验证答案。流程先让小型 base language model 在独立的 `dev_diagnostic` split 上作答，再把失败解析为 error taxonomy，例如算术错误、公式错误、单位/尺度错误、时间顺序错误、解析失败和变量绑定错误。
 
-## Next Step
+随后，项目根据错误画像从独立 `candidate_pool` 中选择 SFT 样本。对照组是 matched-random baseline，会匹配任务族、难度、答案量级和推理长度。如果严格 stratum matching 需要与 targeted subset 重叠，系统会报告 overlap，并把它作为 baseline 独立性限制，而不是隐藏。
 
-Run `Qwen/Qwen2.5-0.5B` base diagnostic and a LoRA smoke test on a GPU machine, then compare Base, Random, and Targeted under B128/B256 budgets.
+锁定的 ID/OOD test split 不参与策略调整。
 
-## Fit
+## 当前证据
 
-The work is intended for RA conversations around post-training, data curation, reliable reasoning, and efficient small-model experimentation.
+仓库已经包含可复现 generator、solver、模拟 diagnostic path、selection policies、bias audit 和 workflow validator。模拟路径只是为了在没有模型/GPU 的环境中验证 pipeline，不支持任何真实训练增益声明。
+
+## 下一步
+
+运行 `Qwen/Qwen2.5-0.5B` 的真实 base diagnostic，并在 GPU 环境中做 LoRA smoke test。随后在 B128/B256 预算下比较 Base、Matched Random 和 Targeted。
+
+## 与 RA 工作的关系
+
+该项目展示的是 post-training 研究中的基础能力：数据构造、诊断评估、数据选择、baseline 公平性、泄漏控制、实验记录和克制汇报。适合用于和老师讨论大模型训练、数据效率、可靠推理和实验严谨性相关 RA 工作。

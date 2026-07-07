@@ -1,38 +1,54 @@
-# Data Generation Spec
+# 数据生成规范
 
-## Design Goal
+## 设计目标
 
-Create solver-verifiable numerical reasoning tasks with controlled metadata. The wording can use commerce or finance-style variables, but every answer is deterministic and independent of external financial knowledge.
+生成可由 solver 验证答案的数值推理任务，并保留可控 metadata。题面可以使用商业或财务风格变量，但答案完全由程序计算，不依赖任何外部金融知识。
 
-## Task Families
+## 任务族
 
-### Ratio Change
+### 比例变化
 
-Given an initial value and percentage increase/decrease, compute the final value or net change.
+给定初始值和百分比增减，计算最终值或净变化。
 
-Example: "A metric starts at 120 and increases by 15%. What is the final value?"
+示例：
 
-### Multiplicative Relation
+```text
+A metric starts at 120 and increases by 15%. What is the final value?
+```
 
-Given chained multipliers or unit counts, compute a derived value.
+### 乘法关系
 
-Example: "Each unit contains 4 packs and each pack has 12 items. How many items are in 7 units?"
+给定链式乘数或单位数量，计算派生数量。
 
-### Weighted Aggregation
+示例：
 
-Compute a weighted average or total from two to four components.
+```text
+Each unit contains 4 packs and each pack has 12 items. How many items are in 7 units?
+```
 
-Example: "Group A has weight 0.35 and value 80, Group B has weight 0.65 and value 92. What is the weighted value?"
+### 加权聚合
 
-### Temporal Numeric Constraint
+从两到四个组件计算加权平均或加权总量。
 
-Track a value over ordered periods with additions, removals, caps, or minimum constraints.
+示例：
 
-Example: "A count is 50 on Monday, gains 8 on Tuesday, then loses 6 on Wednesday. What is the Wednesday value?"
+```text
+Group A has weight 0.35 and value 80, Group B has weight 0.65 and value 92. What is the weighted value?
+```
 
-## Schema
+### 时间数值约束
 
-Each example contains:
+按时间顺序跟踪数值变化，包括增加、减少、上限或下限约束。
+
+示例：
+
+```text
+A count is 50 on Monday, gains 8 on Tuesday, then loses 6 on Wednesday. What is the Wednesday value?
+```
+
+## 样本 Schema
+
+每条样本包含：
 
 - `id`
 - `split`
@@ -44,20 +60,21 @@ Each example contains:
 - `metadata`
 - `buckets`
 
-Required buckets:
+必须包含的 bucket：
 
 - `difficulty_bucket`
 - `answer_magnitude_bucket`
 - `reasoning_length_bucket`
 
-## Determinism
+## 确定性
 
-Every script accepts a seed and writes reproducible JSONL. The generator uses only Python standard-library random state passed through `random.Random`.
+所有生成脚本都接受 seed，并写出可复现 JSONL。生成器只使用 Python 标准库中的 `random.Random`，避免隐式全局随机状态。
 
-## Leakage Rules
+## 泄漏规则
 
-- Prompts are generated independently by split seed.
-- Selection can read candidate metadata and dev diagnostic error profile.
-- Selection must not inspect test predictions or evaluation metrics.
-- OOD template examples use held-out surface templates.
-- OOD range examples use larger numeric ranges than the candidate and dev splits.
+- 不同 split 使用独立 seed 生成。
+- 选择策略可以读取 candidate metadata 和 dev diagnostic 的聚合错误画像。
+- 选择策略不能读取 test predictions 或 test metrics。
+- OOD template 使用 held-out surface templates。
+- OOD range 使用大于 candidate/dev 的数值范围。
+- 真实模型比较前必须运行 duplicate/near-duplicate audit。

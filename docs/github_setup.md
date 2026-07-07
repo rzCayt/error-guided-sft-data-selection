@@ -1,26 +1,28 @@
-# GitHub Setup
+# GitHub 设置说明
 
-## Attempted Creation Paths
+## 仓库地址
 
-Repository name: `error-guided-sft-data-selection`
+当前远程仓库：
 
-Attempted methods in this Codex thread:
+```text
+https://github.com/rzCayt/error-guided-sft-data-selection
+```
 
-1. Searched current GitHub connector tools for repository creation support. Available tools cover existing repository metadata, files, issues, PRs, blobs, trees, commits, and file operations, but no direct create-repository tool was exposed.
-2. Checked `gh --version`. The local GitHub CLI is not installed or not on `PATH`.
-3. Attempted to open `https://github.com/new` through the in-app browser. A retry reached `https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Fnew`, so there was no usable logged-in browser state for creating a private repository in this thread.
-
-## Local Repository
-
-Local path:
+本地路径：
 
 ```powershell
 E:\RA准备\07_error_guided_sft_repo
 ```
 
-## Manual GitHub Push Commands
+## 推送命令
 
-After manually creating an empty private GitHub repository named `error-guided-sft-data-selection`, run:
+```powershell
+cd E:\RA准备\07_error_guided_sft_repo
+git status --short --branch
+git push
+```
+
+如果以后需要重新绑定远程仓库：
 
 ```powershell
 cd E:\RA准备\07_error_guided_sft_repo
@@ -29,7 +31,7 @@ git branch -M main
 git push -u origin main
 ```
 
-If SSH is configured:
+如果 SSH 已配置：
 
 ```powershell
 cd E:\RA准备\07_error_guided_sft_repo
@@ -37,3 +39,30 @@ git remote add origin git@github.com:<YOUR_GITHUB_USERNAME>/error-guided-sft-dat
 git branch -M main
 git push -u origin main
 ```
+
+## GitHub Pages 双语主页
+
+仓库已新增：
+
+```text
+docs/index.html
+```
+
+这个页面提供中文/英文切换按钮。GitHub 的 README 不允许运行 JavaScript，因此真正的语言切换按钮放在 GitHub Pages 页面里。
+
+启用方式：
+
+1. 打开 GitHub 仓库页面。
+2. 进入 `Settings`。
+3. 左侧选择 `Pages`。
+4. `Build and deployment` 选择 `Deploy from a branch`。
+5. Branch 选择 `main`，folder 选择 `/docs`。
+6. 保存后等待 GitHub Pages 构建完成。
+
+启用后页面通常会出现在：
+
+```text
+https://rzcayt.github.io/error-guided-sft-data-selection/
+```
+
+如果仓库是 private，GitHub Pages 是否可见取决于账号和仓库设置。README 仍然会作为 GitHub 仓库首页默认展示。

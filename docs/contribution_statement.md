@@ -1,62 +1,61 @@
-# Contribution Statement for Professor Communication
+# 如何说明我的项目贡献
 
-## Short Version
+## 简短版本
 
-I built a small research scaffold for studying whether base-model diagnostic errors can guide data selection for data-efficient LoRA SFT on numerical reasoning tasks. My contribution is the experimental design and reproducible pipeline, not a claim that the method already improves a model.
+我搭建了一个小型、可复现的研究脚手架，用来研究 base model 的诊断错误能否指导 SFT 数据选择。我的贡献重点是实验设计和可审计 pipeline，而不是声称当前方法已经提升真实模型。
 
-## What I Built
+## 我具体做了什么
 
-- A deterministic synthetic numerical-reasoning benchmark with solver-verified labels.
-- Separate splits for candidate training data, base diagnostic profiling, ID testing, OOD template testing, and OOD range testing.
-- A diagnostic pipeline that records predictions, parse success, numeric accuracy, output length, and error type.
-- An error-guided data selector and a matched-random baseline.
-- Bias and leakage audits, including split duplicate checks and targeted/matched overlap checks.
-- A stage-level adversarial review workflow to catch weak baselines, leakage, and overclaimed results before moving to the next stage.
-- Literature positioning around data-efficient instruction tuning, data selection, and LoRA.
+- 设计并实现了一个确定性的数值推理数据生成器，每条样本都有 solver-verified label。
+- 设计了独立 split：训练候选池、base diagnostic、ID test、OOD template test、OOD range test。
+- 实现了 diagnostic pipeline，记录预测、解析成功率、数值准确率、输出长度和错误类型。
+- 实现了 error-guided data selector 和 matched-random baseline。
+- 实现了 bias/leakage audit，包括 split duplicate check 和 targeted/matched overlap check。
+- 建立了阶段式 adversarial review workflow，用来在产生真实训练声明前检查泄漏、baseline 不公平和过度表述。
+- 整理了 data-efficient instruction tuning、data selection 和 LoRA 相关文献定位。
+- 将项目入口文档和导师汇报材料改为中文优先，并保留英文版本用于 GitHub/国际读者。
 
-## What I Did Not Claim
+## 我没有声称什么
 
-- I do not claim that error-guided selection already beats matched random.
-- I do not claim real LoRA training results yet.
-- I do not claim the synthetic tasks prove broad mathematical reasoning.
-- I do not claim the current selector is final; the next version should add an error-type-aware selector and ablations.
+- 我没有声称 error-guided selection 已经优于 matched random。
+- 我没有声称已经完成真实 LoRA 训练结果。
+- 我没有声称合成任务能证明广义数学推理能力。
+- 我没有声称当前 selector 是最终方案；下一版应该加入 error-type-aware selector 和 ablation。
 
-## How To Explain My Role
-
-Use this phrasing:
+## 和老师解释时可以这样说
 
 ```text
-I designed and implemented a controlled pilot pipeline for error-guided SFT data selection. The project focuses on experimental rigor: deterministic data generation, solver-verifiable labels, split discipline, matched-random baselines, leakage audits, and adversarial review before making performance claims. The current stage validates the research setup and prepares for real base-model diagnostic runs on Qwen2.5-0.5B. The next step is to replace simulated diagnostics with real model outputs and test whether diagnostic-error-aware selection adds signal beyond metadata-matched random sampling.
+我设计并实现了一个用于 error-guided SFT data selection 的可控 pilot pipeline。这个项目重点不是先追求漂亮结果，而是把实验流程做严谨：确定性数据生成、solver-verifiable labels、严格 split discipline、matched-random baseline、leakage audit、bias audit，以及每个阶段进入下一步前的 adversarial review。当前阶段已经验证了研究框架和本地 pipeline，下一步是用 Qwen2.5-0.5B 替换 simulated diagnostic，收集真实 base model 错误，再测试错误诊断驱动的数据选择是否比 metadata-matched random sampling 提供额外信号。
 ```
 
-## Professor-Facing Emphasis
+## 导师沟通重点
 
-Emphasize:
+应该强调：
 
-- research question clarity
-- controlled comparison design
-- reproducibility
-- awareness of baseline fairness
-- willingness to report negative or inconclusive results
-- readiness to run real base diagnostics and LoRA experiments
+- 研究问题清楚。
+- comparison design 可控。
+- baseline 公平性和泄漏风险被显式处理。
+- 项目可复现、可审计。
+- 愿意报告负结果或不显著结果。
+- 已准备进入真实 base diagnostic 和 LoRA 对比。
 
-Avoid saying:
+避免说：
 
-- "I built a financial LLM."
-- "The model improved already."
-- "The targeted method works."
-- "The dataset proves reasoning ability."
+- “我做了一个金融大模型。”
+- “模型已经提升了。”
+- “Targeted 方法已经被证明有效。”
+- “这个数据集证明了模型推理能力。”
 
-## One-Minute Verbal Pitch
+## 一分钟口头版本
 
 ```text
-I am building a small post-training research project on data-efficient SFT. The question is whether a base model's diagnostic errors can guide which SFT examples to train on, compared with a matched random baseline under the same budget. I built the generator, solver, split discipline, parser, error taxonomy, targeted and matched-random selection, and audit reports. A separate adversarial review thread checks for leakage, baseline unfairness, and overclaiming. The project is currently at the stage where the pipeline is ready for real Qwen2.5-0.5B base diagnostic, but I am not claiming training gains until the real diagnostic and LoRA comparison are run.
+我在做一个小型 post-training 研究项目，问题是 base model 的诊断错误能不能指导 SFT 数据选择。具体来说，我先让 base model 在独立诊断集上暴露错误，再把错误画像转成 candidate pool 的选择信号，然后和严格 matched random baseline 在相同预算下比较。我已经实现了 generator、solver、split discipline、parser、error taxonomy、targeted/matched-random selection 和 audit reports。项目还设置了一个只读审核流程，专门检查 leakage、baseline fairness 和 overclaiming。当前阶段还不声明训练增益，下一步是用 Qwen2.5-0.5B 跑真实 base diagnostic。
 ```
 
-## If Asked "What Was Your Core Contribution?"
+## 如果被问“你的核心贡献是什么”
 
-Answer:
+可以回答：
 
 ```text
-My core contribution is turning a broad RA idea into a reproducible experimental protocol: a solver-verifiable task setup, strict split discipline, diagnostic error profiling, fair matched-random comparison, and audit gates that prevent premature claims. The next research contribution will depend on whether real model diagnostics show that error-type-aware selection improves over metadata-matched random baselines.
+我的核心贡献是把一个比较宽泛的 RA 想法变成可复现的实验协议：solver-verifiable task setup、严格 split discipline、diagnostic error profiling、公平 matched-random comparison，以及防止 premature claims 的 audit gate。后续真正的研究贡献要看真实模型 diagnostic 是否能证明 error-type-aware selection 在 matched random 之上带来额外信号。
 ```

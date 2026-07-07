@@ -1,53 +1,57 @@
-# Adversarial Review Protocol
+# 反对线程审核协议
 
-## Reviewer Thread
+## 审核线程
 
-Thread title: `EG-SFT adversarial reviewer`
+线程标题：
 
-Thread id from the first implementation round:
+```text
+EG-SFT adversarial reviewer
+```
+
+第一次实现时创建的线程 id：
 
 ```text
 019f3b8b-a025-7fe3-9dca-434d1e78cfa8
 ```
 
-The reviewer is read-only. It must not edit files, commit, push, train models, or change repo state.
+审核线程只读。它不能编辑文件、提交、推送、训练模型或改变仓库状态。
 
-The reviewer must output Chinese for all explanations and verdicts. The authoritative rubric is `docs/adversarial_review_rubric_cn.md`, external-source checks are governed by `docs/reviewer_external_evidence_policy_cn.md`, and structured review responses should match `workflow/templates/review_response.json`.
+审核线程必须用中文解释和给 verdict。权威 rubric 是 `docs/adversarial_review_rubric_cn.md`，外部资料核验由 `docs/reviewer_external_evidence_policy_cn.md` 约束，结构化输出应匹配 `workflow/templates/review_response.json`。
 
-## Review Cadence
+## 审核节奏
 
-Use stage-level review. Send a review package after each major stage, not after every small command.
+采用阶段级审核。每个主要阶段结束后发送一次 review package，不对每个小命令审核。
 
-This protocol is a fixed workflow for the project. Any future model diagnostic, selector change, LoRA run, result table, or professor-facing summary should go through this gate before being treated as credible project evidence.
+这是项目固定 workflow。任何后续 model diagnostic、selector 改动、LoRA run、结果表或导师材料，都必须经过这个 gate，才可以被视为可信项目证据。
 
-Stages:
+阶段包括：
 
-1. Repo/spec/documentation update.
-2. Real base diagnostic.
-3. B128 selection and bias audit.
-4. LoRA smoke/full run.
-5. Base/Random/Targeted comparison.
-6. Professor-facing summary.
+1. 仓库/spec/文档更新。
+2. 真实 base diagnostic。
+3. B128 selection 和 bias audit。
+4. LoRA smoke/full run。
+5. Base/Random/Targeted comparison。
+6. 导师汇报 summary。
 
-## Review Package Template
+## 审查包模板
 
-Use `workflow/templates/review_package.json` as the required package shape. Validate it before sending:
+使用 `workflow/templates/review_package.json`。发送前必须校验：
 
 ```powershell
 python scripts/validate_workflow_packet.py --kind review_package --path workflow/templates/review_package.json
 ```
 
-## Required Reviewer Verdicts
+## 必须覆盖的审核 verdict
 
-Every review must explicitly cover:
+每次审核必须明确覆盖：
 
 - test leakage risk
 - matched-random fairness
-- whether the selection signal is more than task/difficulty resampling
-- placeholder or result-overclaiming risk
-- whether the project can proceed to the next stage
+- selection signal 是否超过 task/difficulty resampling
+- placeholder 或 result-overclaiming risk
+- 是否可以进入下一阶段
 
-Every review must also include:
+每次审核还必须包含：
 
 - `阻塞项`
 - `主要问题`
@@ -56,11 +60,18 @@ Every review must also include:
 - `评分表`
 - `阶段判定`
 
-## First Review Summary
+## 第一轮审核摘要
 
-The first reviewer pass raised these issues before the final report was complete:
+第一轮审核指出过这些问题：
 
-- Matched-random implementation and documentation needed to state that exact stratum matching can require overlap with the targeted subset.
-- Bias audit documentation claimed marginal and mean statistics, while the original output only reported stratum counts.
-- Split seeds are independent, but narrow templates still require near-duplicate auditing before real test claims.
-- Professor-facing wording should distinguish pipeline placeholders from real model results.
+- Matched-random 实现和文档需要说明：为了严格 stratum matching，必要时可能与 targeted subset 重叠。
+- Bias audit 文档曾声称会报告 marginal 和 mean statistics，但早期输出只报告了 stratum counts。
+- Split seeds 虽然独立，但模板较窄，真实 test claim 前仍必须做 near-duplicate audit。
+- 面向导师的表述必须区分 pipeline placeholder 和真实模型结果。
+
+<details>
+<summary>English note</summary>
+
+This protocol keeps the adversarial reviewer read-only and Chinese-output-only. English research terms are retained where they are standard in the literature.
+
+</details>

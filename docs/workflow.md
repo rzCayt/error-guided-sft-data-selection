@@ -1,68 +1,79 @@
-# Fixed Project Workflow
+# 项目固定工作流
 
-This repository uses a stage-gated workflow. The goal is to keep the project credible enough for RA discussion by preventing silent leakage, weak baselines, and overclaimed results.
+本仓库使用 stage-gated workflow。目标是让项目在 RA 沟通中保持可信，避免隐性泄漏、弱 baseline 和过度声明。
 
-The authoritative workflow is now the Chinese, machine-checkable workflow:
+权威流程以中文、机器可校验版本为准：
 
-- `docs/workflow_cn.md`: main-thread SOP and self-check rubric.
-- `docs/adversarial_review_rubric_cn.md`: read-only reviewer rubric and required Chinese output format.
-- `docs/reviewer_external_evidence_policy_cn.md`: external-source search and citation policy for reviewer checks.
-- `workflow/stages.json`: stage gates, required artifacts, checks, forbidden claims, and exit criteria.
-- `workflow/templates/*.json`: structured stage plan, self-check, review package, and review response templates.
-- `scripts/validate_workflow_packet.py`: local validator for workflow packets.
+- `docs/workflow_cn.md`：主线程 SOP 与自评 rubric。
+- `docs/adversarial_review_rubric_cn.md`：只读审核线程 rubric 和中文输出格式。
+- `docs/reviewer_external_evidence_policy_cn.md`：审核线程外部资料搜索和引用规则。
+- `workflow/stages.json`：阶段门槛、必需产物、必跑检查、禁止声明和退出条件。
+- `workflow/templates/*.json`：阶段计划、自评、审查包和审核回复模板。
+- `scripts/validate_workflow_packet.py`：本地 workflow packet 校验器。
 
-## Stage Gate
+## 阶段门槛
 
-Each stage follows the same order:
+每个阶段必须按同一顺序推进：
 
-1. Fill a structured stage plan.
-2. Run or update the stage artifacts.
-3. Fill a main-thread self-check.
-4. Build a structured review package.
-5. Validate the packet with `scripts/validate_workflow_packet.py`.
-6. Send the package to the adversarial reviewer thread.
-7. Fix blockers before moving to the next claim-bearing stage.
-8. Commit and push only after verification and review pass.
+1. 填写结构化 stage plan。
+2. 执行或更新本阶段 artifact。
+3. 填写主线程 self-check。
+4. 生成结构化 review package。
+5. 用 `scripts/validate_workflow_packet.py` 校验。
+6. 把 package 发给 adversarial reviewer 线程。
+7. 先修复 blocker，再进入下一 claim-bearing 阶段。
+8. 只有本地验证和审核都通过后，才提交和推送。
 
-## Adversarial Reviewer
+## 审核线程
 
-Thread title: `EG-SFT adversarial reviewer`
+线程标题：
 
-Thread id:
+```text
+EG-SFT adversarial reviewer
+```
+
+线程 id：
 
 ```text
 019f3b8b-a025-7fe3-9dca-434d1e78cfa8
 ```
 
-The reviewer is read-only and must answer in Chinese. It should attack:
+审核线程只读，必须中文输出，并重点攻击：
 
-- test leakage and near-duplicate risk
-- matched-random fairness
-- whether selection is more than task/difficulty resampling
-- simulated-result overclaiming
-- LoRA reproducibility
-- professor-facing contribution wording
+- test leakage 和 near-duplicate 风险。
+- matched-random baseline 是否公平。
+- selection signal 是否超过 task/difficulty 重采样。
+- simulated result 是否被过度包装。
+- LoRA 实验是否可复现。
+- 面向导师的贡献表述是否夸大。
 
-## Required Review Package
+## 审查包要求
 
-Use the JSON structure in `workflow/templates/review_package.json`. The reviewer response must follow `workflow/templates/review_response.json` and the Chinese rubric in `docs/adversarial_review_rubric_cn.md`.
+使用 `workflow/templates/review_package.json` 的结构。审核回复必须遵守 `workflow/templates/review_response.json` 和 `docs/adversarial_review_rubric_cn.md`。
 
-## Current Gate Status
+## 当前阶段状态
 
-Allowed next step:
+允许的下一步：
 
-- Real base diagnostic as exploratory data collection.
+- `real_base_diagnostic`：探索性真实 base diagnostic。
 
-Not allowed yet:
+暂不允许：
 
-- Claim-bearing Random vs Targeted LoRA comparison.
-- Professor-facing performance claims.
+- 有 claim-bearing 含义的 Random vs Targeted LoRA comparison。
+- 面向导师的真实性能提升声明。
 
-Required before LoRA comparison:
+进入 LoRA 对比前必须完成：
 
-- Run split leakage audit.
-- Run selection bias audit for the exact budget.
-- Require `overlap_rate=0` or explicitly mark the comparison invalid.
-- Add or ablate an error-type-aware selector.
-- Replace simulated diagnostic rows with real model raw outputs and run metadata.
-- Store Qwen smoke evidence as a machine-readable artifact, not only prose.
+- 运行 split leakage audit。
+- 对准确预算运行 selection bias audit。
+- 要求 `overlap_rate=0`，或明确把 comparison 标记为有独立性限制。
+- 加入或消融 error-type-aware selector。
+- 用真实模型 raw outputs 和 run metadata 替换 simulated diagnostic rows。
+- 把 Qwen smoke evidence 保存为机器可读 artifact，而不是只写 prose。
+
+<details>
+<summary>English note</summary>
+
+This file is Chinese-first because the project is currently prepared for a Chinese RA application context. Key English terms are retained to keep the research framing searchable and readable on GitHub.
+
+</details>
