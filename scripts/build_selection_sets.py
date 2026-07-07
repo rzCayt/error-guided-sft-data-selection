@@ -6,7 +6,7 @@ from _bootstrap import add_src_to_path
 
 ROOT = add_src_to_path()
 
-from eg_sft.selection.bias_audit import audit_selection_bias  # noqa: E402
+from eg_sft.selection.bias_audit import audit_selection_bias, summarize_selection_bias  # noqa: E402
 from eg_sft.selection.error_guided import select_error_guided  # noqa: E402
 from eg_sft.selection.matched_random import select_matched_random  # noqa: E402
 from eg_sft.utils.io import read_csv, read_jsonl, write_csv, write_jsonl  # noqa: E402
@@ -30,11 +30,13 @@ def main() -> None:
     targeted = select_error_guided(candidates, profile, budget=args.budget, seed=args.seed)
     matched = select_matched_random(candidates, targeted, seed=args.seed + 1)
     audit = audit_selection_bias(targeted, matched)
+    summary = summarize_selection_bias(targeted, matched)
 
     out_dir = ROOT / "data" / "samples"
     write_jsonl(out_dir / f"selection_error_guided_b{args.budget}.jsonl", targeted)
     write_jsonl(out_dir / f"selection_matched_random_b{args.budget}.jsonl", matched)
     write_csv(ROOT / "results" / "selection_bias_audit.csv", audit)
+    write_csv(ROOT / "results" / "selection_bias_summary.csv", summary)
     print(f"wrote targeted={len(targeted)} matched={len(matched)}")
 
 

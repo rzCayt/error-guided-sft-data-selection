@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import random
 from collections.abc import Iterable
 
@@ -155,7 +156,34 @@ def generate_split(split: SplitName, n: int | None = None, seed: int = 20260707)
 
 
 def generate_all(seed: int = 20260707) -> dict[SplitName, list[Example]]:
-    return {split: generate_split(split, seed=seed) for split in SPLIT_SIZES}
+    generated: dict[SplitName, list[Example]] = {}
+    seen: set[str] = set()
+    for split, size in SPLIT_SIZES.items():
+        rng = random.Random(seed + sum(ord(ch) for ch in split))
+        examples: list[Example] = []
+        attempts = 0
+        while len(examples) < size:
+            attempts += 1
+            if attempts > size * 50:
+                raise RuntimeError(f"Could not generate enough unique examples for {split}")
+            example = make_example(len(examples), split, rng)
+            signature = example_signature(example.to_dict())
+            if signature in seen:
+                continue
+            seen.add(signature)
+            examples.append(example)
+        generated[split] = examples
+    return generated
+
+
+def example_signature(row: dict) -> str:
+    payload = {
+        "task_family": row["task_family"],
+        "prompt": row["prompt"],
+        "params": row["metadata"]["params"],
+        "answer": row["answer"],
+    }
+    return json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
 
 def iter_training_records(examples: Iterable[Example]) -> Iterable[dict[str, str]]:

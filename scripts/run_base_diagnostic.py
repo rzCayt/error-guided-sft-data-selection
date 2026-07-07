@@ -53,6 +53,7 @@ def main() -> None:
     rows = read_jsonl(path)
     diagnostics = []
     grouped = defaultdict(lambda: {"count": 0, "failures": 0})
+    grouped_error_type = defaultdict(lambda: {"count": 0, "failures": 0})
     for row in rows:
         prediction = simulate_prediction(row, rng)
         parsed = parse_numeric(prediction)
@@ -83,6 +84,9 @@ def main() -> None:
         )
         grouped[key]["count"] += 1
         grouped[key]["failures"] += int(not correct)
+        error_key = key + (error_type,)
+        grouped_error_type[error_key]["count"] += 1
+        grouped_error_type[error_key]["failures"] += int(not correct)
 
     profile = []
     for key, stats in sorted(grouped.items()):
@@ -100,8 +104,26 @@ def main() -> None:
             }
         )
 
+    error_type_profile = []
+    for key, stats in sorted(grouped_error_type.items()):
+        count = stats["count"]
+        failures = stats["failures"]
+        error_type_profile.append(
+            {
+                "task_family": key[0],
+                "difficulty_bucket": key[1],
+                "answer_magnitude_bucket": key[2],
+                "reasoning_length_bucket": key[3],
+                "error_type": key[4],
+                "count": count,
+                "failures": failures,
+                "error_rate": round(failures / count, 4) if count else 0,
+            }
+        )
+
     write_csv(ROOT / "results" / "base_diagnostic_results.csv", diagnostics)
     write_csv(ROOT / "results" / "error_profile_v0.csv", profile)
+    write_csv(ROOT / "results" / "error_profile_by_error_type_v0.csv", error_type_profile)
     accuracy = sum(row["numeric_accuracy"] for row in diagnostics) / len(diagnostics)
     print(f"wrote diagnostics={len(diagnostics)} accuracy={accuracy:.3f}")
 

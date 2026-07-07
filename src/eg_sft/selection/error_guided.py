@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import hashlib
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 
 def _stable_noise(identifier: str, seed: int) -> float:
@@ -33,15 +33,39 @@ def select_error_guided(
 ) -> list[dict]:
     weights = build_profile_weights(profile_rows)
 
-    def score(row: dict) -> tuple[float, float]:
+    def key_for(row: dict) -> tuple[str, str, str, str]:
         buckets = row["buckets"]
-        key = (
+        return (
             row["task_family"],
             buckets["difficulty_bucket"],
             buckets["answer_magnitude_bucket"],
             buckets["reasoning_length_bucket"],
         )
-        return (weights.get(key, 1.0), _stable_noise(row["id"], seed))
+
+    def score(row: dict) -> tuple[float, float]:
+        return (weights.get(key_for(row), 1.0), _stable_noise(row["id"], seed))
 
     ordered = sorted(candidates, key=score, reverse=True)
-    return ordered[:budget]
+    stratum_sizes = Counter(key_for(row) for row in candidates)
+    stratum_caps = {key: size // 2 for key, size in stratum_sizes.items()}
+    selected: list[dict] = []
+    selected_counts: Counter = Counter()
+
+    for row in ordered:
+        key = key_for(row)
+        if selected_counts[key] >= stratum_caps[key]:
+            continue
+        selected.append(row)
+        selected_counts[key] += 1
+        if len(selected) >= budget:
+            return selected
+
+    selected_ids = {row["id"] for row in selected}
+    for row in ordered:
+        if row["id"] in selected_ids:
+            continue
+        selected.append(row)
+        if len(selected) >= budget:
+            return selected
+
+    return selected

@@ -1,0 +1,9 @@
+metric,targeted,matched_random,delta,note
+targeted_count,128,,,Number of selected error-guided examples.
+matched_random_count,,128,,Number of selected matched-random examples.
+overlap_count,0,0,0,Shared examples; nonzero overlap is allowed only to preserve exact stratum matching.
+overlap_rate,0.0,0.0,0,Fraction of each subset shared with the other subset.
+mean_abs_answer,2105.739047,1774.248586,331.490461,Checks whether answer scale differs beyond bucket matching.
+mean_reasoning_length_score,2.75,2.75,0.0,"short=1, medium=2, long=3."
+task_family_marginal_l1_delta,,,0,Zero means exact task-family marginal matching.
+difficulty_marginal_l1_delta,,,0,Zero means exact difficulty marginal matching.

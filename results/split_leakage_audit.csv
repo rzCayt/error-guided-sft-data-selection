@@ -1,0 +1,11 @@
+left_split,right_split,left_count,right_count,exact_prompt_overlap,exact_signature_overlap,verdict
+candidate_pool,dev_diagnostic,500,100,0,0,pass
+candidate_pool,test_id,500,100,0,0,pass
+candidate_pool,test_ood_template,500,50,0,0,pass
+candidate_pool,test_ood_range,500,50,0,0,pass
+dev_diagnostic,test_id,100,100,0,0,pass
+dev_diagnostic,test_ood_template,100,50,0,0,pass
+dev_diagnostic,test_ood_range,100,50,0,0,pass
+test_id,test_ood_template,100,50,0,0,pass
+test_id,test_ood_range,100,50,0,0,pass
+test_ood_template,test_ood_range,50,50,0,0,pass

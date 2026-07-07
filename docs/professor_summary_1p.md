@@ -10,11 +10,11 @@ Can base-model diagnostic errors guide SFT data selection more effectively than 
 
 ## Pipeline
 
-The project builds a controlled synthetic numerical-reasoning benchmark with deterministic solver labels. A base small language model is evaluated on a locked diagnostic split. Its failures are parsed into an error taxonomy covering arithmetic error, wrong formula, unit/scale error, temporal ordering, parse failure, and variable binding. The resulting error profile is used to select SFT examples from a separate candidate pool. A matched-random baseline controls for task family, difficulty, answer magnitude, and reasoning length. Locked ID and OOD tests are kept out of policy tuning.
+The project builds a controlled synthetic numerical-reasoning benchmark with deterministic solver labels. A base small language model is evaluated on a diagnostic split that is separate from training candidates and locked tests. Its failures are parsed into an error taxonomy covering arithmetic error, wrong formula, unit/scale error, temporal ordering, parse failure, and variable binding. The resulting error profile is used to select SFT examples from a separate candidate pool. A matched-random baseline is constructed to match task family, difficulty, answer magnitude, and reasoning length strata. If exact matching requires overlap with the targeted subset, the overlap is reported as a limitation rather than hidden. Locked ID and OOD tests are kept out of policy tuning.
 
 ## Current Evidence
 
-The repository contains a reproducible generator, solver, simulated diagnostic path, selection policies, and bias audit. The simulated path is a placeholder for local environments where model loading is unavailable; it keeps the pipeline testable without claiming training gains.
+The repository contains a reproducible generator, solver, simulated diagnostic path, selection policies, and bias audit. The simulated path is only a placeholder for local environments where model loading is unavailable; it validates the pipeline but does not support any claim of training gain.
 
 ## Next Step
 

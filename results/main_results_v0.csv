@@ -1,4 +1,4 @@
 condition,split,n,parse_success_rate,numeric_accuracy,note
-base_simulated,dev_diagnostic,100,0.93,0.58,Simulated diagnostic placeholder; replace with real model outputs before claiming results.
+base_simulated,dev_diagnostic,100,0.93,0.59,Simulated diagnostic placeholder; replace with real model outputs before claiming results.
 matched_random_lora,locked_tests,0,,,Pending real LoRA run.
 error_guided_lora,locked_tests,0,,,Pending real LoRA run.
