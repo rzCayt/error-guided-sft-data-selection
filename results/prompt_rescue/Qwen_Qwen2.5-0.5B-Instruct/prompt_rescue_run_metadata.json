@@ -1,0 +1,46 @@
+{
+  "status": "ok",
+  "created_at_utc": "2026-07-09T01:55:46.073629+00:00",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "input": "data/samples/dev_diagnostic.jsonl",
+  "seed": 20260715,
+  "prompt_variants": [
+    "current_direct",
+    "step_by_step_final_answer",
+    "final_answer_only"
+  ],
+  "prompt_templates": {
+    "current_direct": "Problem: {prompt}\nFinal numeric answer =",
+    "step_by_step_final_answer": "Problem: {prompt}\nShow the calculation briefly. Put the final result on the last line as: Final answer: <number>",
+    "final_answer_only": "Problem: {prompt}\nReturn only one line in this exact format: Final answer: <number>"
+  },
+  "parser_version": "parse_numeric_final_answer_v1_fallback_last_number",
+  "recorded_base_accuracy": 0.21,
+  "chat_template_mode": "auto",
+  "generation_config": {
+    "max_new_tokens": 64,
+    "do_sample": false
+  },
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "raw_outputs_path": "results\\prompt_rescue\\Qwen_Qwen2.5-0.5B-Instruct\\prompt_rescue_outputs.jsonl",
+  "packages": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.2"
+  },
+  "device": {
+    "type": "cuda",
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU"
+  },
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "tokenizer_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "tokenizer_revision_source": "model_config_commit_hash_same_hf_repo",
+  "dtype": "torch.bfloat16",
+  "prompt_rendering": "chat_template",
+  "n_examples": 100,
+  "n_generations": 300,
+  "cuda_memory": {
+    "allocated_mb": 958.29,
+    "peak_allocated_mb": 963.74
+  }
+}
