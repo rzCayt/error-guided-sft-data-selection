@@ -7,11 +7,12 @@
     "mode": "read_only",
     "required_output_language": "zh-CN"
   },
-  "current_allowed_stage": "parser_error_audit",
+  "current_allowed_stage": "qwen_0_5b_rescue_gate",
   "reviewable_stage_ids": [
     "workflow_upgrade",
     "real_base_diagnostic",
-    "parser_error_audit"
+    "parser_error_audit",
+    "qwen_0_5b_rescue_gate"
   ],
   "stages": [
     {
@@ -99,6 +100,36 @@
         "错误样例至少覆盖 parser/格式风险、模型推理错误和 prompt/题目理解风险。",
         "研究笔记明确说明哪些结论不能下。",
         "下一步说明以人工复核和 selection bias audit 为主，而不是直接训练。"
+      ],
+      "next_stage": "qwen_0_5b_rescue_gate"
+    },
+    {
+      "id": "qwen_0_5b_rescue_gate",
+      "name_zh": "Qwen2.5-0.5B prompt/parser 救援门槛",
+      "goal_zh": "只在 dev_diagnostic 上比较基础模型和 instruction-tuned 控制模型的 prompt/parser 敏感性，判断 0.5B 低正确率是否主要来自输出接口问题。",
+      "required_artifacts": [
+        "scripts/run_prompt_rescue_diagnostic.py",
+        "docs/qwen_0_5b_rescue_gate_cn.md",
+        "tests/test_prompt_rescue.py",
+        "src/eg_sft/eval/parser.py"
+      ],
+      "required_checks": [
+        "python scripts/run_prompt_rescue_diagnostic.py --help",
+        "pytest -q"
+      ],
+      "forbidden_claims": [
+        "不能声称 prompt/parser rescue 证明模型推理能力真实提升。",
+        "不能声称 prompt/parser rescue 证明 LoRA、SFT 或 error-guided selection 有效。",
+        "不能把 Qwen2.5-0.5B-Instruct 控制结果混入 base model 的 SFT 主结论。",
+        "不能使用 test_id、test_ood_template 或 test_ood_range 调 prompt、parser 或阶段判定。"
+      ],
+      "exit_criteria": [
+        "新增脚本必须只默认读取 dev_diagnostic，并输出到 results/prompt_rescue/，不得覆盖 real_base_diagnostic_* 或人工复核 CSV。",
+        "metadata 必须记录 model、tokenizer revision、prompt variant、parser version、seed、limit、decoding config 和 prompt rendering。",
+        "summary 必须按 model 和 prompt variant 报告 n、parse_success_rate、numeric_accuracy 以及相对 0.21 的 dev-only gain。",
+        "若只运行 --limit smoke，只能证明代码路径可运行，不能判定 rescue gate 通过。",
+        "完整 100 条 dev_diagnostic 才能用于判断是否达到 +0.10 到 +0.15 的继续条件。",
+        "审计线程允许进入后续 selection_bias_audit 前，必须确认结果没有被写成 LoRA/SFT/selection 效果证据。"
       ],
       "next_stage": "selection_bias_audit"
     },
