@@ -8,6 +8,11 @@ FINAL_ANSWER_RE = re.compile(
     r"([-+]?(?:\d*\.\d+|\d+))",
     re.IGNORECASE,
 )
+FINAL_VALUE_RE = re.compile(
+    r"final\s+value\s*(?:is|=|:)\s*"
+    r"([-+]?(?:\d*\.\d+|\d+))",
+    re.IGNORECASE,
+)
 
 
 def parse_numeric_last_number(text: str) -> float | None:
@@ -36,6 +41,22 @@ def parse_numeric_final_answer_or_last_number_with_mode(text: str) -> tuple[floa
     if final_answer is not None:
         return final_answer, "final_answer_marker"
     fallback = parse_numeric_last_number(text)
+    if fallback is not None:
+        return fallback, "last_number_fallback"
+    return None, "parse_failure"
+
+
+def parse_numeric_answer_marker_v2(text: str) -> tuple[float | None, str]:
+    cleaned = text.replace(",", "")
+    final_answer_matches = FINAL_ANSWER_RE.findall(cleaned)
+    if final_answer_matches:
+        return float(final_answer_matches[-1]), "final_answer_marker"
+
+    final_value_matches = FINAL_VALUE_RE.findall(cleaned)
+    if final_value_matches:
+        return float(final_value_matches[-1]), "final_value_marker"
+
+    fallback = parse_numeric_last_number(cleaned)
     if fallback is not None:
         return fallback, "last_number_fallback"
     return None, "parse_failure"

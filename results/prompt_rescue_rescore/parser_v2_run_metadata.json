@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "created_at_utc": "2026-07-09T02:13:03.108247+00:00",
+  "parser_v2_version": "parse_answer_marker_v2_final_answer_final_value_fallback_last_number",
+  "input_root": "results/prompt_rescue",
+  "input_files": {
+    "results\\prompt_rescue\\Qwen_Qwen2.5-0.5B\\prompt_rescue_outputs.jsonl": 300,
+    "results\\prompt_rescue\\Qwen_Qwen2.5-0.5B-Instruct\\prompt_rescue_outputs.jsonl": 300
+  },
+  "n_rows": 600,
+  "outputs": {
+    "rescored_outputs": "results\\prompt_rescue_rescore\\parser_v2_outputs.jsonl",
+    "summary": "results\\prompt_rescue_rescore\\parser_v2_summary.csv",
+    "metadata": "results\\prompt_rescue_rescore\\parser_v2_run_metadata.json"
+  },
+  "note": "Offline parser-only rescore of existing prompt rescue raw outputs. No model inference was run.",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0"
+}

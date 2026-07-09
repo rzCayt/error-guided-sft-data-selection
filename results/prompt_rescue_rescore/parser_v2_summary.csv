@@ -1,0 +1,7 @@
+model,prompt_variant,n,parser_v1_accuracy,parser_v2_accuracy,accuracy_delta_v2_minus_v1,parser_v1_marker_rate,parser_v2_marker_rate,parser_v1_fallback_rate,parser_v2_fallback_rate,multi_number_output_rate,incorrect_to_correct_flips,correct_to_incorrect_flips,net_correct_flip,parser_v2_version
+Qwen/Qwen2.5-0.5B,current_direct,100,0.24,0.28,0.04,0.0,0.09,1.0,0.91,0.37,4,0,4,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
+Qwen/Qwen2.5-0.5B,final_answer_only,100,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
+Qwen/Qwen2.5-0.5B,step_by_step_final_answer,100,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
+Qwen/Qwen2.5-0.5B-Instruct,current_direct,100,0.1,0.1,0.0,0.05,0.05,0.95,0.95,1.0,0,0,0,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
+Qwen/Qwen2.5-0.5B-Instruct,final_answer_only,100,0.15,0.15,0.0,1.0,1.0,0.0,0.0,0.0,0,0,0,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
+Qwen/Qwen2.5-0.5B-Instruct,step_by_step_final_answer,100,0.03,0.03,0.0,0.11,0.12,0.89,0.88,1.0,0,0,0,parse_answer_marker_v2_final_answer_final_value_fallback_last_number
