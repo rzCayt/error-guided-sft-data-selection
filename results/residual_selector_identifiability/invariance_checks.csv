@@ -1,0 +1,10 @@
+check,passed,value
+input_order_invariance,True,1.0
+candidate_id_rename_invariance,True,1.0
+fixed_quota_deterministic_stability,True,1.0
+diagnostic_bootstrap_stability_above_random,True,0.72149016
+fixed_quota_random_reference,True,0.14991679
+candidate_variation_beyond_operation_signature,False,1
+observed_profile_exceeds_permuted_variance,False,0.05940594
+test_split_not_accessed,True,True
+candidate_gold_not_used_by_signal,True,True

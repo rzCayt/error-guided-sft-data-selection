@@ -1,0 +1,33 @@
+{
+  "additional_backward_required": false,
+  "claim_boundary": "This supplement only closes F2 input-length coverage; it does not measure gradient-signal validity.",
+  "correct_query_count": 8,
+  "correct_query_exceeds_smoked_max": false,
+  "created_at_utc": "2026-07-10T19:02:10.890333+00:00",
+  "input_hashes": {
+    "dev_diagnostic_sha256": "D3D64C86EEEC1904D58AA2216A699DCB2FE06B0B307F2C6DAC8D7EC42D7B069E",
+    "error_membership_sha256": "9AC39B04239EA7A1198EC9BAFA07FE9A6672E032E5962CD1A17C768B5B7F7AC6",
+    "static_estimate_sha256": "E7BD2EAF8751C7FB79AA5193FF1013BF62D5409AB6EE67B25B910CA23A6703AE"
+  },
+  "longest_correct_query": {
+    "content_sha256": "036E97EAD2D5C3D7F4E9C61C1634658194D63F52CE06336E55F6C65542769318",
+    "equivalent_content_ids": [
+      "dev_diagnostic-0054"
+    ],
+    "id": "dev_diagnostic-0054",
+    "prefix_token_count": 63,
+    "target_token_count": 62,
+    "total_token_count": 125
+  },
+  "model": "Qwen/Qwen3-1.7B",
+  "packages": {
+    "transformers": "4.57.2"
+  },
+  "phase": "f0_correct_query_length_audit",
+  "previously_smoked_max_total_tokens": 152,
+  "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "schema_version": 1,
+  "stage_id": "model_aware_signal_f0_f1",
+  "status": "passed",
+  "tokenizer_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+}

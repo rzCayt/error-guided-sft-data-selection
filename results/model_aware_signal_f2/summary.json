@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "stage_id": "model_aware_signal_f2_tiny_feasibility",
+  "created_at_utc": "2026-07-10T19:14:42.966571+00:00",
+  "status": "frozen_negative_result",
+  "model": "Qwen/Qwen3-1.7B",
+  "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "dtype": "bfloat16",
+  "sample_counts": {
+    "candidate": 8,
+    "error_query": 17,
+    "correct_query": 8
+  },
+  "observed": {
+    "spearman_s_e_s_c": 0.42857142857142855,
+    "t_rank": 0.5714285714285714,
+    "t_delta": 0.019283303247784912
+  },
+  "permutation_p90": {
+    "t_rank": 0.40476190476190477,
+    "t_delta": 0.024050296122713696
+  },
+  "loo": {
+    "spearman_median": 1.0,
+    "spearman_p10": 1.0,
+    "top_k": 2,
+    "top_k_jaccard_median": 1.0
+  },
+  "gates": {
+    "spearman_s_e_s_c_le_0_90": true,
+    "t_rank_ge_permutation_p90": true,
+    "t_delta_ge_permutation_p90": false,
+    "loo_spearman_median_ge_0_80": true,
+    "loo_spearman_p10_ge_0_60": true,
+    "loo_top_k_jaccard_median_ge_0_60": true,
+    "id_rename_invariance": true,
+    "input_order_invariance": true
+  },
+  "failed_gates": [
+    "t_delta_ge_permutation_p90"
+  ],
+  "confound_correlations": {
+    "token_normalized_loss": {
+      "spearman_with_s_e": -0.4523809523809524,
+      "unique_value_count": 8
+    },
+    "gradient_norm": {
+      "spearman_with_s_e": -0.7142857142857143,
+      "unique_value_count": 8
+    },
+    "target_token_count": {
+      "spearman_with_s_e": 0.4790505047653036,
+      "unique_value_count": 7
+    },
+    "final_answer_token_count": {
+      "spearman_with_s_e": 0.5361109642475096,
+      "unique_value_count": 3
+    },
+    "answer_log1p_abs": {
+      "spearman_with_s_e": -0.7142857142857143,
+      "unique_value_count": 8
+    },
+    "difficulty_ordinal": {
+      "spearman_with_s_e": 0.4787549991450212,
+      "unique_value_count": 3
+    },
+    "bm25_prompt_only": {
+      "spearman_with_s_e": -0.4787549991450212,
+      "unique_value_count": 3
+    },
+    "static_operation": {
+      "spearman_with_s_e": -0.2683725200608466,
+      "unique_value_count": 6
+    }
+  },
+  "stratum_variation": {
+    "exact_stratum_count": 3,
+    "multi_candidate_exact_stratum_count": 3,
+    "multi_candidate_nonconstant_count": 3,
+    "maximum_unique_s_e_within_exact_stratum": 3
+  },
+  "invariance": {
+    "candidate_id_rename": {
+      "passed": true,
+      "original_content_hashes": [
+        "11D30E63D82E5FCB09A3EB0B74AFB83FC83B7EDCDE47AFC1302FF36C565F5ECC",
+        "20ABD98DA09987297092FF463AB9DAEF032AB189465AA990F422F09C52E292E7",
+        "7527C52E9276BE6FFE7988735A96C9CAFD348F4F051BD522BBC2655B901F78B1",
+        "8827172888B9D32DFC2A4269F348CCE353E7D1F0A2719BB402B8B43C372177A3",
+        "9DD7DA67467D73482935D77358C79714504CA019A1EF4AADD5A91951549921FF",
+        "A6DCB06DCC09D1E5B0191401B15E42F94B170F6A70213098D2B5802592D78CEE",
+        "CB34E8D53C1E72FB6180970977B886FA483F81FCA80A1AAA60B65F7ECA4A6048",
+        "CBE10A88C5243E9DD38A5035715DB47C0B990F909F104678BF098CB4DA6800C3"
+      ],
+      "renamed_content_hashes": [
+        "11D30E63D82E5FCB09A3EB0B74AFB83FC83B7EDCDE47AFC1302FF36C565F5ECC",
+        "20ABD98DA09987297092FF463AB9DAEF032AB189465AA990F422F09C52E292E7",
+        "7527C52E9276BE6FFE7988735A96C9CAFD348F4F051BD522BBC2655B901F78B1",
+        "8827172888B9D32DFC2A4269F348CCE353E7D1F0A2719BB402B8B43C372177A3",
+        "9DD7DA67467D73482935D77358C79714504CA019A1EF4AADD5A91951549921FF",
+        "A6DCB06DCC09D1E5B0191401B15E42F94B170F6A70213098D2B5802592D78CEE",
+        "CB34E8D53C1E72FB6180970977B886FA483F81FCA80A1AAA60B65F7ECA4A6048",
+        "CBE10A88C5243E9DD38A5035715DB47C0B990F909F104678BF098CB4DA6800C3"
+      ],
+      "max_abs_score_difference": 0.0,
+      "tolerance": 1e-07,
+      "scope": "candidate sampling and content-keyed offline scoring; IDs are not model inputs"
+    },
+    "input_order": {
+      "passed": true,
+      "max_abs_score_difference": 0.0,
+      "tolerance": 1e-06,
+      "scope": "offline aggregation after reversing candidate and within-group query order"
+    }
+  },
+  "resource_summary": {
+    "maximum_peak_allocated_mib": 3621.222,
+    "maximum_peak_reserved_mib": 3654.0,
+    "median_backward_seconds": 0.06324819999281317,
+    "maximum_backward_seconds": 0.7996654000598937,
+    "pairwise_analysis_seconds": 1.0902664000168443
+  },
+  "claim_boundary": "This eight-candidate dev-only pilot tests representation feasibility only. It does not establish selector, training, or generalization effectiveness.",
+  "next_stage": null
+}

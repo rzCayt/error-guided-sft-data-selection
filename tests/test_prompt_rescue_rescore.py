@@ -1,9 +1,15 @@
 import importlib.util
+import sys
 from pathlib import Path
 
-from eg_sft.eval.parser import parse_numeric_answer_marker_v2
+from eg_sft.eval.parser import (
+    parse_numeric_answer_marker_v2,
+    parse_numeric_final_marker_only_v4,
+    parse_numeric_strict_final_answer_v3,
+)
 
 _SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "rescore_prompt_rescue_outputs.py"
+sys.path.insert(0, str(_SCRIPT.parent))
 _SPEC = importlib.util.spec_from_file_location("rescore_prompt_rescue_outputs", _SCRIPT)
 assert _SPEC is not None and _SPEC.loader is not None
 _MODULE = importlib.util.module_from_spec(_SPEC)
@@ -18,6 +24,69 @@ def test_parser_v2_recovers_final_value_before_tail_fragment() -> None:
 
 def test_parser_v2_keeps_last_number_fallback() -> None:
     assert parse_numeric_answer_marker_v2("7 * 9 = 63") == (63.0, "last_number_fallback")
+
+
+def test_parser_v3_rejects_formula_without_final_marker() -> None:
+    assert parse_numeric_strict_final_answer_v3("0.7*23 + 0.3*90 = 43.1") == (
+        None,
+        "non_strict_numeric_output",
+    )
+
+
+def test_parser_v3_accepts_single_numeric_and_final_marker() -> None:
+    assert parse_numeric_strict_final_answer_v3("Final numeric answer: 43.1") == (
+        43.1,
+        "final_answer_marker",
+    )
+    assert parse_numeric_strict_final_answer_v3(" 43.1 ") == (43.1, "single_numeric_output")
+
+
+def test_parser_v3_boundary_cases_are_frozen() -> None:
+    assert parse_numeric_strict_final_answer_v3("Final answer: 1 + 2 = 3") == (
+        None,
+        "non_strict_numeric_output",
+    )
+    assert parse_numeric_strict_final_answer_v3(r"Final answer: \boxed{72.87}") == (
+        72.87,
+        "final_answer_marker",
+    )
+    assert parse_numeric_strict_final_answer_v3("Final value is **61.034**") == (
+        61.034,
+        "final_value_marker",
+    )
+    assert parse_numeric_strict_final_answer_v3(r"\boxed{72.87}") == (
+        72.87,
+        "single_numeric_output",
+    )
+
+
+def test_final_marker_only_parser_accepts_explicit_final_markers() -> None:
+    assert parse_numeric_final_marker_only_v4("Final answer: 72.87") == (
+        72.87,
+        "final_answer_marker",
+    )
+    assert parse_numeric_final_marker_only_v4("Final numeric answer: 72.87") == (
+        72.87,
+        "final_numeric_answer_marker",
+    )
+    assert parse_numeric_final_marker_only_v4("Final value is **61.034**") == (
+        61.034,
+        "final_value_marker",
+    )
+
+
+def test_final_marker_only_parser_rejects_single_number_without_marker() -> None:
+    assert parse_numeric_final_marker_only_v4("72.87") == (
+        None,
+        "missing_final_marker_numeric_output",
+    )
+
+
+def test_final_marker_only_parser_rejects_non_strict_marker_payload() -> None:
+    assert parse_numeric_final_marker_only_v4("Final answer: 1 + 2 = 3") == (
+        None,
+        "non_strict_final_marker_payload",
+    )
 
 
 def test_rescore_row_records_flip() -> None:

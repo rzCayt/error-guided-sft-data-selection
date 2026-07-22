@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "stage_plan",
+  "language": "zh-CN",
+  "stage_id": "model_aware_signal_f2_tiny_feasibility",
+  "stage_goal": "在冻结Qwen3-1.7B、17个dev错误query、8个dev正确control和8个确定性分层candidate上，检验最后一层q/v梯度表示是否具有最低限度的error-specificity、稳定性和非退化性；不产生训练subset。",
+  "planned_changes": [
+    {
+      "area": "gradient_extraction",
+      "description": "严格复用F0/F1的teacher-forcing、assistant-only mask、256-token拒绝上限和最后一层q/v参数白名单，顺序提取单位化CPU FP32梯度。"
+    },
+    {
+      "area": "frozen_controls",
+      "description": "并列计算candidate token-normalized loss、prompt-only BM25和既有static operation signature对照。"
+    },
+    {
+      "area": "error_specificity",
+      "description": "按预注册定义计算sE、sC、delta、1000次17/8标签置换、17次LOO及ID和输入顺序不变性。"
+    },
+    {
+      "area": "claim_boundary",
+      "description": "任一预注册门槛失败即冻结负面结果；即使通过也只允许重新审计，不自动进入F3或训练。"
+    }
+  ],
+  "required_artifacts": [
+    "scripts/run_model_aware_f2.py",
+    "tests/test_model_aware_f2.py",
+    "results/model_aware_signal_f2/summary.json",
+    "results/model_aware_signal_f2/candidate_scores.csv",
+    "results/model_aware_signal_f2/permutation_null.json",
+    "results/model_aware_signal_f2/loo_stability.json",
+    "results/model_aware_signal_f2/run_metadata.json",
+    "docs/model_aware_signal_f2_results_cn.md"
+  ],
+  "required_checks": [
+    "python scripts/run_model_aware_f2.py --help",
+    "python scripts/run_model_aware_f2.py",
+    "python scripts/validate_workflow_packet.py --kind stage_plan --path workflow/packets/model_aware_signal_f2_stage_plan.json",
+    "python scripts/validate_workflow_packet.py --kind self_check --path workflow/packets/model_aware_signal_f2_self_check.json",
+    "python scripts/validate_workflow_packet.py --kind review_package --path workflow/packets/model_aware_signal_f2_review_package.json",
+    "pytest -q"
+  ],
+  "forbidden_claims": [
+    "不能把8个candidate的可行性结果写成selector、训练或泛化有效性。",
+    "不能使用test、pair_manifest、hidden groups或人工标签。",
+    "不能运行F3、LoRA、SFT、Targeted vs Random或任何参数更新。",
+    "不能在看到结果后修改样本、prototype、置换、LOO或通过阈值。"
+  ],
+  "stop_conditions": [
+    "peak allocated超过7168MiB或peak reserved超过7680MiB。",
+    "出现OOM、非有限loss/gradient、零梯度、非q/v梯度、截断、量化、offload或协议fallback。",
+    "任一样本超过256 tokens，或模型、revision、dtype、query membership和candidate抽样不匹配。",
+    "Spearman、permutation P90、LOO、top-k Jaccard或不变性任一预注册门槛失败。"
+  ],
+  "next_stage_if_passed": null
+}
