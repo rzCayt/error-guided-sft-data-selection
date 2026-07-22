@@ -70,3 +70,7 @@ program exit is not a successful research claim.
 - The 25-item model check is bounded pipeline validation, not a statistical
   estimate of general performance.
 - The eight-candidate F2 run is too small for a general utility claim.
+- `scripts/build_public_release_artifacts.py` is a maintainer utility: its
+  default source is the local provenance directory, which is intentionally not
+  part of the public release because it contains machine-specific cache paths.
+  The sanitizer itself is tested with a self-contained synthetic fixture.
