@@ -1,4 +1,5 @@
 import importlib.util
+import sys
 from pathlib import Path
 
 from eg_sft.eval.parser import (
@@ -9,6 +10,7 @@ from eg_sft.eval.parser import (
 )
 
 _SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "run_prompt_rescue_diagnostic.py"
+sys.path.insert(0, str(_SCRIPT.parent))
 _SPEC = importlib.util.spec_from_file_location("run_prompt_rescue_diagnostic", _SCRIPT)
 assert _SPEC is not None and _SPEC.loader is not None
 _MODULE = importlib.util.module_from_spec(_SPEC)

@@ -1,0 +1,21 @@
+{
+  "audit_version": "selector_identifiability_audit_v2",
+  "generated_at_utc": "2026-07-10T00:13:22.034283+00:00",
+  "offline_only": true,
+  "model_generation_run": false,
+  "training_run": false,
+  "candidate_path": "data\\samples\\candidate_pool.jsonl",
+  "candidate_sha256": "7af785cd1a4047a700a3e4b5f34794b726ee77ad8e2bc6c9622fba521673fd00",
+  "profile_path": "results\\real_error_profile.csv",
+  "profile_sha256": "2e1c2cd62128e3d13d18de48b6ac6db89f4e0ebf514944accf693459f45625a3",
+  "selector_source_path": "src/eg_sft/selection/error_guided.py",
+  "selector_source_sha256": "17ed55ff08a535d67794db2b0696e728df1d2953cb042b53aab802912a3e96cf",
+  "matched_random_source_path": "src/eg_sft/selection/matched_random.py",
+  "matched_random_source_sha256": "282b1d79c9b4eab57ba52c410200deb2323cec35d63d46ed7e35668ad45c5eb2",
+  "tie_break_rule": "sha256(f'{seed}:{candidate_id}') first 12 hex digits / 16**12",
+  "tie_break_direction": "descending",
+  "id_rename_rule": "candidate row index -> audit-renamed-{index:05d}",
+  "id_rename_map_path": "results/selector_identifiability_audit/id_rename_map.csv",
+  "null_pairwise_samples_independent": false,
+  "null_interval_interpretation": "descriptive_only_not_significance_test"
+}

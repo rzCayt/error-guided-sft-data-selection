@@ -1,0 +1,12 @@
+task_family,difficulty_bucket,answer_magnitude_bucket,reasoning_length_bucket,candidate_count,selected_count,selected_ids_equal_top_hash_k
+multiplicative_relation,hard,large,long,36,18,True
+multiplicative_relation,hard,medium,long,4,2,True
+ratio_change,easy,medium,short,18,9,True
+ratio_change,hard,medium,long,15,7,True
+temporal_numeric_constraint,easy,small,long,19,7,True
+temporal_numeric_constraint,hard,medium,long,21,10,True
+temporal_numeric_constraint,hard,small,long,20,10,True
+temporal_numeric_constraint,medium,small,long,20,9,True
+weighted_aggregation,easy,small,long,39,19,True
+weighted_aggregation,hard,small,long,39,19,True
+weighted_aggregation,medium,small,long,39,18,True
