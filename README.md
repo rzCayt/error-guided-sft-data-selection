@@ -43,7 +43,8 @@ different weighted-aggregation-only input set.
 3. [Results index](docs/results_index.md)
 4. [Reproducibility guide](docs/reproducibility.md)
 5. [Code takeover guide](docs/code_takeover_guide.md)
-6. [Public release scope](docs/public_release_scope.md)
+6. [Code map](docs/code_map.md) and [personal scorecard](docs/code_takeover_scorecard.md)
+7. [Public release scope](docs/public_release_scope.md)
 
 The sanitized bounded-check artifacts and their SHA-256 manifest are built by
 `scripts/build_public_release_artifacts.py` under `results/public_release_v1/`.
