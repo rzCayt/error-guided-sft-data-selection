@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any
 
 
@@ -56,3 +56,27 @@ def stratified_candidate_sample(
         if not made_progress:
             raise AssertionError("candidate sampling stopped before reaching count")
     return selected
+
+
+def select_until_eligible_count(
+    ordered_candidates: Sequence[dict[str, Any]],
+    *,
+    count: int,
+    is_eligible: Callable[[dict[str, Any]], bool],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Scan a frozen order until ``count`` eligible candidates are found."""
+
+    if count <= 0:
+        raise ValueError("count must be positive")
+    selected: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    for candidate in ordered_candidates:
+        if is_eligible(candidate):
+            selected.append(candidate)
+            if len(selected) == count:
+                return selected, excluded
+        else:
+            excluded.append(candidate)
+    raise ValueError(
+        f"only {len(selected)} eligible candidates found for requested count={count}"
+    )

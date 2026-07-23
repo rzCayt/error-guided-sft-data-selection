@@ -25,7 +25,10 @@ from eg_sft.data.public_gsm8k import (  # noqa: E402
     validate_gsm8k_source_row,
 )
 from eg_sft.experiment.run_manifest import create_run_manifest  # noqa: E402
-from eg_sft.selection.h1a_sample import stratified_candidate_sample  # noqa: E402
+from eg_sft.selection.h1a_sample import (  # noqa: E402
+    select_until_eligible_count,
+    stratified_candidate_sample,
+)
 from eg_sft.selection.query_groups import load_jsonl  # noqa: E402
 from eg_sft.selection.rds import (  # noqa: E402
     RDS_FORMAT_VERSION,
@@ -120,6 +123,7 @@ def main() -> None:
     parser.add_argument("--query-groups-dir", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--candidate-count", type=int, default=96)
+    parser.add_argument("--require-response-trainable", action="store_true")
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--max-length", type=int, default=512)
     parser.add_argument("--seed", type=int, default=20260722)
@@ -147,6 +151,7 @@ def main() -> None:
         "query_groups": ["all_query", "error_query"],
         "candidate_count": args.candidate_count,
         "candidate_sampling": "source_stratified_stable_hash_round_robin",
+        "require_response_trainable": args.require_response_trainable,
         "candidate_config": candidate_config,
         "gsm8k_config": gsm_config,
     }
@@ -173,9 +178,9 @@ def main() -> None:
     candidate_pool = load_jsonl(
         args.data_manifest_dir.resolve() / "tulu_candidate_pool.jsonl"
     )
-    candidates = stratified_candidate_sample(
+    candidate_order = stratified_candidate_sample(
         candidate_pool,
-        count=args.candidate_count,
+        count=len(candidate_pool),
         seed=args.seed,
     )
     all_queries = load_jsonl(
@@ -232,16 +237,14 @@ def main() -> None:
                 eos_token=tokenizer.eos_token,
             )
         )
-    candidate_texts: list[str] = []
-    candidate_training_audits: list[dict[str, Any]] = []
-    for candidate in candidates:
+    preflight_cache: dict[str, tuple[str, dict[str, Any]]] = {}
+
+    def candidate_is_trainable(candidate: dict[str, Any]) -> bool:
         raw_row = tulu[int(candidate["source_index"])]
-        candidate_texts.append(
-            _validate_and_format_candidate(
-                candidate=candidate,
-                raw_row=raw_row,
-                eos_token=tokenizer.eos_token,
-            )
+        rds_text = _validate_and_format_candidate(
+            candidate=candidate,
+            raw_row=raw_row,
+            eos_token=tokenizer.eos_token,
         )
         messages = raw_row["messages"]
         prompt, response = tulu_response_only_parts(
@@ -256,25 +259,51 @@ def main() -> None:
                 max_length=args.max_length,
                 add_eos=True,
             )
-            candidate_training_audits.append(
-                {
-                    "response_only_trainable": True,
-                    "training_total_tokens": len(tokenized["input_ids"]),
-                    "training_supervised_tokens": sum(
-                        label != -100 for label in tokenized["labels"]
-                    ),
-                }
-            )
+            audit = {
+                "response_only_trainable": True,
+                "training_total_tokens": len(tokenized["input_ids"]),
+                "training_supervised_tokens": sum(
+                    label != -100 for label in tokenized["labels"]
+                ),
+            }
         except ValueError as error:
             if "response was fully truncated" not in str(error):
                 raise
-            candidate_training_audits.append(
-                {
-                    "response_only_trainable": False,
-                    "training_total_tokens": args.max_length,
-                    "training_supervised_tokens": 0,
-                }
-            )
+            audit = {
+                "response_only_trainable": False,
+                "training_total_tokens": args.max_length,
+                "training_supervised_tokens": 0,
+            }
+        preflight_cache[candidate["candidate_id"]] = (rds_text, audit)
+        return bool(audit["response_only_trainable"])
+
+    if args.require_response_trainable:
+        candidates, excluded_candidates = select_until_eligible_count(
+            candidate_order,
+            count=args.candidate_count,
+            is_eligible=candidate_is_trainable,
+        )
+    else:
+        candidates = candidate_order[: args.candidate_count]
+        excluded_candidates = []
+        for candidate in candidates:
+            candidate_is_trainable(candidate)
+
+    candidate_texts = [
+        preflight_cache[candidate["candidate_id"]][0] for candidate in candidates
+    ]
+    candidate_training_audits = [
+        preflight_cache[candidate["candidate_id"]][1] for candidate in candidates
+    ]
+    exclusion_rows = [
+        {
+            "candidate_id": candidate["candidate_id"],
+            "source_dataset": candidate["source_dataset"],
+            "source_index": candidate["source_index"],
+            "reason": "response_fully_truncated_at_max_length",
+        }
+        for candidate in excluded_candidates
+    ]
 
     torch.cuda.empty_cache()
     torch.cuda.reset_peak_memory_stats()
@@ -358,6 +387,8 @@ def main() -> None:
         "response_only_untrainable_candidate_count": (
             len(candidates) - len(trainable_error_order)
         ),
+        "candidate_scan_count": len(candidates) + len(excluded_candidates),
+        "excluded_before_filling_trainable_count": len(excluded_candidates),
         "all_vs_error_order_identical": all_order == error_order,
         "all_vs_error_rank_spearman": _spearman_from_complete_ranks(
             all_order,
@@ -389,6 +420,7 @@ def main() -> None:
         run_dir / "embeddings.pt",
     )
     _write_jsonl(run_dir / "candidate_scores.jsonl", score_rows)
+    _write_jsonl(run_dir / "candidate_preflight_exclusions.jsonl", exclusion_rows)
     _write_json(run_dir / "reliability_candidates.json", reliability_rows)
     _write_json(run_dir / "metrics.json", metrics)
     print(json.dumps({"run_dir": str(run_dir), **metrics}, indent=2))

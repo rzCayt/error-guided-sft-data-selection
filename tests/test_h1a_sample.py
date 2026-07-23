@@ -1,6 +1,9 @@
 import pytest
 
-from eg_sft.selection.h1a_sample import stratified_candidate_sample
+from eg_sft.selection.h1a_sample import (
+    select_until_eligible_count,
+    stratified_candidate_sample,
+)
 
 
 def _candidates() -> list[dict]:
@@ -36,3 +39,14 @@ def test_stratified_sample_rejects_duplicate_ids() -> None:
     candidates[-1]["candidate_id"] = candidates[0]["candidate_id"]
     with pytest.raises(ValueError, match="unique"):
         stratified_candidate_sample(candidates, count=3, seed=1)
+
+
+def test_select_until_eligible_count_supplements_without_reordering() -> None:
+    candidates = [{"candidate_id": str(index), "valid": index % 3 != 0} for index in range(10)]
+    selected, excluded = select_until_eligible_count(
+        candidates,
+        count=5,
+        is_eligible=lambda row: row["valid"],
+    )
+    assert [row["candidate_id"] for row in selected] == ["1", "2", "4", "5", "7"]
+    assert [row["candidate_id"] for row in excluded] == ["0", "3", "6"]
