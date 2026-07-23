@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from eg_sft.gsm8k.parser import parse_generated_answer, parse_gold_answer
+from eg_sft.gsm8k.parser import (
+    parse_generated_answer,
+    parse_gold_answer,
+    parse_last_numeric_answer,
+)
 
 
 PROMPT_VERSION = "gsm8k_base_completion_v2_one_shot_frozen"
@@ -46,7 +50,13 @@ def score_generation(
     gold = parse_gold_answer(gold_answer_text)
     if not gold.ok or gold.value is None:
         raise ValueError(f"invalid GSM8K gold answer: {gold.status}")
-    prediction = parse_generated_answer(generated_text)
+    strict_prediction = parse_generated_answer(generated_text)
+    if strict_prediction.ok:
+        prediction = strict_prediction
+        parse_mode = "strict_final_marker"
+    else:
+        prediction = parse_last_numeric_answer(generated_text)
+        parse_mode = "last_numeric_fallback" if prediction.ok else "failed"
     correct = bool(
         prediction.ok
         and prediction.value is not None
@@ -58,6 +68,13 @@ def score_generation(
         "question_sha256": record["question_sha256"],
         "prompt_version": PROMPT_VERSION,
         "raw_output": generated_text,
+        "strict_parse_status": strict_prediction.status,
+        "strict_parsed_prediction": (
+            str(strict_prediction.value)
+            if strict_prediction.value is not None
+            else None
+        ),
+        "parse_mode": parse_mode,
         "parse_status": prediction.status,
         "parsed_prediction": (
             str(prediction.value) if prediction.value is not None else None

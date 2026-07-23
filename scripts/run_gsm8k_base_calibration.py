@@ -207,7 +207,13 @@ def main() -> None:
 
         torch.cuda.synchronize()
         elapsed_seconds = time.perf_counter() - started
+        strict_parsed_count = sum(
+            row["strict_parse_status"] == "ok" for row in output_rows
+        )
         parsed_count = sum(row["parse_status"] == "ok" for row in output_rows)
+        fallback_parsed_count = sum(
+            row["parse_mode"] == "last_numeric_fallback" for row in output_rows
+        )
         correct_count = sum(row["numeric_correct"] for row in output_rows)
         status_counts: dict[str, int] = {}
         for row in output_rows:
@@ -217,6 +223,9 @@ def main() -> None:
         metrics = {
             "protocol_split": args.protocol_split,
             "example_count": len(output_rows),
+            "strict_parsed_count": strict_parsed_count,
+            "strict_parse_rate": strict_parsed_count / len(output_rows),
+            "fallback_parsed_count": fallback_parsed_count,
             "parsed_count": parsed_count,
             "parse_rate": parsed_count / len(output_rows),
             "numeric_correct_count": correct_count,

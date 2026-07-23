@@ -2,7 +2,11 @@ from decimal import Decimal
 
 import pytest
 
-from eg_sft.gsm8k.parser import parse_generated_answer, parse_gold_answer
+from eg_sft.gsm8k.parser import (
+    parse_generated_answer,
+    parse_gold_answer,
+    parse_last_numeric_answer,
+)
 
 
 @pytest.mark.parametrize(
@@ -55,3 +59,23 @@ def test_malformed_generated_answers_are_rejected(text: str, status: str) -> Non
     parsed = parse_generated_answer(text)
     assert parsed.value is None
     assert parsed.status == status
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("The property is worth $333,200.", Decimal("333200")),
+        ("x = 70 cm\nFinal answer: 70 cm", Decimal("70")),
+        ("First 2, then 5.", Decimal("5")),
+    ],
+)
+def test_last_numeric_fallback_is_explicit(text: str, expected: Decimal) -> None:
+    parsed = parse_last_numeric_answer(text)
+    assert parsed.ok
+    assert parsed.value == expected
+
+
+def test_last_numeric_fallback_rejects_output_without_numbers() -> None:
+    parsed = parse_last_numeric_answer("No numeric answer was produced.")
+    assert parsed.value is None
+    assert parsed.status == "no_numeric_token"

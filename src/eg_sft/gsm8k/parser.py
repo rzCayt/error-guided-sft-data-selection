@@ -19,6 +19,7 @@ from decimal import Decimal, InvalidOperation
 
 _NUMBER = r"[-+]?(?:(?:\d{1,3}(?:,\d{3})+)|\d+)(?:\.\d+)?"
 _GOLD_PATTERN = re.compile(rf"####\s*(?P<number>{_NUMBER})\s*$")
+_ANY_NUMBER = re.compile(rf"(?P<number>{_NUMBER})")
 _GENERATED_LINE = re.compile(
     rf"Final\s+answer\s*:\s*(?P<number>{_NUMBER})\s*$",
     re.IGNORECASE,
@@ -86,3 +87,16 @@ def parse_generated_answer(text: str) -> ParseResult:
     if value is None:
         return ParseResult(None, "invalid_number", final_match.group(0))
     return ParseResult(value, "ok", final_match.group(0))
+
+
+def parse_last_numeric_answer(text: str) -> ParseResult:
+    """Extract the last numeric token as an explicitly labeled fallback."""
+
+    matches = list(_ANY_NUMBER.finditer(text))
+    if not matches:
+        return ParseResult(None, "no_numeric_token")
+    match = matches[-1]
+    value = _to_decimal(match.group("number"))
+    if value is None:
+        return ParseResult(None, "invalid_last_number", match.group(0))
+    return ParseResult(value, "ok", match.group(0))

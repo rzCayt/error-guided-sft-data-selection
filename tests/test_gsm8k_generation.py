@@ -29,6 +29,7 @@ def test_score_generation_preserves_wrong_model_number() -> None:
     )
     assert result["prompt_version"] == PROMPT_VERSION
     assert result["parsed_prediction"] == "6"
+    assert result["parse_mode"] == "strict_final_marker"
     assert result["numeric_correct"] is False
 
 
@@ -38,6 +39,20 @@ def test_parse_failure_counts_as_incorrect() -> None:
         gold_answer_text="2 + 3 = 5.\n#### 5",
         generated_text="The answer is five.",
     )
-    assert result["parse_status"] == "missing_final_marker"
+    assert result["strict_parse_status"] == "missing_final_marker"
+    assert result["parse_status"] == "no_numeric_token"
+    assert result["parse_mode"] == "failed"
     assert result["parsed_prediction"] is None
     assert result["numeric_correct"] is False
+
+
+def test_score_generation_labels_last_number_fallback() -> None:
+    result = score_generation(
+        record=_record(),
+        gold_answer_text="2 + 3 = 5.\n#### 5",
+        generated_text="Therefore, she has 5 apples.",
+    )
+    assert result["strict_parse_status"] == "missing_final_marker"
+    assert result["parse_mode"] == "last_numeric_fallback"
+    assert result["parsed_prediction"] == "5"
+    assert result["numeric_correct"] is True
