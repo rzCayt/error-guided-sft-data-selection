@@ -35,6 +35,16 @@ def test_tulu_format_requires_final_assistant_and_adds_eos() -> None:
     assert text == "<|user|>\nQuestion\n<|assistant|>\nAnswer<eos>"
 
 
+def test_tulu_format_accepts_empty_system_message_from_processed_data() -> None:
+    messages = [
+        {"role": "system", "content": ""},
+        {"role": "user", "content": "Question"},
+        {"role": "assistant", "content": "Answer"},
+    ]
+    text = format_tulu_rds_text(messages, eos_token="<eos>")
+    assert text.startswith("<|system|>\n\n<|user|>")
+
+
 def test_round_robin_uses_query_group_and_never_repeats_candidates() -> None:
     all_query_similarity = torch.tensor(
         [

@@ -61,7 +61,7 @@ def format_tulu_rds_text(
         content = message.get("content", "").strip()
         if role not in {"system", "user", "assistant"}:
             raise ValueError(f"unsupported message role: {role}")
-        if not content:
+        if not content and role != "system":
             raise ValueError(f"empty {role} message")
         suffix = eos_token if role == "assistant" else ""
         pieces.append(f"<|{role}|>\n{content}{suffix}\n")
