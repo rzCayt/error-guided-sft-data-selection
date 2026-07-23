@@ -7,13 +7,10 @@ from typing import Any
 from eg_sft.gsm8k.parser import parse_generated_answer, parse_gold_answer
 
 
-PROMPT_VERSION = "gsm8k_base_completion_v3_format_contrast"
+PROMPT_VERSION = "gsm8k_base_completion_v2_one_shot_frozen"
 PROMPT_TEMPLATE = """Solve the grade-school math problem by following the example format.
 The final non-empty line must contain only ``Final answer:`` followed by a number.
 Do not put units, currency symbols, words, or punctuation after the number.
-
-Wrong final line: Final answer: 70 cm
-Correct final line: Final answer: 70
 
 Example problem:
 Mia has 2 apples and buys 3 more. How many apples does she have?
