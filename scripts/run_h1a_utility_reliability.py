@@ -137,34 +137,60 @@ def main() -> None:
     parser.add_argument("--eval-batch-size", type=int, default=4)
     parser.add_argument("--learning-rate", type=float, default=2e-4)
     parser.add_argument("--repeat-seeds", type=int, nargs="+", default=[17, 29])
+    parser.add_argument(
+        "--mode",
+        choices=["reliability", "formal"],
+        default="reliability",
+    )
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
         raise RuntimeError("utility measurement requires CUDA")
     if not torch.cuda.is_bf16_supported():
         raise RuntimeError("utility measurement requires BF16")
-    if len(args.repeat_seeds) != 2 or len(set(args.repeat_seeds)) != 2:
-        raise ValueError("exactly two distinct repeat seeds are required")
+    if len(set(args.repeat_seeds)) != len(args.repeat_seeds):
+        raise ValueError("repeat seeds must be distinct")
+    if args.mode == "reliability" and len(args.repeat_seeds) != 2:
+        raise ValueError("reliability mode requires exactly two repeat seeds")
+    if args.mode == "formal" and len(args.repeat_seeds) != 1:
+        raise ValueError("formal mode requires exactly one fixed seed")
     device = torch.device("cuda")
 
     config = _read_json(args.config.resolve())
     model_config = config["model"]
     gsm_config = config["datasets"]["gsm8k"]
     candidate_config = config["datasets"]["candidate_pool"]
-    reliability_rows = _read_json(
-        args.scoring_run_dir.resolve() / "reliability_candidates.json"
-    )
-    if len(reliability_rows) != 10:
-        raise ValueError("scoring run must provide exactly ten reliability candidates")
-    if len({row["candidate_id"] for row in reliability_rows}) != 10:
-        raise ValueError("reliability candidate IDs are not unique")
+    if args.mode == "reliability":
+        measurement_candidates = _read_json(
+            args.scoring_run_dir.resolve() / "reliability_candidates.json"
+        )
+        if len(measurement_candidates) != 10:
+            raise ValueError(
+                "scoring run must provide exactly ten reliability candidates"
+            )
+    else:
+        measurement_candidates = load_jsonl(
+            args.scoring_run_dir.resolve() / "candidate_scores.jsonl"
+        )
+        if len(measurement_candidates) != 96:
+            raise ValueError("formal scoring run must provide exactly 96 candidates")
+        if not all(
+            row.get("response_only_trainable")
+            for row in measurement_candidates
+        ):
+            raise ValueError("formal candidates must all be response-only trainable")
+    if len(
+        {row["candidate_id"] for row in measurement_candidates}
+    ) != len(measurement_candidates):
+        raise ValueError("measurement candidate IDs are not unique")
 
     run_config = {
+        "mode": args.mode,
         "model": model_config,
         "gsm8k": gsm_config,
         "candidate_pool": candidate_config,
         "utility_set_size": 128,
-        "candidate_count": 10,
+        "candidate_count": len(measurement_candidates),
         "repeat_seeds": args.repeat_seeds,
         "measurement": "one_adamw_step_then_response_loss_reduction",
         "max_length": args.max_length,
@@ -178,12 +204,20 @@ def main() -> None:
             "target_modules": "all-linear",
             "bias": "none",
         },
-        "reliability_gate": {"icc_a1_at_least": 0.90},
+        "reliability_gate": (
+            {"icc_a1_at_least": 0.90}
+            if args.mode == "reliability"
+            else None
+        ),
     }
     run_dir, manifest = create_run_manifest(
         output_root=args.output_root.resolve(),
         repo_root=ROOT,
-        stage="h1a_utility_reliability10",
+        stage=(
+            "h1a_utility_reliability10"
+            if args.mode == "reliability"
+            else "h1a_utility_formal96"
+        ),
         config=run_config,
         seed=config["seed"],
         command=[sys.executable, *sys.argv],
@@ -253,7 +287,7 @@ def main() -> None:
 
         candidate_examples: dict[str, dict[str, list[int]]] = {}
         candidate_token_audit: list[dict[str, Any]] = []
-        for score_row in reliability_rows:
+        for score_row in measurement_candidates:
             candidate = candidate_lookup[score_row["candidate_id"]]
             messages = _validate_candidate_row(
                 candidate,
@@ -315,7 +349,12 @@ def main() -> None:
             encoding="utf-8",
             newline="\n",
         ) as measurement_file:
-            for candidate_position, score_row in enumerate(reliability_rows):
+            total_measurements = (
+                len(measurement_candidates) * len(args.repeat_seeds)
+            )
+            for candidate_position, score_row in enumerate(
+                measurement_candidates
+            ):
                 candidate_id = score_row["candidate_id"]
                 candidate_loader = DataLoader(
                     [candidate_examples[candidate_id]],
@@ -417,7 +456,7 @@ def main() -> None:
                     )
                     measurement_file.flush()
                     print(
-                        f"completed={len(measurements)}/20 "
+                        f"completed={len(measurements)}/{total_measurements} "
                         f"candidate={candidate_id} seed={repeat_seed} "
                         f"utility={utility:.10f}",
                         flush=True,
@@ -431,48 +470,69 @@ def main() -> None:
         by_candidate: dict[str, dict[int, float]] = defaultdict(dict)
         for row in measurements:
             by_candidate[row["candidate_id"]][row["repeat_seed"]] = row["utility"]
-        reliability_matrix = [
+        measurement_matrix = [
             [by_candidate[row["candidate_id"]][seed] for seed in args.repeat_seeds]
-            for row in reliability_rows
-        ]
-        first_repeat = [row[0] for row in reliability_matrix]
-        second_repeat = [row[1] for row in reliability_matrix]
-        icc = icc_absolute_agreement(reliability_matrix)
-        pearson = pearson_correlation(first_repeat, second_repeat)
-        absolute_differences = [
-            abs(left - right)
-            for left, right in zip(first_repeat, second_repeat, strict=True)
+            for row in measurement_candidates
         ]
         peak_memory = int(torch.cuda.max_memory_allocated())
         metrics = {
-            "candidate_count": 10,
-            "repeat_count": 2,
-            "measurement_count": 20,
+            "mode": args.mode,
+            "candidate_count": len(measurement_candidates),
+            "repeat_count": len(args.repeat_seeds),
+            "measurement_count": len(measurements),
             "utility_set_size": 128,
             "base_utility_loss": base_utility_loss,
-            "icc_absolute_agreement_a1": icc,
-            "pearson_between_repeats": pearson,
-            "mean_absolute_repeat_difference": sum(absolute_differences)
-            / len(absolute_differences),
-            "max_absolute_repeat_difference": max(absolute_differences),
             "repeat_means": [
-                sum(first_repeat) / len(first_repeat),
-                sum(second_repeat) / len(second_repeat),
+                sum(row[repeat_index] for row in measurement_matrix)
+                / len(measurement_matrix)
+                for repeat_index in range(len(args.repeat_seeds))
             ],
             "positive_utility_measurements": sum(
                 row["utility"] > 0 for row in measurements
             ),
-            "reliability_gate_icc_at_least_0_90": icc >= 0.90,
+            "utility_min": min(row["utility"] for row in measurements),
+            "utility_max": max(row["utility"] for row in measurements),
             "elapsed_seconds": elapsed,
             "peak_memory_bytes": peak_memory,
             "peak_memory_gib": peak_memory / 1024**3,
             "claim_boundary": (
                 "This ten-candidate run tests utility measurement reliability. "
                 "It is not the preregistered 96-candidate H1a effect test."
+                if args.mode == "reliability"
+                else
+                "This run measures formal candidate utility. H1a requires "
+                "the preregistered partial correlation and permutation analysis."
             ),
         }
-        if not math.isfinite(icc) or not math.isfinite(pearson):
-            raise RuntimeError("non-finite reliability statistic")
+        if args.mode == "reliability":
+            first_repeat = [row[0] for row in measurement_matrix]
+            second_repeat = [row[1] for row in measurement_matrix]
+            icc = icc_absolute_agreement(measurement_matrix)
+            pearson = pearson_correlation(first_repeat, second_repeat)
+            absolute_differences = [
+                abs(left - right)
+                for left, right in zip(
+                    first_repeat,
+                    second_repeat,
+                    strict=True,
+                )
+            ]
+            metrics.update(
+                {
+                    "icc_absolute_agreement_a1": icc,
+                    "pearson_between_repeats": pearson,
+                    "mean_absolute_repeat_difference": (
+                        sum(absolute_differences)
+                        / len(absolute_differences)
+                    ),
+                    "max_absolute_repeat_difference": max(
+                        absolute_differences
+                    ),
+                    "reliability_gate_icc_at_least_0_90": icc >= 0.90,
+                }
+            )
+            if not math.isfinite(icc) or not math.isfinite(pearson):
+                raise RuntimeError("non-finite reliability statistic")
         _write_json(run_dir / "metrics.json", metrics)
         _write_json(
             run_dir / "token_audit.json",
