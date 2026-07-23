@@ -25,6 +25,7 @@ ROOT = add_src_to_path()
 from eg_sft.data.public_gsm8k import (  # noqa: E402
     candidate_prompt_text,
     sha256_text,
+    validate_gsm8k_source_row,
 )
 from eg_sft.experiment.run_manifest import create_run_manifest  # noqa: E402
 from eg_sft.experiment.utility import (  # noqa: E402
@@ -230,6 +231,8 @@ def main() -> None:
         collator = ResponseOnlyCollator(pad_token_id=int(tokenizer.pad_token_id))
 
         utility_rows = [gsm[int(record["source_index"])] for record in utility_records]
+        for record, row in zip(utility_records, utility_rows, strict=True):
+            validate_gsm8k_source_row(record, row)
         utility_examples, utility_token_audit = build_tokenized_overfit_examples(
             tokenizer=tokenizer,
             rows=utility_rows,

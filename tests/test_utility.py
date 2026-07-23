@@ -1,6 +1,8 @@
 import pytest
+import torch
 
 from eg_sft.experiment.utility import (
+    causal_supervised_token_count,
     icc_absolute_agreement,
     pearson_correlation,
 )
@@ -30,3 +32,13 @@ def test_icc_penalizes_repeat_disagreement() -> None:
 def test_pearson_correlation_handles_scale_but_not_reversal() -> None:
     assert pearson_correlation([1, 2, 3], [2, 4, 6]) == pytest.approx(1.0)
     assert pearson_correlation([1, 2, 3], [6, 4, 2]) == pytest.approx(-1.0)
+
+
+def test_causal_token_count_matches_right_padded_shifted_labels() -> None:
+    labels = torch.tensor(
+        [
+            [-100, -100, 10, 11, 12],
+            [-100, 20, 21, -100, -100],
+        ]
+    )
+    assert causal_supervised_token_count(labels) == 5

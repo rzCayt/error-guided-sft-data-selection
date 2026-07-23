@@ -27,6 +27,19 @@ def sha256_text(text: str) -> str:
     return hashlib.sha256(normalize_text(text).encode("utf-8")).hexdigest()
 
 
+def validate_gsm8k_source_row(
+    record: dict[str, Any],
+    source_row: dict[str, str],
+) -> None:
+    """Verify that a pinned dataset row matches both frozen source hashes."""
+
+    record_id = str(record.get("record_id", "unknown"))
+    if sha256_text(source_row["question"]) != record.get("question_sha256"):
+        raise ValueError(f"question hash mismatch for {record_id}")
+    if sha256_text(source_row["answer"]) != record.get("answer_sha256"):
+        raise ValueError(f"answer hash mismatch for {record_id}")
+
+
 def word_ngrams(text: str, *, n: int = 5) -> set[tuple[str, ...]]:
     """Return normalized word n-grams, falling back to one short token tuple."""
 

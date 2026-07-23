@@ -8,6 +8,14 @@ import torch
 from torch.utils.data import DataLoader
 
 
+def causal_supervised_token_count(labels: torch.Tensor) -> int:
+    """Count labels consumed by Transformers' causal-LM shifted loss."""
+
+    if labels.ndim < 2 or labels.shape[-1] < 2:
+        raise ValueError("labels must have batch and sequence dimensions")
+    return int((labels[..., 1:] != -100).sum().item())
+
+
 def to_device(
     batch: dict[str, torch.Tensor],
     device: torch.device,
@@ -28,7 +36,7 @@ def mean_supervised_token_loss(
     supervised_tokens = 0
     for batch in loader:
         batch = to_device(batch, device)
-        token_count = int((batch["labels"] != -100).sum().item())
+        token_count = causal_supervised_token_count(batch["labels"])
         if token_count == 0:
             raise ValueError("evaluation batch has zero supervised tokens")
         loss = model(**batch).loss

@@ -22,6 +22,7 @@ ROOT = add_src_to_path()
 from eg_sft.data.public_gsm8k import (  # noqa: E402
     candidate_prompt_text,
     sha256_text,
+    validate_gsm8k_source_row,
 )
 from eg_sft.experiment.run_manifest import create_run_manifest  # noqa: E402
 from eg_sft.selection.h1a_sample import stratified_candidate_sample  # noqa: E402
@@ -180,6 +181,12 @@ def main() -> None:
     all_queries = load_jsonl(
         args.query_groups_dir.resolve() / "all_queries.jsonl"
     )
+    gsm8k_records = {
+        row["record_id"]: row
+        for row in load_jsonl(
+            args.data_manifest_dir.resolve() / "gsm8k_records.jsonl"
+        )
+    }
     error_queries = load_jsonl(
         args.query_groups_dir.resolve() / "error_queries.jsonl"
     )
@@ -214,8 +221,10 @@ def main() -> None:
     query_texts: list[str] = []
     for query in all_queries:
         row = gsm[int(query["source_index"])]
-        if sha256_text(row["question"]) != query["question_sha256"]:
-            raise ValueError(f"query hash mismatch for {query['record_id']}")
+        frozen_record = gsm8k_records[query["record_id"]]
+        if frozen_record["source_index"] != query["source_index"]:
+            raise ValueError(f"query source index mismatch for {query['record_id']}")
+        validate_gsm8k_source_row(frozen_record, row)
         query_texts.append(
             format_gsm8k_rds_text(
                 question=row["question"],

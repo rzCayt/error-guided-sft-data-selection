@@ -1,9 +1,12 @@
+import pytest
+
 from eg_sft.data.public_gsm8k import (
     build_gsm8k_split_records,
     build_tulu_candidate_pool,
     build_ngram_reference_index,
     maximum_ngram_overlap,
     sha256_text,
+    validate_gsm8k_source_row,
 )
 
 
@@ -40,6 +43,19 @@ def test_gsm8k_splits_are_deterministic_disjoint_and_complete() -> None:
     assert first_manifest["protocol_split_counts"] == sizes
     assert first_manifest["question_hash_overlap_train_test"] == 0
     assert len({record["record_id"] for record in first_records}) == 13
+
+
+def test_gsm8k_source_validation_checks_question_and_answer_hashes() -> None:
+    row = {"question": "What is 1 + 1?", "answer": "work\n#### 2"}
+    record = {
+        "record_id": "example",
+        "question_sha256": sha256_text(row["question"]),
+        "answer_sha256": sha256_text(row["answer"]),
+    }
+    validate_gsm8k_source_row(record, row)
+
+    with pytest.raises(ValueError, match="answer hash mismatch"):
+        validate_gsm8k_source_row(record, {**row, "answer": "work\n#### 3"})
 
 
 def test_candidate_pool_deduplicates_excludes_and_is_deterministic() -> None:
