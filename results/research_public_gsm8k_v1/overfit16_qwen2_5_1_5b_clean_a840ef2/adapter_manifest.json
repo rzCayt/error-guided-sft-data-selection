@@ -1,0 +1,10 @@
+{
+  "adapter_config_sha256": "bbf0175d476c7dbbe26fb73b5e9d5dcf8bb864953fc24ef9820d2c7e456bd562",
+  "adapter_model_bytes": 73911112,
+  "adapter_model_sha256": "f45cf7c93d288a3a1a4209c27a5ee7a5b21ad5e76c30df3d74b330ac8c47807d",
+  "adapter_weights_committed_to_git": false,
+  "clean_git_commit": "a840ef25bebceec567e5f883b0a02ec78533a30d",
+  "claim_boundary": "This overfit run validates the training and save/load pipeline. It does not measure generalization or data-selection effectiveness.",
+  "local_run_id": "20260723T092634Z_gsm8k_lora_overfit16_986293b560_s20260722",
+  "metrics_sha256": "3f9a36e62461b767b068326204be4026aa060840aed374f1848a46beb62b5d10"
+}

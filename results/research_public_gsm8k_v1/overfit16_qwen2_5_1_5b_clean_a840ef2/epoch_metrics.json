@@ -1,0 +1,42 @@
+[
+  {
+    "epoch": 1,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.49091721788071824
+  },
+  {
+    "epoch": 2,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.32136712879111734
+  },
+  {
+    "epoch": 3,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.182044440835222
+  },
+  {
+    "epoch": 4,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.10047178674743126
+  },
+  {
+    "epoch": 5,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.031254368125157896
+  },
+  {
+    "epoch": 6,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.023206025655336908
+  },
+  {
+    "epoch": 7,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.003725641765232215
+  },
+  {
+    "epoch": 8,
+    "supervised_tokens": 1937,
+    "train_token_loss": 0.00309812652667329
+  }
+]

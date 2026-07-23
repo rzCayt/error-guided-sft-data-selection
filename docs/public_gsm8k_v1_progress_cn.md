@@ -79,20 +79,50 @@ processed 数据卡没有明确许可证字段，因此公开结果只保存源 
 - LoRA adapter 保存和加载后输出一致；
 - 运行目录不可覆盖、配置哈希与键顺序无关。
 
-全仓测试结果：`121 passed`。
+全仓测试结果：`125 passed`。
+
+### 6. Qwen2.5-1.5B 的 16 样本 LoRA 过拟合
+
+规范运行对应干净 commit：
+
+`a840ef25bebceec567e5f883b0a02ec78533a30d`
+
+manifest 记录 `git_is_dirty=false`。训练使用 16 条固定 development 样本，没有
+接触 selection diagnostic、utility validation 或 held-out test。
+
+| 指标 | 结果 |
+|---|---:|
+| 训练前 token loss | 0.548746 |
+| 训练后 token loss | 0.003192 |
+| loss 降低比例 | 99.418% |
+| 优化步数 | 32 |
+| 训练耗时 | 55.12 秒 |
+| 监督 token / 秒 | 281.15 |
+| 峰值显存 | 3.742 GiB |
+| LoRA 可训练参数 | 18,464,768 |
+| 可训练参数比例 | 1.182% |
+
+保存 adapter 后释放原模型，重新加载基础模型和 adapter，再次计算得到的 loss 仍为
+`0.0031916847242529`，与保存前绝对差为 0。
+
+adapter 权重 SHA-256：
+
+`f45cf7c93d288a3a1a4209c27a5ee7a5b21ad5e76c30df3d74b330ac8c47807d`
+
+这证明训练、梯度隔离、保存和加载管线可以工作，但不证明泛化能力，也不证明任何
+数据选择器有效。
 
 ## 当前还不能声称什么
 
 - 尚未重新训练 Qwen3-4B；
-- 尚未完成 Qwen2.5-1.5B 的 16 样本过拟合；
 - 尚未生成 448 条 diagnostic 的基础模型答对/答错标签；
 - 尚未完成候选效用 H1a；
 - 尚未证明 error-conditioned RDS+ 超过 all-query RDS+ 或随机选择。
 
 ## 下一段代码目标
 
-1. 用真实 Qwen tokenizer 验证 response-only mask；
-2. 完成 16 样本 LoRA 过拟合；
-3. 固定 GSM8K prompt、生成参数和 raw-output schema；
-4. 在 interface calibration 64 条上冻结解析与生成接口；
-5. 再开始 448 条 diagnostic 推理和 H1a 候选效用实现。
+1. 固定 GSM8K prompt、生成参数和 raw-output schema；
+2. 在 interface calibration 64 条上冻结解析与生成接口；
+3. 开始 448 条 diagnostic 的基础模型推理；
+4. 根据答对/答错结果生成 all-query 与 error-conditioned 查询表示；
+5. 实现 H1a 的单候选微更新和 utility loss 计算。
