@@ -1,0 +1,17 @@
+{
+  "bottom_24_mean_utility": -0.0007720183220097515,
+  "candidate_count": 96,
+  "claim_boundary": "This is the preregistered Tulu-pool candidate-utility H1a test. It does not establish GSM8K-domain robustness or downstream SFT gains.",
+  "direction_gate_passed": true,
+  "error_query_count": 99,
+  "h1a_gate_passed": true,
+  "observed_partial_spearman": 0.2277490256814716,
+  "one_sided_permutation_p": 0.07292707292707293,
+  "permutation_count": 1000,
+  "permutation_gate_passed": true,
+  "permutation_greater_or_equal_count": 72,
+  "query_count": 448,
+  "rho_gate_passed": true,
+  "top_24_mean_utility": 0.0017221152909290087,
+  "top_minus_bottom_mean_utility": 0.0024941336129387605
+}

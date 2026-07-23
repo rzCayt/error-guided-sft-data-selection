@@ -4,9 +4,10 @@ This project asks a narrow question: can diagnostic failures from a target
 language model identify training examples that are unusually useful for
 post-training?
 
-## Status: frozen negative result
+## Status: candidate-utility gate passed; downstream SFT untested
 
-The current evidence does **not** justify an SFT effectiveness experiment.
+The original synthetic selector audits remain negative. A newer public-data
+extension now provides a preregistered reason to run the bounded SFT comparison.
 
 - The first selector is not identifiable beyond the metadata already used by
   an exact matched-random baseline.
@@ -14,12 +15,16 @@ The current evidence does **not** justify an SFT effectiveness experiment.
   metadata is fixed.
 - An eight-candidate model-aware feasibility pilot fails one preregistered
   effect-size gate (`0.0193 < permutation p90 0.0241`).
-- No completed result shows that targeted selection beats random selection,
-  improves LoRA/SFT, or predicts candidate-level training utility.
+- In a frozen 96-candidate Tulu experiment, the error-conditioned RDS+ score
+  predicts one-step candidate utility after controlling the all-query score
+  and training-token length: partial Spearman `0.22775`, one-sided
+  1,000-label-permutation `p=0.07293`, and positive top-minus-bottom utility.
+- No completed result yet shows that targeted selection improves downstream
+  LoRA/SFT accuracy or beats all-query RDS+ or random selection after training.
 
-This is a useful stopping result: before spending compute on an 18-run SFT
-matrix, the project must first show that its score contains candidate-specific
-signal beyond simple matching variables.
+The candidate-utility gate is therefore passed for the frozen Tulu pool. This
+authorizes the preregistered bounded `B=500` comparison; it is not itself an SFT
+effectiveness result.
 
 ## Verified evidence
 
@@ -28,6 +33,7 @@ signal beyond simple matching variables.
 | Original selector identifiability | 500 candidates, budget 128 | Fail | Score is fully controlled by matched metadata |
 | Residual selector identifiability | 500 candidates, budget 128 | Fail | Score is still static at the operation-signature level |
 | Model-aware feasibility | 8 candidates | Fail | Representation is computable, but the effect gate is not cleared |
+| Formal Tulu candidate utility H1a | 96 candidates, 1,000 permutations | Pass | Incremental candidate-level signal clears all three preregistered gates |
 | Selector reproduction | 500 candidates, budget 128 | Exact SHA-256 match | Offline audit is deterministically reproducible |
 | Model pipeline check | Qwen3-1.7B, 25 mixed-family dev items | 19/25 numeric; 25/25 parsed | Raw output-to-parser-to-metric chain works end to end |
 
@@ -71,13 +77,15 @@ before running them.
 ## Research boundary
 
 Development diagnostics are used for selector design and audit. They are not a
-held-out final test set. H1a (candidate utility) and all LoRA/SFT comparisons
-remain future work.
+held-out final test set. Tulu-pool H1a is complete, but the 48-candidate
+GSM8K-domain boundary check and all downstream LoRA/SFT comparisons remain
+unfinished.
 
 ## 中文摘要
 
-本项目研究：目标模型在诊断集上的错误，能否形成超越简单匹配变量的候选级
-训练数据效用信号。当前得到的是可复核的负结果，而不是 SFT 提升结果：已有
-metadata selector、residual selector 和八候选 model-aware 小实验均未达到继续
-训练的门槛。因此当前正确动作是暂停大规模 LoRA/SFT，先验证候选级分数是否
-真的能预测训练样本效用。
+本项目研究：目标模型在诊断集上的错误，能否形成超越 all-query 分数和训练词元
+长度的候选级训练数据效用信号。旧的 metadata selector、residual selector 和八候选
+试验仍是负结果；新的 96 候选 Tulu 正式 H1a 则通过了预注册的三项门槛：
+partial Spearman 为 0.22775，单侧 1,000 次标签置换 `p=0.07293`，高分组平均效用
+高于低分组。该结果只说明可以继续做固定预算的 `B=500` 训练比较，尚不能声称
+error-conditioned RDS+ 能提高最终准确率或优于 random/all-query RDS+。

@@ -12,6 +12,18 @@
 | Exact selector rerun | Frozen public inputs | `results/public_release_v1/selector_identifiability_rerun/summary.json` | Summary hash matches |
 | Bounded model check | Qwen3-1.7B, first 25 mixed-family dev items | `results/public_release_v1/model_pipeline_check_25/` | Pipeline works; no effectiveness claim |
 
+## Public GSM8K v1 chain
+
+| Stage | Inputs | Main artifact | Decision |
+|---|---|---|---|
+| Trainable RDS+ scoring | 448 queries, 99 errors, 96 Tulu candidates | `results/research_public_gsm8k_v1/rds96_trainable_qwen2_5_1_5b_clean_153363f/` | Freeze all-query and error-query scores |
+| Utility measurement | 96 candidates, one fixed LoRA update each, 128 utility items | `results/research_public_gsm8k_v1/utility96_qwen2_5_1_5b_clean_3fdb8b5/` | Complete candidate-level utilities |
+| Formal Tulu H1a | 96 utilities, two controls, 1,000 label permutations | `results/research_public_gsm8k_v1/h1a_formal_tulu96_clean_3fdb8b5/` | Pass all three preregistered gates; proceed to bounded training comparison |
+
+The Tulu H1a decision is not a downstream SFT result. The GSM8K-domain
+48-candidate boundary check and the `B=500` random/all-query/error-query
+training comparison remain unfinished.
+
 ## Baseline table warning
 
 `results/model_native_baseline_table/model_native_baseline_table.csv` contains
