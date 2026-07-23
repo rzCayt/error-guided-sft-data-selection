@@ -79,7 +79,7 @@ processed 数据卡没有明确许可证字段，因此公开结果只保存源 
 - LoRA adapter 保存和加载后输出一致；
 - 运行目录不可覆盖、配置哈希与键顺序无关。
 
-全仓测试结果：`125 passed`。
+全仓测试结果：`133 passed`。
 
 ### 6. Qwen2.5-1.5B 的 16 样本 LoRA 过拟合
 
@@ -112,6 +112,43 @@ adapter 权重 SHA-256：
 这证明训练、梯度隔离、保存和加载管线可以工作，但不证明泛化能力，也不证明任何
 数据选择器有效。
 
+### 7. 64 条 interface calibration 与 parser 冻结
+
+提示词只在 64 条 interface calibration 内调整：
+
+| 版本 | 检查范围 | 严格解析率 | 数值准确率 |
+|---|---:|---:|---:|
+| v1：只有格式文字要求 | 前 8 条 | 37.5% | 25.0% |
+| v2：加入一个正确示例 | 前 8 条 | 87.5% | 75.0% |
+| v3：加入错误/正确格式对照 | 前 8 条 | 62.5% | 62.5% |
+
+v3 反而降低格式遵循，因此冻结 v2，不再继续试提示词。完整 64 条的规范运行对应
+干净 commit：
+
+`7af04b168b089c88318031018b0d2f8ba134566c`
+
+完整 64 条结果：
+
+| 指标 | 数值 |
+|---|---:|
+| 严格 `Final answer:` 解析 | 45/64，70.3125% |
+| last-number fallback | 19/64 |
+| 最终数值解析 | 64/64，100% |
+| 数值正确 | 48/64，75% |
+| 生成速度 | 68.12 token/s |
+| 峰值显存 | 2.996 GiB |
+
+解析器现在先尝试严格 final marker；失败时提取模型原文最后一个数，并把
+`parse_mode=last_numeric_fallback` 明确写入逐条结果。这样不会修改模型写出的
+数字，同时把格式遵循与数学正确性分开报告。
+
+在相同 commit、模型 revision、seed 和生成配置下独立生成两次，64 条
+`record_id + raw_output` 的合成 SHA-256 完全一致：
+
+`467f6d0882163600fefc112de2718b3af00a2a5d6f8b42ace486ea5ef6e08d61`
+
+prompt 和 parser 至此冻结。后续 diagnostic 不再根据结果修改解析规则。
+
 ## 当前还不能声称什么
 
 - 尚未重新训练 Qwen3-4B；
@@ -121,8 +158,8 @@ adapter 权重 SHA-256：
 
 ## 下一段代码目标
 
-1. 固定 GSM8K prompt、生成参数和 raw-output schema；
-2. 在 interface calibration 64 条上冻结解析与生成接口；
-3. 开始 448 条 diagnostic 的基础模型推理；
-4. 根据答对/答错结果生成 all-query 与 error-conditioned 查询表示；
-5. 实现 H1a 的单候选微更新和 utility loss 计算。
+1. 开始 448 条 diagnostic 的基础模型推理；
+2. 根据答对/答错结果生成 all-query 与 error-conditioned 查询表示；
+3. 实现 H1a 的单候选微更新和 utility loss 计算；
+4. 先对 10 个候选重测，验证 utility 测量可靠性；
+5. 可靠性通过后再运行 96+48 个正式候选。

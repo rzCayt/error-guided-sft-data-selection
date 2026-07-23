@@ -1,0 +1,67 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\run_gsm8k_base_calibration.py",
+    "--config",
+    "configs\\public_gsm8k_v1.json",
+    "--data-manifest-dir",
+    "results\\research_public_gsm8k_v1\\data_manifest_full_v2_fuzzy",
+    "--output-root",
+    "results\\checkpoints\\public_gsm8k_v1",
+    "--protocol-split",
+    "interface_calibration",
+    "--limit",
+    "64",
+    "--batch-size",
+    "4",
+    "--max-input-length",
+    "512",
+    "--max-new-tokens",
+    "384",
+    "--seed",
+    "20260722"
+  ],
+  "config": {
+    "batch_size": 4,
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1
+    },
+    "dtype": "bfloat16",
+    "gsm8k": {
+      "config": "main",
+      "license": "mit",
+      "repo_id": "openai/gsm8k",
+      "revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    "limit": 64,
+    "max_input_length": 512,
+    "max_new_tokens": 384,
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "protocol_split": "interface_calibration"
+  },
+  "config_hash": "9029d24ac9b7abef5ae9ef966e91253e56b2e3d479588644618c17876382f4a2",
+  "dataset_revisions": {
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "cuda_version": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.8.0+cu128"
+  },
+  "git_commit": "7af04b168b089c88318031018b0d2f8ba134566c",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T094055Z_gsm8k_base_interface_calibration_9029d24ac9_s20260722",
+  "seed": 20260722,
+  "stage": "gsm8k_base_interface_calibration",
+  "started_at_utc": "2026-07-23T09:40:55.456149+00:00"
+}
