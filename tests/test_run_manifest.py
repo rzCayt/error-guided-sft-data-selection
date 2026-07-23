@@ -26,6 +26,8 @@ def test_run_directory_cannot_be_overwritten(tmp_path) -> None:
     run_dir, manifest = create_run_manifest(**arguments)
     assert (run_dir / "manifest.json").is_file()
     assert manifest["config_hash"] == stable_config_hash(arguments["config"])
+    assert "git_is_dirty" in manifest
+    assert "git_diff_sha256" in manifest
 
     with pytest.raises(FileExistsError):
         create_run_manifest(**arguments)

@@ -30,6 +30,30 @@ def _git_commit(repo_root: Path) -> str | None:
     return process.stdout.strip() if process.returncode == 0 else None
 
 
+def _git_worktree_state(repo_root: Path) -> tuple[bool | None, str | None]:
+    status_process = subprocess.run(
+        ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+        cwd=repo_root,
+        capture_output=True,
+        check=False,
+    )
+    if status_process.returncode != 0:
+        return None, None
+
+    diff_process = subprocess.run(
+        ["git", "diff", "--binary", "HEAD"],
+        cwd=repo_root,
+        capture_output=True,
+        check=False,
+    )
+    diff_hash = (
+        hashlib.sha256(diff_process.stdout).hexdigest()
+        if diff_process.returncode == 0
+        else None
+    )
+    return bool(status_process.stdout.strip()), diff_hash
+
+
 def create_run_manifest(
     *,
     output_root: Path,
@@ -53,12 +77,15 @@ def create_run_manifest(
     run_id = f"{timestamp:%Y%m%dT%H%M%SZ}_{stage}_{config_hash[:10]}_s{seed}"
     run_dir = output_root / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
+    git_is_dirty, git_diff_sha256 = _git_worktree_state(repo_root)
 
     manifest: dict[str, Any] = {
         "run_id": run_id,
         "stage": stage,
         "started_at_utc": timestamp.isoformat(),
         "git_commit": _git_commit(repo_root),
+        "git_is_dirty": git_is_dirty,
+        "git_diff_sha256": git_diff_sha256,
         "config_hash": config_hash,
         "config": config,
         "seed": seed,
