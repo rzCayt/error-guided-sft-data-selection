@@ -17,6 +17,7 @@ results/research_public_gsm8k_v1/data_smoke_gsm8k/
 results/research_public_gsm8k_v1/data_manifest_full_v1/
 results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy_rerun/
 results/research_public_gsm8k_v1/overfit16_qwen2_5_1_5b/
+results/research_public_gsm8k_v1/query_groups_diagnostic448_v1/
 
 # Secrets and model artifacts must never be committed.
 .env

@@ -1,0 +1,17 @@
+{
+  "artifact_role": "frozen_query_group_ids",
+  "claim_boundary": "These text-free ID lists define the later all-query and error-conditioned selector inputs. They contain no query representations or selector-effectiveness result.",
+  "code_commit": "8b5273d8c1f574977c92d6535dfcc14a775b97e3",
+  "code_was_clean_before_run": true,
+  "source_diagnostic_commit": "34ad476c704a5a468f703d9cdd8e3879664b638d",
+  "source_diagnostic_raw_outputs_sha256": "2d6644eaa76a5916454080bc77a4db4ffec41106a4e1686e47b1f957c840b73f",
+  "all_query_count": 448,
+  "error_query_count": 99,
+  "minimum_group_size": 64,
+  "group_size_gate_passed": true,
+  "files": {
+    "all_queries.jsonl": "8f2de0f120117ef3d695fbaefc536e669ae048f7fa60f0f98def722cc4740c97",
+    "error_queries.jsonl": "50346e6c673a714f2913f4e668203feb467ad27365e6f216fa7a2e8ccbd0be4c",
+    "query_group_manifest.json": "f39efc1ffd008089659e53400d0aa812c6a9110d7bb9a668f91173c59e9c1f90"
+  }
+}

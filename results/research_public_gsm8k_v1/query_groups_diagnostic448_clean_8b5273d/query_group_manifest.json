@@ -1,0 +1,11 @@
+{
+  "all_queries_sha256": "21f060139584b587828a2ae27042f8d7585cb5bfea2a6ef36e91e8f541478cf4",
+  "all_query_count": 448,
+  "correct_query_count": 349,
+  "error_queries_sha256": "9516b2380924870db7b6f89ae83bfabae9a62ec5fa3ac10c7b2d246071d81164",
+  "error_query_count": 99,
+  "fallback_required": false,
+  "group_size_gate_passed": true,
+  "minimum_group_size": 64,
+  "protocol_split": "selection_diagnostic"
+}
