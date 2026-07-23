@@ -80,3 +80,30 @@ def select_until_eligible_count(
     raise ValueError(
         f"only {len(selected)} eligible candidates found for requested count={count}"
     )
+
+
+def stable_record_order(
+    records: Sequence[dict[str, Any]],
+    *,
+    id_field: str,
+    seed: int,
+    namespace: str,
+) -> list[dict[str, Any]]:
+    """Return a deterministic hash order without consulting outcome values."""
+
+    if not namespace:
+        raise ValueError("namespace must be non-empty")
+    record_ids = [str(record.get(id_field, "")) for record in records]
+    if any(not record_id for record_id in record_ids):
+        raise ValueError(f"every record needs a non-empty {id_field}")
+    if len(set(record_ids)) != len(record_ids):
+        raise ValueError(f"{id_field} values must be unique")
+
+    def priority(record: dict[str, Any]) -> str:
+        material = f"{seed}:{namespace}:{record[id_field]}"
+        return hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+    return sorted(
+        records,
+        key=lambda record: (priority(record), str(record[id_field])),
+    )

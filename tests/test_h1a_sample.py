@@ -2,6 +2,7 @@ import pytest
 
 from eg_sft.selection.h1a_sample import (
     select_until_eligible_count,
+    stable_record_order,
     stratified_candidate_sample,
 )
 
@@ -50,3 +51,36 @@ def test_select_until_eligible_count_supplements_without_reordering() -> None:
     )
     assert [row["candidate_id"] for row in selected] == ["1", "2", "4", "5", "7"]
     assert [row["candidate_id"] for row in excluded] == ["0", "3", "6"]
+
+
+def test_stable_record_order_is_input_order_invariant() -> None:
+    records = [
+        {"record_id": "gsm-3"},
+        {"record_id": "gsm-1"},
+        {"record_id": "gsm-2"},
+    ]
+    first = stable_record_order(
+        records,
+        id_field="record_id",
+        seed=20260722,
+        namespace="gsm8k-domain-h1a",
+    )
+    second = stable_record_order(
+        list(reversed(records)),
+        id_field="record_id",
+        seed=20260722,
+        namespace="gsm8k-domain-h1a",
+    )
+    assert [row["record_id"] for row in first] == [
+        row["record_id"] for row in second
+    ]
+
+
+def test_stable_record_order_rejects_duplicate_ids() -> None:
+    with pytest.raises(ValueError, match="must be unique"):
+        stable_record_order(
+            [{"record_id": "same"}, {"record_id": "same"}],
+            id_field="record_id",
+            seed=1,
+            namespace="domain",
+        )

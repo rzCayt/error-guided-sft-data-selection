@@ -87,10 +87,22 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--permutations", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=20260722)
+    parser.add_argument(
+        "--scope",
+        choices=["tulu", "gsm8k_domain"],
+        default="tulu",
+    )
     args = parser.parse_args()
 
     if args.permutations != 1000:
         raise ValueError("formal H1a requires exactly 1000 permutations")
+    candidate_count = 96 if args.scope == "tulu" else 48
+    group_count = candidate_count // 4
+    stage = (
+        "h1a_formal_tulu96"
+        if args.scope == "tulu"
+        else "h1a_formal_gsm8k_domain48"
+    )
 
     scoring_dir = args.scoring_run_dir.resolve()
     utility_dir = args.utility_run_dir.resolve()
@@ -102,10 +114,14 @@ def main() -> None:
     all_queries = load_jsonl(query_dir / "all_queries.jsonl")
     error_queries = load_jsonl(query_dir / "error_queries.jsonl")
 
-    if len(scoring_rows) != 96:
-        raise ValueError(f"expected 96 scoring rows, found {len(scoring_rows)}")
-    if len(utility_rows) != 96:
-        raise ValueError(f"expected 96 utility rows, found {len(utility_rows)}")
+    if len(scoring_rows) != candidate_count:
+        raise ValueError(
+            f"expected {candidate_count} scoring rows, found {len(scoring_rows)}"
+        )
+    if len(utility_rows) != candidate_count:
+        raise ValueError(
+            f"expected {candidate_count} utility rows, found {len(utility_rows)}"
+        )
     if len(all_queries) != 448:
         raise ValueError(f"expected 448 diagnostic queries, found {len(all_queries)}")
     if len(error_queries) != 99:
@@ -117,7 +133,10 @@ def main() -> None:
 
     candidate_ids = [row["candidate_id"] for row in scoring_rows]
     utility_by_id = {row["candidate_id"]: row for row in utility_rows}
-    if len(set(candidate_ids)) != 96 or len(utility_by_id) != 96:
+    if (
+        len(set(candidate_ids)) != candidate_count
+        or len(utility_by_id) != candidate_count
+    ):
         raise ValueError("candidate IDs must be unique in both inputs")
     if set(candidate_ids) != set(utility_by_id):
         raise ValueError("scoring and utility candidate IDs differ")
@@ -212,7 +231,7 @@ def main() -> None:
         top_bottom_mean_difference(
             scores=error_scores,
             utilities=utilities,
-            group_count=24,
+            group_count=group_count,
         )
     )
     top_set = set(top_indices)
@@ -225,11 +244,11 @@ def main() -> None:
             "training_total_tokens": int(token_lengths[index]),
             "utility": utilities[index],
             "score_group": (
-                "top_24"
+                f"top_{group_count}"
                 if index in top_set
-                else "bottom_24"
+                else f"bottom_{group_count}"
                 if index in bottom_set
-                else "middle_48"
+                else f"middle_{candidate_count - 2 * group_count}"
             ),
         }
         for index, candidate_id in enumerate(candidate_ids)
@@ -240,7 +259,8 @@ def main() -> None:
     direction_gate = top_bottom_difference > 0
     h1a_passed = rho_gate and permutation_gate and direction_gate
     run_config = {
-        "candidate_count": 96,
+        "scope": args.scope,
+        "candidate_count": candidate_count,
         "query_count": len(all_queries),
         "error_query_count": len(error_indices),
         "utility_seed": 17,
@@ -249,7 +269,7 @@ def main() -> None:
         "permutations": args.permutations,
         "permutation_rule": "sample_99_of_448_without_replacement",
         "permutation_p_value": "one_sided_plus_one_correction",
-        "top_bottom_group_count": 24,
+        "top_bottom_group_count": group_count,
         "gates": {
             "partial_spearman_at_least": 0.15,
             "one_sided_permutation_p_at_most": 0.10,
@@ -259,7 +279,7 @@ def main() -> None:
     run_dir, _ = create_run_manifest(
         output_root=args.output_root.resolve(),
         repo_root=ROOT,
-        stage="h1a_formal_tulu96",
+        stage=stage,
         config=run_config,
         seed=args.seed,
         command=[sys.executable, *sys.argv],
@@ -277,18 +297,20 @@ def main() -> None:
         },
     )
     metrics = {
-        "candidate_count": 96,
+        "scope": args.scope,
+        "candidate_count": candidate_count,
         "query_count": len(all_queries),
         "error_query_count": len(error_indices),
         "observed_partial_spearman": observed_rho,
         "permutation_count": args.permutations,
         "permutation_greater_or_equal_count": greater_or_equal_count,
         "one_sided_permutation_p": permutation_p,
-        "top_24_mean_utility": (
-            sum(utilities[index] for index in top_indices) / 24
+        "top_group_count": group_count,
+        "top_group_mean_utility": (
+            sum(utilities[index] for index in top_indices) / group_count
         ),
-        "bottom_24_mean_utility": (
-            sum(utilities[index] for index in bottom_indices) / 24
+        "bottom_group_mean_utility": (
+            sum(utilities[index] for index in bottom_indices) / group_count
         ),
         "top_minus_bottom_mean_utility": top_bottom_difference,
         "rho_gate_passed": rho_gate,
@@ -298,6 +320,10 @@ def main() -> None:
         "claim_boundary": (
             "This is the preregistered Tulu-pool candidate-utility H1a test. "
             "It does not establish GSM8K-domain robustness or downstream SFT gains."
+            if args.scope == "tulu"
+            else
+            "This is the preregistered 48-candidate GSM8K-domain boundary test. "
+            "It does not establish downstream SFT gains."
         ),
     }
     _write_json(run_dir / "metrics.json", metrics)

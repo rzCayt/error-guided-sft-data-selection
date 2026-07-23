@@ -39,7 +39,10 @@ from eg_sft.training.lora_audit import (  # noqa: E402
     audit_lora_gradients,
     audit_lora_parameters,
 )
-from eg_sft.training.overfit import build_tokenized_overfit_examples  # noqa: E402
+from eg_sft.training.overfit import (  # noqa: E402
+    build_tokenized_overfit_examples,
+    gsm8k_training_text,
+)
 from eg_sft.training.response_only import (  # noqa: E402
     ResponseOnlyCollator,
     tokenize_response_only,
@@ -139,7 +142,7 @@ def main() -> None:
     parser.add_argument("--repeat-seeds", type=int, nargs="+", default=[17, 29])
     parser.add_argument(
         "--mode",
-        choices=["reliability", "formal"],
+        choices=["reliability", "formal", "domain"],
         default="reliability",
     )
     args = parser.parse_args()
@@ -152,8 +155,8 @@ def main() -> None:
         raise ValueError("repeat seeds must be distinct")
     if args.mode == "reliability" and len(args.repeat_seeds) != 2:
         raise ValueError("reliability mode requires exactly two repeat seeds")
-    if args.mode == "formal" and len(args.repeat_seeds) != 1:
-        raise ValueError("formal mode requires exactly one fixed seed")
+    if args.mode in {"formal", "domain"} and len(args.repeat_seeds) != 1:
+        raise ValueError("formal and domain modes require one fixed seed")
     device = torch.device("cuda")
 
     config = _read_json(args.config.resolve())
@@ -168,7 +171,7 @@ def main() -> None:
             raise ValueError(
                 "scoring run must provide exactly ten reliability candidates"
             )
-    else:
+    elif args.mode == "formal":
         measurement_candidates = load_jsonl(
             args.scoring_run_dir.resolve() / "candidate_scores.jsonl"
         )
@@ -179,6 +182,20 @@ def main() -> None:
             for row in measurement_candidates
         ):
             raise ValueError("formal candidates must all be response-only trainable")
+    else:
+        measurement_candidates = load_jsonl(
+            args.scoring_run_dir.resolve() / "candidate_scores.jsonl"
+        )
+        if len(measurement_candidates) != 48:
+            raise ValueError("domain scoring run must provide exactly 48 candidates")
+        if not all(
+            row.get("source_dataset") == "openai/gsm8k"
+            and row.get("response_only_trainable")
+            for row in measurement_candidates
+        ):
+            raise ValueError(
+                "domain candidates must be trainable openai/gsm8k rows"
+            )
     if len(
         {row["candidate_id"] for row in measurement_candidates}
     ) != len(measurement_candidates):
@@ -188,7 +205,14 @@ def main() -> None:
         "mode": args.mode,
         "model": model_config,
         "gsm8k": gsm_config,
-        "candidate_pool": candidate_config,
+        "candidate_pool": (
+            {
+                "source": "gsm8k_in_domain_candidate_pool",
+                "candidate_count": len(measurement_candidates),
+            }
+            if args.mode == "domain"
+            else candidate_config
+        ),
         "utility_set_size": 128,
         "candidate_count": len(measurement_candidates),
         "repeat_seeds": args.repeat_seeds,
@@ -216,15 +240,22 @@ def main() -> None:
         stage=(
             "h1a_utility_reliability10"
             if args.mode == "reliability"
-            else "h1a_utility_formal96"
+            else
+            "h1a_utility_formal96"
+            if args.mode == "formal"
+            else "h1a_utility_gsm8k_domain48"
         ),
         config=run_config,
         seed=config["seed"],
         command=[sys.executable, *sys.argv],
-        dataset_revisions={
-            gsm_config["repo_id"]: gsm_config["revision"],
-            candidate_config["repo_id"]: candidate_config["revision"],
-        },
+        dataset_revisions=(
+            {gsm_config["repo_id"]: gsm_config["revision"]}
+            if args.mode == "domain"
+            else {
+                gsm_config["repo_id"]: gsm_config["revision"],
+                candidate_config["repo_id"]: candidate_config["revision"],
+            }
+        ),
         model_revision=model_config["revision"],
         extra={
             "gpu_name": torch.cuda.get_device_name(0),
@@ -238,20 +269,36 @@ def main() -> None:
         utility_records = _utility_records(
             args.data_manifest_dir.resolve() / "gsm8k_records.jsonl"
         )
-        candidate_lookup = _candidate_lookup(
-            args.data_manifest_dir.resolve() / "tulu_candidate_pool.jsonl"
-        )
+        if args.mode == "domain":
+            gsm_records = load_jsonl(
+                args.data_manifest_dir.resolve() / "gsm8k_records.jsonl"
+            )
+            candidate_lookup = {
+                row["record_id"]: row
+                for row in gsm_records
+                if row["protocol_split"] == "in_domain_candidate_pool"
+            }
+            if len(candidate_lookup) != 6705:
+                raise ValueError("expected 6705 GSM8K in-domain candidates")
+        else:
+            candidate_lookup = _candidate_lookup(
+                args.data_manifest_dir.resolve() / "tulu_candidate_pool.jsonl"
+            )
         gsm = load_dataset(
             gsm_config["repo_id"],
             gsm_config["config"],
             split="train",
             revision=gsm_config["revision"],
         )
-        tulu = load_dataset(
-            candidate_config["repo_id"],
-            candidate_config["config"],
-            split="train",
-            revision=candidate_config["revision"],
+        tulu = (
+            None
+            if args.mode == "domain"
+            else load_dataset(
+                candidate_config["repo_id"],
+                candidate_config["config"],
+                split="train",
+                revision=candidate_config["revision"],
+            )
         )
         tokenizer = AutoTokenizer.from_pretrained(
             model_config["repo_id"],
@@ -288,15 +335,26 @@ def main() -> None:
         candidate_examples: dict[str, dict[str, list[int]]] = {}
         candidate_token_audit: list[dict[str, Any]] = []
         for score_row in measurement_candidates:
-            candidate = candidate_lookup[score_row["candidate_id"]]
-            messages = _validate_candidate_row(
-                candidate,
-                tulu[int(candidate["source_index"])],
-            )
-            prompt, response = tulu_response_only_parts(
-                messages,
-                eos_token=tokenizer.eos_token,
-            )
+            candidate_id = score_row["candidate_id"]
+            candidate = candidate_lookup[candidate_id]
+            if args.mode == "domain":
+                raw_candidate = gsm[int(candidate["source_index"])]
+                validate_gsm8k_source_row(candidate, raw_candidate)
+                prompt, response = gsm8k_training_text(
+                    raw_candidate["question"],
+                    raw_candidate["answer"],
+                )
+            else:
+                if tulu is None:
+                    raise AssertionError("Tulu dataset was not loaded")
+                messages = _validate_candidate_row(
+                    candidate,
+                    tulu[int(candidate["source_index"])],
+                )
+                prompt, response = tulu_response_only_parts(
+                    messages,
+                    eos_token=tokenizer.eos_token,
+                )
             tokenized = tokenize_response_only(
                 tokenizer,
                 prompt=prompt,
@@ -304,10 +362,10 @@ def main() -> None:
                 max_length=args.max_length,
                 add_eos=True,
             )
-            candidate_examples[candidate["candidate_id"]] = tokenized
+            candidate_examples[candidate_id] = tokenized
             candidate_token_audit.append(
                 {
-                    "candidate_id": candidate["candidate_id"],
+                    "candidate_id": candidate_id,
                     "source_index": candidate["source_index"],
                     "total_tokens": len(tokenized["input_ids"]),
                     "supervised_tokens": sum(
@@ -502,6 +560,10 @@ def main() -> None:
                 else
                 "This run measures formal candidate utility. H1a requires "
                 "the preregistered partial correlation and permutation analysis."
+                if args.mode == "formal"
+                else
+                "This run measures 48 GSM8K in-domain candidate utilities. "
+                "The domain boundary conclusion requires frozen H1a statistics."
             ),
         }
         if args.mode == "reliability":
