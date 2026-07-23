@@ -1,0 +1,21 @@
+{
+  "base_utility_loss": 0.49819309158023994,
+  "candidate_count": 10,
+  "claim_boundary": "This ten-candidate run tests utility measurement reliability. It is not the preregistered 96-candidate H1a effect test.",
+  "elapsed_seconds": 240.27103430000716,
+  "icc_absolute_agreement_a1": 0.9728822444011759,
+  "max_absolute_repeat_difference": 0.0010662945755523512,
+  "mean_absolute_repeat_difference": 0.0004478470879917096,
+  "measurement_count": 20,
+  "peak_memory_bytes": 6272552960,
+  "peak_memory_gib": 5.841770172119141,
+  "pearson_between_repeats": 0.9880057765902654,
+  "positive_utility_measurements": 8,
+  "reliability_gate_icc_at_least_0_90": true,
+  "repeat_count": 2,
+  "repeat_means": [
+    0.0002696368373835523,
+    0.0007110311609467513
+  ],
+  "utility_set_size": 128
+}

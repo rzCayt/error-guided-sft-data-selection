@@ -1,0 +1,10 @@
+{
+  "dataset_repo_id": "openai/gsm8k",
+  "dataset_revision": "740312add88f781978c0658806c59bc2815b9866",
+  "hash_normalization": "NFKC, casefold, collapse whitespace, SHA-256",
+  "selection_diagnostic_rows_checked": 448,
+  "candidate_utility_validation_rows_checked": 128,
+  "question_hash_mismatches": 0,
+  "answer_hash_mismatches": 0,
+  "verdict": "All source questions and answers match the frozen manifest."
+}
