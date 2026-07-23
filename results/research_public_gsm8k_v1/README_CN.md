@@ -10,6 +10,10 @@
 - `calibration64_qwen2_5_1_5b_clean_7af04b1/`：64 条 interface calibration
   的完整模型原始输出、严格解析结果、fallback 解析模式、数值正确性和运行证据。
   该分区只用于冻结接口，不是最终模型准确率。
+- `diagnostic448_qwen2_5_1_5b_clean_34ad476/`：448 条 selection diagnostic
+  的完整模型原始输出和运行证据。其中 349 条数值答对、99 条数值答错；
+  两组都超过 64 条下限，因此后续可以按原计划构造 all-query 与
+  error-conditioned 查询组。该分区不是 held-out test，也不能证明选择器有效。
 
 其他 smoke、旧版和独立重跑目录属于本地验证中间产物，已通过 `.gitignore`
 排除，不属于规范发布结果。

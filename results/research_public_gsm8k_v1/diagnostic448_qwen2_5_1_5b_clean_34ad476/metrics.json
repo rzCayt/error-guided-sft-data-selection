@@ -1,0 +1,20 @@
+{
+  "claim_boundary": "Interface-calibration results are for prompt/parser freezing, not final model evaluation.",
+  "elapsed_seconds": 606.4548791999987,
+  "example_count": 448,
+  "fallback_parsed_count": 132,
+  "generated_tokens": 68336,
+  "generated_tokens_per_second": 112.68109523687076,
+  "numeric_accuracy": 0.7790178571428571,
+  "numeric_correct_count": 349,
+  "parse_rate": 1.0,
+  "parse_status_counts": {
+    "ok": 448
+  },
+  "parsed_count": 448,
+  "peak_memory_gib": 3.0656886100769043,
+  "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+  "protocol_split": "selection_diagnostic",
+  "strict_parse_rate": 0.7053571428571429,
+  "strict_parsed_count": 316
+}
