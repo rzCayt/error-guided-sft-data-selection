@@ -1,0 +1,205 @@
+{
+  "candidate_pool": {
+    "exact_gsm8k_user_prompt_exclusions": 0,
+    "fuzzy_exclusion_examples": [
+      {
+        "candidate_id": "tulu-116338-469ed8e570f8",
+        "matched_reference_sha256": "e5cbd5f432e58d628fcc60ae0ca8bb3f88eec2e53254613d14fe31863aad8474",
+        "ngram_jaccard": 0.7678571428571429,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "eb76f6457c5d822add79176ba692b8b170eb02e35bab9e5d5d853a6a437aaa68"
+      },
+      {
+        "candidate_id": "tulu-058812-3531a46fa9e3",
+        "matched_reference_sha256": "61c9eae56afd2ed428cecbb27d4cfc9ed100de06919428fd5f00330e3e847223",
+        "ngram_jaccard": 0.24422442244224424,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "8dbd0283f6f327ee16004507c249b0ca8d86f2d05877931ea0e0235c9d06416b"
+      },
+      {
+        "candidate_id": "tulu-187428-ef2ebf10cfbb",
+        "matched_reference_sha256": "68fb6f66ceea41e233732a1d4ee8bff24f812acdda268e2b2b6eb84e0ac3440f",
+        "ngram_jaccard": 0.08550185873605948,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "d3792acf9debad69b2e21a6607ce32fa3117679f25d644cd5ae9f232ca9aa453"
+      },
+      {
+        "candidate_id": "tulu-195295-25092ce99960",
+        "matched_reference_sha256": "4718dc95db95cc309abce14bd191a3f51f8b62861825559d8eee3a0d62d9244d",
+        "ngram_jaccard": 0.18575063613231552,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "d16c39d4bda25ed80762326768f709bc3cfb89a1e7bbff52f511e323e07b5ca0"
+      },
+      {
+        "candidate_id": "tulu-082726-75d11df19ee4",
+        "matched_reference_sha256": "0ff7ad4d3d8b63ba9024b7018be90d1f221e91a9cedc008f4b76d711e9b25924",
+        "ngram_jaccard": 0.6756756756756757,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "771d077c907b21d9830b240a8b4a9cc975d8b154512627ee24283f5f2e0e53d4"
+      },
+      {
+        "candidate_id": "tulu-189631-1c36bd4ccf66",
+        "matched_reference_sha256": "d71f3c5aa00e6ce10c1458ede7e0dce80106d1d453978cef368db4df16b560a0",
+        "ngram_jaccard": 0.12552301255230125,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "86bbcd604cd536ff757b38d6490bf3fb8e30d1bb61531be16e25d191ce03c0ff"
+      },
+      {
+        "candidate_id": "tulu-177541-5a7cec4be9d3",
+        "matched_reference_sha256": "638695675379d979d4fec1b766d102a205a607151ebef589dfdfc131d3a28905",
+        "ngram_jaccard": 0.30451127819548873,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "5cd7e77127289b52f5e5e337892e3fec5eed18d5eec65f12e88304a2f68fe1c6"
+      },
+      {
+        "candidate_id": "tulu-145637-bccddca496fa",
+        "matched_reference_sha256": "e51519287a86304bc1c5bc1c45e5e26ecaa2a8a806cc01f71ec61d88ecd5e687",
+        "ngram_jaccard": 0.1254980079681275,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "4cad5321114bbf88a33589d5e4388a280105e5d09761e30801cb1676ff1342db"
+      },
+      {
+        "candidate_id": "tulu-009717-f7566269c7a8",
+        "matched_reference_sha256": "14fbeb2c8126775bb7a9d40b995e70fde1976b39aee407181dd0a714508d8f7c",
+        "ngram_jaccard": 0.8245614035087719,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "2d2a6339d14ddda4a70264015878773d662a0cb2be1c3296f02f1fea9d33ab49"
+      },
+      {
+        "candidate_id": "tulu-129873-ef9eb8d4ac19",
+        "matched_reference_sha256": "d967d614350f3f96540741991c1e9d56024cef25d17c052f9cd3a0fe8a1367a9",
+        "ngram_jaccard": 0.12546125461254612,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "88de5de823e8418ccefa0f5b971c4dacec913f17b073f6c1dbfef53070ba72b1"
+      },
+      {
+        "candidate_id": "tulu-170249-01191a788187",
+        "matched_reference_sha256": "793bc2727b13e3837b78901bfa0e1e764e57ac093c8eef8effbb426475ec6fae",
+        "ngram_jaccard": 0.2145748987854251,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "d20fcadf7fb99751b54f06b261cea5547ac3fc3ffd82e78de540f87cd1c70ba2"
+      },
+      {
+        "candidate_id": "tulu-061237-03a5440a8328",
+        "matched_reference_sha256": "76e3e66acb7ba90a4c7d3aad3bdffdba547046eaf97022e8c29c343483653069",
+        "ngram_jaccard": 0.18627450980392157,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "31eee121934a6697456a581a29ba9248db587fed2d6633cc64a306389844bae6"
+      },
+      {
+        "candidate_id": "tulu-182700-ed9d9e06058f",
+        "matched_reference_sha256": "6c9388d5411972a88dfdea6949db2be5f86ae897953a6234928b8ac2be5a1c88",
+        "ngram_jaccard": 0.20618556701030927,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "6927563e5995bc4c96241c08c2c338e4544eeaf00ab11a12a016c46d7ceb0481"
+      },
+      {
+        "candidate_id": "tulu-003351-0fcc64292e0f",
+        "matched_reference_sha256": "cf79b35f598d6d2cd02b67c93481cea29006e6ff742ea82aef212c1407a4c14d",
+        "ngram_jaccard": 0.08126410835214447,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "8b3a8a54736d5a1cc86558e190aa9019784a4e7a9831b22bc3a13df11e2d179b"
+      },
+      {
+        "candidate_id": "tulu-000636-e14503f17aad",
+        "matched_reference_sha256": "4b26be12d79da9ea0a7d50c8d981017c5f95821f6e29500e0b9f82b49aadcac7",
+        "ngram_jaccard": 0.9146341463414634,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "df50ea6a01f0ad1d82cece753d3af4c34d2f9723c5f64f699b5bc1ff850c8efb"
+      },
+      {
+        "candidate_id": "tulu-010213-52c54daf5425",
+        "matched_reference_sha256": "506300cfe8ce35c35a5b7de733c2ca83d19dec73b324ee3bade2689aac0813d4",
+        "ngram_jaccard": 0.12848297213622292,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "c6d32f138e45e487fbd7ad65f757f829f687897913569647b6c558c8330133ef"
+      },
+      {
+        "candidate_id": "tulu-026996-8c901e8e9024",
+        "matched_reference_sha256": "d28bce0ab30a02f7863405c2b585ba0d3e8d6f9f552bc9b27c1a0b61185af835",
+        "ngram_jaccard": 0.7941176470588235,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "d8680319a41771ca5bfd30e689f236b4f695af67b423557c574fdb3ff01e9f57"
+      },
+      {
+        "candidate_id": "tulu-184934-c5a125615d84",
+        "matched_reference_sha256": "4bc090a335ac5c945fc84f16064315891e1604c60aed50e156b2b01c59d5aeaf",
+        "ngram_jaccard": 0.123046875,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "95c00da51db36a0fb6f738eeb0fc0e566e4fc21b61ac69fdcbd2a1d91e5bc7a1"
+      },
+      {
+        "candidate_id": "tulu-011471-4f605a96dfe1",
+        "matched_reference_sha256": "70dec2cb1a9c931539796d31818036fdbfa9907461e829c32ba4266ceb39131f",
+        "ngram_jaccard": 0.1796875,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "4b5af3519b372e87e1b9124d8d4648d3bbe00ecaa1cf85564c814e6b01e53eb0"
+      },
+      {
+        "candidate_id": "tulu-152960-36749d8e69b0",
+        "matched_reference_sha256": "816810cb766f592994bbf61d914c1e5f4c91a8af6d069cf0f863739931c761e2",
+        "ngram_jaccard": 0.10427350427350428,
+        "smaller_set_containment": 1.0,
+        "user_prompt_sha256": "e15c562944f039cbbe76cefec76dafa2fbc60824c7220f701b8330e87be2d184"
+      }
+    ],
+    "fuzzy_gsm8k_exclusion_count_before_pool_filled": 97,
+    "fuzzy_ngram_size": 5,
+    "fuzzy_threshold": 0.8,
+    "invalid_row_count": 61,
+    "requested_pool_size": 10000,
+    "seed": 20260722,
+    "selected_pool_size": 10000,
+    "selection_rule": "ascending_sha256(seed + source_id + normalized_prompt_sha256)",
+    "unique_prompt_count_before_sampling": 194230
+  },
+  "claim_boundary": "Output files contain source IDs and hashes, not redistributed source text.",
+  "config": {
+    "candidate_pool_size": 10000,
+    "datasets": {
+      "candidate_pool": {
+        "config": "default",
+        "license": "not_specified_on_dataset_card",
+        "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+        "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+      },
+      "gsm8k": {
+        "config": "main",
+        "license": "mit",
+        "repo_id": "openai/gsm8k",
+        "revision": "740312add88f781978c0658806c59bc2815b9866"
+      }
+    },
+    "gsm8k_train_splits": {
+      "candidate_utility_validation": 128,
+      "development": 128,
+      "in_domain_candidate_pool": 6705,
+      "interface_calibration": 64,
+      "selection_diagnostic": 448
+    },
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "protocol_version": "public-gsm8k-v1",
+    "public_text_policy": "store_ids_hashes_and_generated_outputs_only",
+    "seed": 20260722
+  },
+  "config_path": "E:\\RA准备\\11_gsm8k_targeted_selection\\configs\\public_gsm8k_v1.json",
+  "gsm8k": {
+    "held_out_test_count": 1319,
+    "protocol_split_counts": {
+      "candidate_utility_validation": 128,
+      "development": 128,
+      "in_domain_candidate_pool": 6705,
+      "interface_calibration": 64,
+      "selection_diagnostic": 448
+    },
+    "question_hash_overlap_train_test": 0,
+    "seed": 20260722,
+    "test_count": 1319,
+    "train_count": 7473
+  },
+  "protocol_version": "public-gsm8k-v1"
+}

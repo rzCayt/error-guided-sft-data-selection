@@ -13,6 +13,9 @@ results/adapters/
 results/checkpoints/
 results/*.jsonl
 !results/real_base_diagnostic_outputs.jsonl
+results/research_public_gsm8k_v1/data_smoke_gsm8k/
+results/research_public_gsm8k_v1/data_manifest_full_v1/
+results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy_rerun/
 
 # Secrets and model artifacts must never be committed.
 .env
