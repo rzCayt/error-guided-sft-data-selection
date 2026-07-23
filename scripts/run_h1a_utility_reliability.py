@@ -105,6 +105,27 @@ def _first_batch_loader(
     )
 
 
+def _load_base_model(
+    *,
+    repo_id: str,
+    revision: str,
+    device: torch.device,
+) -> torch.nn.Module:
+    model = AutoModelForCausalLM.from_pretrained(
+        repo_id,
+        revision=revision,
+        dtype=torch.bfloat16,
+        low_cpu_mem_usage=True,
+    )
+    model.config.use_cache = False
+    model.gradient_checkpointing_enable(
+        gradient_checkpointing_kwargs={"use_reentrant": False}
+    )
+    model.enable_input_require_grads()
+    model.to(device)
+    return model
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
@@ -263,18 +284,11 @@ def main() -> None:
 
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
-        base_model = AutoModelForCausalLM.from_pretrained(
-            model_config["repo_id"],
+        base_model = _load_base_model(
+            repo_id=model_config["repo_id"],
             revision=model_config["revision"],
-            dtype=torch.bfloat16,
-            low_cpu_mem_usage=True,
+            device=device,
         )
-        base_model.config.use_cache = False
-        base_model.gradient_checkpointing_enable(
-            gradient_checkpointing_kwargs={"use_reentrant": False}
-        )
-        base_model.enable_input_require_grads()
-        base_model.to(device)
 
         base_utility_loss = mean_supervised_token_loss(
             base_model,
@@ -286,6 +300,9 @@ def main() -> None:
             probe_loader,
             device,
         )
+        del base_model
+        gc.collect()
+        torch.cuda.empty_cache()
         started = time.perf_counter()
         measurements: list[dict[str, Any]] = []
         measurement_path = run_dir / "utility_measurements.jsonl"
@@ -305,8 +322,13 @@ def main() -> None:
                 )
                 for repeat_index, repeat_seed in enumerate(args.repeat_seeds):
                     set_seed(repeat_seed)
+                    fresh_base_model = _load_base_model(
+                        repo_id=model_config["repo_id"],
+                        revision=model_config["revision"],
+                        device=device,
+                    )
                     model = get_peft_model(
-                        base_model,
+                        fresh_base_model,
                         LoraConfig(
                             task_type=TaskType.CAUSAL_LM,
                             r=16,
@@ -398,9 +420,7 @@ def main() -> None:
                         flush=True,
                     )
 
-                    del optimizer, trainable, candidate_batch
-                    base_model = model.unload()
-                    del model
+                    del optimizer, trainable, candidate_batch, model, fresh_base_model
                     gc.collect()
                     torch.cuda.empty_cache()
 
