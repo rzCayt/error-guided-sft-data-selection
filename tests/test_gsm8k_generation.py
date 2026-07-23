@@ -16,6 +16,8 @@ def _record() -> dict[str, object]:
 def test_prompt_contains_frozen_final_line_contract() -> None:
     prompt = build_evaluation_prompt("What is 2 + 3?")
     assert "Final answer: <number>" in prompt
+    assert "Do not put units" in prompt
+    assert "Example solution:" in prompt
     assert "What is 2 + 3?" in prompt
 
 

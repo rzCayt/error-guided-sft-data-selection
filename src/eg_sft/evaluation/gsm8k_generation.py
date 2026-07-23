@@ -7,9 +7,19 @@ from typing import Any
 from eg_sft.gsm8k.parser import parse_generated_answer, parse_gold_answer
 
 
-PROMPT_VERSION = "gsm8k_base_completion_v1"
-PROMPT_TEMPLATE = """Solve the following grade-school math problem.
-Show the calculation clearly. Your final non-empty line must use exactly this format:
+PROMPT_VERSION = "gsm8k_base_completion_v2_one_shot"
+PROMPT_TEMPLATE = """Solve the grade-school math problem by following the example format.
+The final non-empty line must contain only ``Final answer:`` followed by a number.
+Do not put units, currency symbols, words, or punctuation after the number.
+
+Example problem:
+Mia has 2 apples and buys 3 more. How many apples does she have?
+
+Example solution:
+Mia has 2 + 3 = 5 apples.
+Final answer: 5
+
+Now solve the next problem. Show the calculation clearly and finish with exactly:
 Final answer: <number>
 
 Problem:
