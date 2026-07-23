@@ -23,3 +23,11 @@ def test_reliability_candidates_span_the_complete_error_order() -> None:
     assert selected[0] == 0
     assert selected[-1] == 95
     assert len(selected) == len(set(selected)) == 10
+
+
+def test_reliability_candidates_can_span_a_filtered_trainable_order() -> None:
+    trainable_order = [index for index in range(96) if index % 5 != 0]
+    selected = _MODULE._reliability_indices(trainable_order, count=10)
+    assert selected[0] == trainable_order[0]
+    assert selected[-1] == trainable_order[-1]
+    assert all(index % 5 != 0 for index in selected)

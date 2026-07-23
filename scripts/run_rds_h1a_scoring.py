@@ -35,6 +35,8 @@ from eg_sft.selection.rds import (  # noqa: E402
     rank_scores,
     round_robin_order,
 )
+from eg_sft.training.response_only import tokenize_response_only  # noqa: E402
+from eg_sft.training.tulu import tulu_response_only_parts  # noqa: E402
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -221,14 +223,49 @@ def main() -> None:
                 eos_token=tokenizer.eos_token,
             )
         )
-    candidate_texts = [
-        _validate_and_format_candidate(
-            candidate=candidate,
-            raw_row=tulu[int(candidate["source_index"])],
+    candidate_texts: list[str] = []
+    candidate_training_audits: list[dict[str, Any]] = []
+    for candidate in candidates:
+        raw_row = tulu[int(candidate["source_index"])]
+        candidate_texts.append(
+            _validate_and_format_candidate(
+                candidate=candidate,
+                raw_row=raw_row,
+                eos_token=tokenizer.eos_token,
+            )
+        )
+        messages = raw_row["messages"]
+        prompt, response = tulu_response_only_parts(
+            messages,
             eos_token=tokenizer.eos_token,
         )
-        for candidate in candidates
-    ]
+        try:
+            tokenized = tokenize_response_only(
+                tokenizer,
+                prompt=prompt,
+                response=response,
+                max_length=args.max_length,
+                add_eos=True,
+            )
+            candidate_training_audits.append(
+                {
+                    "response_only_trainable": True,
+                    "training_total_tokens": len(tokenized["input_ids"]),
+                    "training_supervised_tokens": sum(
+                        label != -100 for label in tokenized["labels"]
+                    ),
+                }
+            )
+        except ValueError as error:
+            if "response was fully truncated" not in str(error):
+                raise
+            candidate_training_audits.append(
+                {
+                    "response_only_trainable": False,
+                    "training_total_tokens": args.max_length,
+                    "training_supervised_tokens": 0,
+                }
+            )
 
     torch.cuda.empty_cache()
     torch.cuda.reset_peak_memory_stats()
@@ -288,11 +325,18 @@ def main() -> None:
             "all_query_score": all_scores[index],
             "error_query_rank": error_ranks[index],
             "error_query_score": error_scores[index],
+            **candidate_training_audits[index],
         }
         for index, candidate in enumerate(candidates)
     ]
+    trainable_error_order = [
+        index
+        for index in error_order
+        if candidate_training_audits[index]["response_only_trainable"]
+    ]
     reliability_rows = [
-        score_rows[index] for index in _reliability_indices(error_order, count=10)
+        score_rows[index]
+        for index in _reliability_indices(trainable_error_order, count=10)
     ]
     top_count = max(1, len(candidates) // 4)
     metrics = {
@@ -301,6 +345,10 @@ def main() -> None:
         "all_query_count": len(all_queries),
         "error_query_count": len(error_queries),
         "embedding_dimension": candidate_embeddings.shape[1],
+        "response_only_trainable_candidate_count": len(trainable_error_order),
+        "response_only_untrainable_candidate_count": (
+            len(candidates) - len(trainable_error_order)
+        ),
         "all_vs_error_order_identical": all_order == error_order,
         "all_vs_error_rank_spearman": _spearman_from_complete_ranks(
             all_order,
