@@ -181,7 +181,7 @@ def _last_message(messages: Sequence[dict[str, str]], role: str) -> str | None:
     return None
 
 
-def _prompt_text(messages: Sequence[dict[str, str]]) -> str:
+def candidate_prompt_text(messages: Sequence[dict[str, str]]) -> str:
     if not messages or messages[-1].get("role") != "assistant":
         raise ValueError("candidate must end with an assistant response")
     prompt_messages = messages[:-1]
@@ -226,7 +226,7 @@ def build_tulu_candidate_pool(
             invalid_rows += 1
             continue
         try:
-            prompt = _prompt_text(messages)
+            prompt = candidate_prompt_text(messages)
         except ValueError:
             invalid_rows += 1
             continue

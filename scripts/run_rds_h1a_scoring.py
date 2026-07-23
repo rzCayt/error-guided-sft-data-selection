@@ -19,7 +19,10 @@ from _bootstrap import add_src_to_path
 
 ROOT = add_src_to_path()
 
-from eg_sft.data.public_gsm8k import sha256_text  # noqa: E402
+from eg_sft.data.public_gsm8k import (  # noqa: E402
+    candidate_prompt_text,
+    sha256_text,
+)
 from eg_sft.experiment.run_manifest import create_run_manifest  # noqa: E402
 from eg_sft.selection.h1a_sample import stratified_candidate_sample  # noqa: E402
 from eg_sft.selection.query_groups import load_jsonl  # noqa: E402
@@ -56,18 +59,6 @@ def _tensor_sha256(tensor: torch.Tensor) -> str:
     return hashlib.sha256(array.tobytes()).hexdigest()
 
 
-def _candidate_prompt_for_hash(messages: Sequence[dict[str, str]]) -> str:
-    if not messages or messages[-1].get("role") != "assistant":
-        raise ValueError("candidate must end with assistant")
-    prompt_messages = messages[:-1]
-    if not prompt_messages:
-        raise ValueError("candidate has no prompt messages")
-    return "\n".join(
-        f"{message.get('role', 'unknown')}: {message.get('content', '')}"
-        for message in prompt_messages
-    )
-
-
 def _validate_and_format_candidate(
     *,
     candidate: dict[str, Any],
@@ -77,7 +68,7 @@ def _validate_and_format_candidate(
     messages = raw_row.get("messages")
     if not isinstance(messages, list):
         raise ValueError(f"{candidate['candidate_id']} has invalid messages")
-    prompt_hash = sha256_text(_candidate_prompt_for_hash(messages))
+    prompt_hash = sha256_text(candidate_prompt_text(messages))
     response_hash = sha256_text(str(messages[-1].get("content", "")))
     if prompt_hash != candidate["prompt_sha256"]:
         raise ValueError(f"prompt hash mismatch for {candidate['candidate_id']}")
