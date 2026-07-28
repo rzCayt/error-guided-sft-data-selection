@@ -1,0 +1,20 @@
+{
+  "execution_policy_version": "b500-local-thermal-eval-v1",
+  "physical_batch_size": 1,
+  "progress_flush_every_examples": 1,
+  "temperature_check_every_examples": 4,
+  "pause_at_temperature_c": 75,
+  "resume_at_temperature_c": 68,
+  "temperature_poll_seconds": 15,
+  "inter_example_sleep_seconds": 0.5,
+  "semantic_generation_fields_unchanged": [
+    "split",
+    "example_count",
+    "max_input_length",
+    "max_new_tokens",
+    "do_sample",
+    "num_beams",
+    "prompt_version",
+    "parser_policy"
+  ]
+}

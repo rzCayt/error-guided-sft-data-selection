@@ -19,6 +19,11 @@ results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy_rerun/
 results/research_public_gsm8k_v1/overfit16_qwen2_5_1_5b/
 results/research_public_gsm8k_v1/query_groups_diagnostic448_v1/
 
+# Large local B=500 adapter/tokenizer artifacts. Their hashes and manifests are
+# tracked separately; weights remain local.
+results/research_public_gsm8k_v1/b500_engineering_runs/**/adapter/
+results/research_public_gsm8k_v1/b500_engineering_runs/**/tokenizer/
+
 # Secrets and model artifacts must never be committed.
 .env
 *.token
