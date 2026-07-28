@@ -127,6 +127,10 @@ def main() -> None:
     parser.add_argument("--execution-config", type=Path, required=True)
     parser.add_argument("--data-manifest-dir", type=Path, required=True)
     parser.add_argument("--run-dir", type=Path, required=True)
+    parser.add_argument(
+        "--resume-directory-name",
+        default="evaluation_resume_v1",
+    )
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
@@ -160,15 +164,40 @@ def main() -> None:
         execution["pause_at_temperature_c"]
     ):
         raise ValueError("resume temperature must be below pause temperature")
+    if (
+        not args.resume_directory_name
+        or Path(args.resume_directory_name).name != args.resume_directory_name
+    ):
+        raise ValueError("resume directory name must be one safe path segment")
 
     adapter_path = run_dir / "adapter" / "adapter_model.safetensors"
     if not adapter_path.is_file():
         raise FileNotFoundError("saved adapter weights are missing")
-    resume_dir = run_dir / "evaluation_resume_v1"
+    resume_dir = run_dir / args.resume_directory_name
     resume_dir.mkdir(parents=True, exist_ok=True)
     raw_path = resume_dir / "raw_outputs.jsonl"
     metrics_path = resume_dir / "metrics.json"
     events_path = resume_dir / "thermal_events.jsonl"
+    resume_manifest_path = resume_dir / "manifest.json"
+    existing_resume_manifest = (
+        _read_json(resume_manifest_path)
+        if resume_manifest_path.exists()
+        else None
+    )
+    if existing_resume_manifest is None:
+        initial_completed_row_count = (
+            len(read_jsonl(raw_path)) if raw_path.exists() else 0
+        )
+        initial_raw_outputs_sha256 = (
+            file_sha256(raw_path) if raw_path.exists() else None
+        )
+    else:
+        initial_completed_row_count = int(
+            existing_resume_manifest["initial_completed_row_count"]
+        )
+        initial_raw_outputs_sha256 = existing_resume_manifest[
+            "initial_raw_outputs_sha256"
+        ]
     resume_manifest = {
         "execution_policy": execution,
         "execution_policy_sha256": file_sha256(execution_path),
@@ -186,9 +215,11 @@ def main() -> None:
         "dataset_revisions": original_manifest["dataset_revisions"],
         "model_revision": model_config["revision"],
         "training_seed": original_manifest["seed"],
+        "initial_completed_row_count": initial_completed_row_count,
+        "initial_raw_outputs_sha256": initial_raw_outputs_sha256,
     }
     _ensure_resume_manifest(
-        path=resume_dir / "manifest.json",
+        path=resume_manifest_path,
         payload=resume_manifest,
     )
 
