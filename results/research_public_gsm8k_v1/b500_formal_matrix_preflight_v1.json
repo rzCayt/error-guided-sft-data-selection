@@ -1,0 +1,331 @@
+{
+  "artifacts": {
+    "data_files": {
+      "gsm8k_records.jsonl": {
+        "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/gsm8k_records.jsonl",
+        "sha256": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7"
+      },
+      "tulu_candidate_pool.jsonl": {
+        "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/tulu_candidate_pool.jsonl",
+        "sha256": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+      }
+    },
+    "h1a_gate": {
+      "h1a_gate_passed": true,
+      "path": "results\\research_public_gsm8k_v1\\h1a_formal_tulu96_clean_3fdb8b5\\metrics.json",
+      "sha256": "f27c91c8067e36bead8a3583681a9839e1cc90c092a61fe4934f31230b91c496"
+    },
+    "protocol_config": {
+      "path": "configs\\public_gsm8k_v1.json",
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+    },
+    "recipe_config": {
+      "path": "configs\\b500_lora_frozen_v1.json",
+      "sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
+    },
+    "runner": {
+      "path": "scripts\\run_b500_lora.py",
+      "sha256": "11f18be117a90ce1e88ebb5a8473b2831d0d14b305e91091e9a9787816070d94"
+    }
+  },
+  "automatic_execution": false,
+  "claim_boundary": "This is a dry-run preflight only. It does not train a model, evaluate GSM8K, or establish a selector comparison result.",
+  "common_contract": {
+    "budget": 500,
+    "data_file_sha256": {
+      "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+      "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    },
+    "h1a_gate_sha256": "f27c91c8067e36bead8a3583681a9839e1cc90c092a61fe4934f31230b91c496",
+    "matrix_version": "b500-formal-comparison-v1",
+    "protocol_config_sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce",
+    "recipe_config_sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1",
+    "runner_sha256": "11f18be117a90ce1e88ebb5a8473b2831d0d14b305e91091e9a9787816070d94",
+    "selection_seed": 20260722
+  },
+  "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+  "job_count": 9,
+  "jobs": [
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "random",
+        "--seed",
+        "17"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_random_seed_17",
+      "order": 1,
+      "seed": 17,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_UNTIL_ALL_SELECTIONS_ARE_FROZEN",
+      "strategy": "random"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_all",
+        "--seed",
+        "17"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_all_seed_17",
+      "order": 2,
+      "seed": 17,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_all"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_error",
+        "--seed",
+        "17"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_error_seed_17",
+      "order": 3,
+      "seed": 17,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_error"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_all",
+        "--seed",
+        "29"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_all_seed_29",
+      "order": 4,
+      "seed": 29,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_all"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_error",
+        "--seed",
+        "29"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_error_seed_29",
+      "order": 5,
+      "seed": 29,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_error"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "random",
+        "--seed",
+        "29"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_random_seed_29",
+      "order": 6,
+      "seed": 29,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_UNTIL_ALL_SELECTIONS_ARE_FROZEN",
+      "strategy": "random"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_error",
+        "--seed",
+        "41"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_error_seed_41",
+      "order": 7,
+      "seed": 41,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_error"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "random",
+        "--seed",
+        "41"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_random_seed_41",
+      "order": 8,
+      "seed": 41,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_UNTIL_ALL_SELECTIONS_ARE_FROZEN",
+      "strategy": "random"
+    },
+    {
+      "command": [
+        "python",
+        "scripts/run_b500_lora.py",
+        "--protocol-config",
+        "configs/public_gsm8k_v1.json",
+        "--recipe-config",
+        "configs/b500_lora_frozen_v1.json",
+        "--selection-manifest",
+        "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+        "--data-manifest-dir",
+        "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+        "--output-root",
+        "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+        "--strategy",
+        "rds_all",
+        "--seed",
+        "41"
+      ],
+      "common_contract_sha256": "bfc7710fd7845867393ab6758399e982c0638b14d92dbf924877064c71e4c34a",
+      "job_id": "b500_rds_all_seed_41",
+      "order": 9,
+      "seed": 41,
+      "selection_manifest": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_all"
+    }
+  ],
+  "matrix_config_sha256": "3f55d72bb5e86ef7a3b1eaea1632bd21dc979be132454496eb40a289b4db015d",
+  "matrix_version": "b500-formal-comparison-v1",
+  "next_blockers": [
+    {
+      "path": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_all"
+    },
+    {
+      "path": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_error"
+    }
+  ],
+  "ready_selection_count": 1,
+  "selections": {
+    "random": {
+      "observed_sha256": "f4f0c1a466ee17738583b25a7c623396a19e9525f0233b3995f7d2d8eaf074e0",
+      "path": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "selected_count": 500,
+      "selected_id_sha256": "9eecf2afdcb74b47f4cfa3c5f2432973a7676f29d8b07e9ab04c59b55e553182",
+      "status": "READY",
+      "strategy": "random"
+    },
+    "rds_all": {
+      "expected_sha256": null,
+      "path": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_all"
+    },
+    "rds_error": {
+      "expected_sha256": null,
+      "path": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "status": "BLOCKED_MISSING_SELECTION_MANIFEST",
+      "strategy": "rds_error"
+    }
+  },
+  "status": "BLOCKED_INCOMPLETE_SELECTION_FREEZE"
+}
