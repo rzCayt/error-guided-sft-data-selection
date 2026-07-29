@@ -1,0 +1,4 @@
+epoch=1/2 train_token_loss=0.943357 optimizer_steps=31
+epoch=2/2 train_token_loss=0.889213 optimizer_steps=62
+evaluation=4/1319
+evaluation=8/1319

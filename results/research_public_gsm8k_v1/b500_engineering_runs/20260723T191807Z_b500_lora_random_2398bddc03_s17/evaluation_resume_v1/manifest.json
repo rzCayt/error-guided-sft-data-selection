@@ -1,0 +1,46 @@
+{
+  "adapter_model_sha256": "a4231f7124ab5b225698218e43660c0083be4545ebe19d60fe7092ef426701fa",
+  "dataset_revisions": {
+    "Harvard-DCML/tulu-v2-197K-processed": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "execution_policy": {
+    "execution_policy_version": "b500-local-thermal-eval-v1",
+    "inter_example_sleep_seconds": 0.5,
+    "pause_at_temperature_c": 75,
+    "physical_batch_size": 1,
+    "progress_flush_every_examples": 1,
+    "resume_at_temperature_c": 68,
+    "semantic_generation_fields_unchanged": [
+      "split",
+      "example_count",
+      "max_input_length",
+      "max_new_tokens",
+      "do_sample",
+      "num_beams",
+      "prompt_version",
+      "parser_policy"
+    ],
+    "temperature_check_every_examples": 4,
+    "temperature_poll_seconds": 15
+  },
+  "execution_policy_sha256": "120afd7549eb8c8401e39cc81cc42d5f3f2ec2708a30f6abe6a3aae155982360",
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "protocol_config_sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce",
+  "recipe_config_sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1",
+  "resume_code_git_commit": "b9ee120940af1c779361741e9439c79bd31feab5",
+  "semantic_evaluation": {
+    "do_sample": false,
+    "example_count": 1319,
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "num_beams": 1,
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "split": "held_out_test"
+  },
+  "semantic_evaluation_hash": "a64170253b341b44f0a436e47ebf87f7ed529907e6cef0c1f7b048f88559af7f",
+  "source_run_git_commit": "7d4b8f9aa3764b20bc54cca4f7d36dd74d82345d",
+  "source_run_id": "20260723T191807Z_b500_lora_random_2398bddc03_s17",
+  "training_seed": 17
+}

@@ -9,3 +9,4 @@
 # Frozen experiment artifacts are byte-addressed by SHA-256. Do not normalize
 # their mixed producer-specific line endings during checkout or commit.
 results/** -text
+results/**/provenance/original_process.*.log -diff

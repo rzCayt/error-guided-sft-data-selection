@@ -1,0 +1,64 @@
+{
+  "artifact_hashes": {
+    "adapter_model_sha256": "a4231f7124ab5b225698218e43660c0083be4545ebe19d60fe7092ef426701fa",
+    "all_hash_contracts_match": true,
+    "execution_policy_sha256": "1a3a6a0112da64f2a52459c5f1b6c47fc8420030841e1c7f728a81b7453b9788",
+    "protocol_config_sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce",
+    "raw_outputs_sha256": "b8ac83f17b868f9a3fd0c7ffda132a0ae7847909c5385538fa38d6d890230d21",
+    "recipe_config_sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
+  },
+  "audit_type": "deterministic_engineering_closure",
+  "claim_boundary": "This audit verifies one random B=500 engineering run only. It does not compare selectors or estimate seed variance.",
+  "completed_at_utc": "2026-07-29T02:30:55.176501+00:00",
+  "evaluation_code_git_commit": "cf1b36529842f6462a2d435051d16f72498b0c46",
+  "evaluation_directory": "evaluation_resume_v3",
+  "independent_adapter_reload": {
+    "active_adapters": [
+      "default"
+    ],
+    "active_vs_disabled_max_abs_logit_difference": 2.3125,
+    "adapter_changes_fixed_prompt_logits": true,
+    "adapter_parameter_tensor_count_in_model": 392,
+    "fixed_prompt_input_tokens": 181,
+    "status": "PASS"
+  },
+  "pinned_dataset_rescore": {
+    "all_saved_rows_match_recomputation": true,
+    "dataset_repo_id": "openai/gsm8k",
+    "dataset_revision": "740312add88f781978c0658806c59bc2815b9866",
+    "rescored_row_count": 1319,
+    "status": "PASS"
+  },
+  "row_audit": {
+    "metrics_recomputed_exactly": true,
+    "ordered_frozen_prefix": true,
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "question_hashes_match": true,
+    "recomputed_metrics": {
+      "example_count": 1319,
+      "fallback_parsed_count": 673,
+      "numeric_accuracy": 0.6125852918877938,
+      "numeric_correct_count": 808,
+      "parse_rate": 1.0,
+      "parse_status_counts": {
+        "ok": 1319
+      },
+      "parsed_count": 1319,
+      "strict_parse_rate": 0.489764973464746,
+      "strict_parsed_count": 646
+    },
+    "row_count": 1319,
+    "source_indexes_match": true,
+    "unique_record_id_count": 1319
+  },
+  "serialized_adapter": {
+    "all_tensor_names_are_lora": true,
+    "nonzero_parameter_count": 18464768,
+    "nonzero_tensor_count": 392,
+    "tensor_count": 392,
+    "total_parameters": 18464768
+  },
+  "source_run_git_commit": "7d4b8f9aa3764b20bc54cca4f7d36dd74d82345d",
+  "source_run_id": "20260723T191807Z_b500_lora_random_2398bddc03_s17",
+  "status": "PASS"
+}

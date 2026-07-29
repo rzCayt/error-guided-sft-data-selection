@@ -6,6 +6,7 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+.aris/
 
 # Local experiment outputs that can become large.
 data/generated/

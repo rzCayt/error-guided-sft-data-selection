@@ -1,0 +1,82 @@
+{
+  "status": "PARTIAL_RECOVERY_WITH_EXPLICIT_GAPS",
+  "recorded_at_utc": "2026-07-29T03:00:00+00:00",
+  "source_run_id": "20260723T191807Z_b500_lora_random_2398bddc03_s17",
+  "source_run_git_commit": "7d4b8f9aa3764b20bc54cca4f7d36dd74d82345d",
+  "original_process_logs": {
+    "stdout": {
+      "copied_path": "provenance/original_process.stdout.log",
+      "source_path_at_recovery": "E:\\RA准备\\b500_random_seed17.stdout.log",
+      "sha256": "1a0645b4ef92c4142c8f35a83fa466dcab0e0e21aa9bc4a194300706b1270e59",
+      "byte_identical_copy": true,
+      "creation_time_utc": "2026-07-23T19:17:38Z",
+      "last_write_time_utc": "2026-07-23T20:18:08Z",
+      "observed_lines": [
+        "epoch=1/2 train_token_loss=0.943357 optimizer_steps=31",
+        "epoch=2/2 train_token_loss=0.889213 optimizer_steps=62",
+        "evaluation=4/1319",
+        "evaluation=8/1319"
+      ]
+    },
+    "stderr": {
+      "copied_path": "provenance/original_process.stderr.log",
+      "source_path_at_recovery": "E:\\RA准备\\b500_random_seed17.stderr.log",
+      "sha256": "383c2c1331812778f13c31d9caf2c981a64e3cc5484f9aa5160ad0ccc7123b90",
+      "byte_identical_copy": true,
+      "creation_time_utc": "2026-07-23T19:17:38Z",
+      "last_write_time_utc": "2026-07-23T19:17:48Z"
+    }
+  },
+  "resume_chain": [
+    {
+      "stage": "evaluation_resume_v1",
+      "execution_policy_version": "b500-local-thermal-eval-v1",
+      "code_git_commit": "b9ee120940af1c779361741e9439c79bd31feab5",
+      "manifest_sha256": "b3da5843408a134199c5609b037a53924b6e8a02984d23d0169401eeee03e200",
+      "manifest_created_utc": "2026-07-28T13:55:34.2793650Z",
+      "raw_file_created_utc": "2026-07-28T13:55:45.1483074Z",
+      "final_row_count": 20,
+      "final_raw_outputs_sha256": "5da3d70d006179f1155f4302375f4aee0240b93564a07dca1d8680796d20e020",
+      "manifest_preceded_first_raw_file_write": true
+    },
+    {
+      "stage": "evaluation_resume_v2",
+      "execution_policy_version": "b500-local-thermal-eval-v2",
+      "code_git_commit": "0049de3e0d6f15aaac47e4d96b62e08730856fff",
+      "manifest_sha256": "c171838704d686b8bfd53e2eb1cf5c6dcb355750647f145d35bd279dc3eb21cb",
+      "initial_row_count": 20,
+      "initial_raw_outputs_sha256": "5da3d70d006179f1155f4302375f4aee0240b93564a07dca1d8680796d20e020",
+      "final_row_count": 48,
+      "final_raw_outputs_sha256": "603a9d73c8b56c39d763b996b451b77360f76df9741820c06e97ee794c9e56e0",
+      "initial_prefix_matches_previous_stage": true
+    },
+    {
+      "stage": "evaluation_resume_v3",
+      "execution_policy_version": "b500-local-thermal-eval-v3",
+      "code_git_commit": "cf1b36529842f6462a2d435051d16f72498b0c46",
+      "manifest_sha256": "ebf5bf496ff4ef5615622f6df6f23768cd820d62b580f7c864bbc730bc074805",
+      "initial_row_count": 48,
+      "initial_raw_outputs_sha256": "603a9d73c8b56c39d763b996b451b77360f76df9741820c06e97ee794c9e56e0",
+      "final_row_count": 1319,
+      "final_raw_outputs_sha256": "b8ac83f17b868f9a3fd0c7ffda132a0ae7847909c5385538fa38d6d890230d21",
+      "initial_prefix_matches_previous_stage": true
+    }
+  ],
+  "resume_chain_checks": {
+    "v1_manifest_timestamp_precedes_v1_raw_creation": true,
+    "v2_initial_count_matches_v1_final_count": true,
+    "v2_initial_hash_matches_v1_final_hash": true,
+    "v3_initial_count_matches_v2_final_count": true,
+    "v3_initial_hash_matches_v2_final_hash": true,
+    "final_count": 1319,
+    "final_hash_matches_metrics": true
+  },
+  "unavailable_and_not_reconstructed": [
+    "original monolithic root metrics.json",
+    "original monolithic root raw_outputs.jsonl beyond the eight logged examples",
+    "original monolithic validation-loss artifact",
+    "original monolithic token-audit artifact",
+    "per-step training telemetry beyond the two epoch summaries in stdout"
+  ],
+  "claim_boundary": "Recovered logs and the v1-v2-v3 hash chain strengthen provenance but do not create telemetry that the interrupted process never saved."
+}

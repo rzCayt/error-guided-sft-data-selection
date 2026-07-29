@@ -1,0 +1,36 @@
+{
+  "status": "PORTABILITY_WARNING_BOUNDED",
+  "recorded_at_utc": "2026-07-29T03:00:00+00:00",
+  "tokenizer_class": "Qwen2Tokenizer",
+  "transformers_version": "4.57.2",
+  "tokenizers_version": "0.22.1",
+  "comparison": {
+    "scope": "all 1319 frozen GSM8K evaluation prompts",
+    "default_interface_example_count": 1319,
+    "fix_mistral_regex_example_count": 1319,
+    "different_tokenization_count": 3,
+    "different_fraction": 0.002274450341167551,
+    "different_source_indexes": [
+      40,
+      592,
+      1211
+    ],
+    "default_token_counts": [
+      160,
+      184,
+      157
+    ],
+    "fixed_token_counts": [
+      166,
+      186,
+      159
+    ]
+  },
+  "frozen_protocol_decision": {
+    "current_run": "retain the default tokenizer behavior used for both training and evaluation",
+    "reason": "changing tokenization after observing the result would break the frozen interface and invalidate direct comparability",
+    "formal_b500_matrix": "retain the same default tokenizer behavior for all three strategies and three seeds under public-gsm8k-v1",
+    "future_protocol": "a separately versioned protocol may freeze fix_mistral_regex before any training or evaluation result is observed"
+  },
+  "claim_boundary": "The warning affects 3 of 1319 evaluation prompt tokenizations under the alternative fix. It is a portability/interface warning, not evidence of a row, metric, or hash mismatch in the frozen v1 run."
+}
