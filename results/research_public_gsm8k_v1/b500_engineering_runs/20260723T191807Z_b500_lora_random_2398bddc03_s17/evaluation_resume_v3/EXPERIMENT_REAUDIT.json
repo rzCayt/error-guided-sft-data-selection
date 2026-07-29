@@ -1,0 +1,85 @@
+{
+  "audit_type": "independent_read_only_reaudit",
+  "completed_at_utc": "2026-07-29T03:15:24.5826571Z",
+  "auditor": {
+    "agent": "isolated gpt-5.6-terra reviewer",
+    "reasoning_effort": "xhigh",
+    "inherited_prior_audit_conclusion": false,
+    "modified_files": false,
+    "ran_training": false
+  },
+  "overall_status": "WARN",
+  "mechanical_integrity_status": "PASS",
+  "evaluation_type": "real_gt",
+  "claim_decisions": {
+    "random_b500_train_save_reload_1319_evaluation_closure": {
+      "status": "PASS_WITH_NON_BLOCKING_WARNINGS",
+      "scope": "one local random B=500 run with training seed 17"
+    },
+    "random_rds_all_rds_error_comparison_completed": {
+      "status": "FAIL_UNSUPPORTED",
+      "reason": "only one random seed-17 engineering run exists"
+    }
+  },
+  "independently_recomputed": {
+    "example_count": 1319,
+    "numeric_correct_count": 808,
+    "numeric_accuracy": 0.6125852918877938,
+    "parsed_count": 1319,
+    "strict_parsed_count": 646,
+    "fallback_parsed_count": 673,
+    "all_saved_rows_match_independent_rescore": true,
+    "all_question_and_answer_hashes_match_pinned_gsm8k": true,
+    "ground_truth_source": "openai/gsm8k test labels at revision 740312add88f781978c0658806c59bc2815b9866",
+    "score_normalization_issue_found": false
+  },
+  "resume_chain": {
+    "row_counts": [
+      20,
+      48,
+      1319
+    ],
+    "raw_outputs_sha256": [
+      "5da3d70d006179f1155f4302375f4aee0240b93564a07dca1d8680796d20e020",
+      "603a9d73c8b56c39d763b996b451b77360f76df9741820c06e97ee794c9e56e0",
+      "b8ac83f17b868f9a3fd0c7ffda132a0ae7847909c5385538fa38d6d890230d21"
+    ],
+    "byte_prefix_continuity_verified": true,
+    "manifest_and_initial_prefix_contracts_verified": true
+  },
+  "adapter": {
+    "local_file_exists": true,
+    "adapter_model_sha256": "a4231f7124ab5b225698218e43660c0083be4545ebe19d60fe7092ef426701fa",
+    "serialized_lora_tensor_count": 392,
+    "serialized_lora_parameter_count": 18464768,
+    "all_serialized_lora_parameters_nonzero": true,
+    "reload_evidence_fixed_prompt_max_logit_difference": 2.3125,
+    "stored_in_git": false
+  },
+  "audit_code_binding": {
+    "implementation_git_commit": "2d43bfecbfe6db4b26e677ea3e55f99ac8a8765e",
+    "audit_artifact_git_commit": "5e7d33d99683f8a2a9427f0ebe9eb47394f22df9",
+    "engineering_audit_v2_sha256": "fc1b9248ad8cb00a6b5ada3c1af770f82882713256e1c5e806a92e512b9ed832",
+    "implementation_blobs_match_declared_sha256": true,
+    "audit_artifact_is_tracked": true
+  },
+  "non_blocking_warnings": [
+    {
+      "code": "LOCAL_MODEL_ARTIFACT_NOT_IMMUTABLY_ARCHIVED",
+      "impact": "the current workspace can be audited, but a Git-only clone cannot reload the adapter or tokenizer"
+    },
+    {
+      "code": "HISTORICAL_TRAINING_TELEMETRY_UNAVAILABLE",
+      "impact": "per-step loss, gradients, original token audits, validation loss, runtime, and peak memory were not recovered and must not be claimed"
+    },
+    {
+      "code": "TOKENIZER_PORTABILITY",
+      "impact": "fix_mistral_regex changes 3 of 1319 evaluation prompt tokenizations; the frozen v1 run consistently used the saved default behavior"
+    },
+    {
+      "code": "STALE_ABSOLUTE_CONFIG_PATH",
+      "impact": "the embedded path is stale, but the embedded config equals the current frozen config and the executed pipeline does not read that field"
+    }
+  ],
+  "claim_boundary": "The audit supports one local random B=500 seed-17 engineering closure. It does not establish selector superiority, seed variance, or a three-strategy comparison."
+}
