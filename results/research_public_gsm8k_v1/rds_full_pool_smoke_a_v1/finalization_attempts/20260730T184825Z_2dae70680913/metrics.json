@@ -1,0 +1,42 @@
+{
+  "all_query_count": 32,
+  "all_vs_error_order_identical": false,
+  "all_vs_error_rank_spearman": 0.986013986013986,
+  "all_vs_error_top_budget_jaccard": 1.0,
+  "audited_candidate_count": 16,
+  "candidate_chunk_manifest_sha256": [
+    "cefb9cf04716510f46f4a24ed7a7e819760959887942e0244da2ad70644f9853"
+  ],
+  "candidate_embeddings_sha256": "8751aeefba118510fb5dcef24ebe78a20fb0c5185e616a2d5fe1df49d2cb9ed9",
+  "candidate_scores_sha256": "82f90d7cb9e4402af0ee37b20356fe117858837f6936fa1bad77f0407b44aeee",
+  "claim_boundary": "This protocol computes frozen full-pool RDS+ rankings and B=500 selection manifests. It does not train LoRA models or establish downstream accuracy gains.",
+  "completed_at_utc": "2026-07-30T18:48:25.787494+00:00",
+  "eligible_candidate_count": 12,
+  "eligible_ordered_id_sha256": "2452ae40165ea4a9e688f8653933bef753f3d764daae4b983405bae54c144d1f",
+  "eligible_source_counts": {
+    "code_alpaca": 1,
+    "cot": 1,
+    "dolly": 2,
+    "flan_v2": 1,
+    "gpt4_alpaca": 1,
+    "lima": 1,
+    "oasst1": 1,
+    "open_orca": 1,
+    "science.scierc_relation": 2,
+    "wizardlm": 1
+  },
+  "eligible_supervised_tokens": 1402,
+  "eligible_total_tokens": 3624,
+  "embedding_dimension": 1536,
+  "error_query_count": 8,
+  "excluded_fully_truncated_count": 4,
+  "query_chunk_manifest_sha256": [
+    "0f8027bb8d28620a93b0969f5bd91c7f1fb01e5bd67da6ee03b2e4c7a595fde0"
+  ],
+  "query_embeddings_sha256": "c8a7fe6210c5d5244a3299ccda848ad3bac3be416fae68cd70ecb27f16d58f36",
+  "representation_version": "qwen2_5_rds_weighted_mean_v1",
+  "run_contract_sha256": "bdda4ed7745fee6875566ae735b48d41f434c4376e44d8682ef39ff9e87b7129",
+  "scope": "engineering_smoke",
+  "selection_budget": 12,
+  "status": "COMPLETE"
+}
