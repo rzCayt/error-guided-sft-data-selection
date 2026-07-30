@@ -38,11 +38,11 @@
     },
     "rds_all": {
       "path": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
-      "sha256": null
+      "sha256": "891ca5b51840f3a914659c825b698222ee5943e5f4b0d3433635fa7813098f65"
     },
     "rds_error": {
       "path": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
-      "sha256": null
+      "sha256": "ac050c659e09dfd0fbd40608ab2fa092ebfba90bff0a838a79053363cbaeff13"
     }
   },
   "job_order": [

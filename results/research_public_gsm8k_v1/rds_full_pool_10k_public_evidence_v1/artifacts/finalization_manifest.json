@@ -1,0 +1,20 @@
+{
+  "artifacts": {
+    "candidate_scores": {
+      "path": "finalization_attempts/20260730T195714Z_a39a314a7628/candidate_scores.jsonl",
+      "row_count": 8542,
+      "sha256": "a16de31a08ee9aeba059a60e25ea3fac26c459bf6814bf163bc1cc5f4459556b"
+    },
+    "metrics": {
+      "path": "finalization_attempts/20260730T195714Z_a39a314a7628/metrics.json",
+      "sha256": "3c60a5c02a994d2a2fcd195c29b46da516510447ae138515f0b4eaf7e65e9fc6"
+    }
+  },
+  "claim_boundary": "This protocol computes frozen full-pool RDS+ rankings and B=500 selection manifests. It does not train LoRA models or establish downstream accuracy gains.",
+  "completed_at_utc": "2026-07-30T19:57:14.300843+00:00",
+  "finalization_attempt_id": "20260730T195714Z_a39a314a7628",
+  "run_contract_sha256": "175add6c3083f7d1e697819a8db1fbeee57d91b33e6907b313a38749f9cfeb5d",
+  "schema_version": "rds-full-pool-finalization-v1",
+  "scope": "formal_10000_candidate_pool",
+  "status": "COMPLETE"
+}
