@@ -1,0 +1,36 @@
+{
+  "execution_protocol_version": "rds-full-pool-thermal-v1",
+  "representation": {
+    "version": "qwen2_5_rds_weighted_mean_v1",
+    "candidate_order": "source_stratified_stable_hash_round_robin",
+    "candidate_eligibility": "response_only_supervised_tokens_gt_0_at_max_length",
+    "pooling": "last_hidden_state_weighted_mean",
+    "padding_tokens_excluded": true,
+    "dtype": "bfloat16",
+    "max_length": 512,
+    "tokenizer_fix_mistral_regex": false,
+    "batch_size": 1,
+    "query_chunk_size": 64,
+    "candidate_chunk_size": 128
+  },
+  "thermal": {
+    "max_start_temperature_c": 65,
+    "abort_temperature_c": 82,
+    "temperature_sample_every_batches": 8,
+    "maximum_start_memory_mib": 512,
+    "maximum_peak_memory_gib": 5.5,
+    "minimum_free_system_memory_gib": 6.0,
+    "cpu_threads": 2
+  },
+  "selection": {
+    "budget": 500,
+    "selection_seed": 20260722,
+    "strategies": [
+      "rds_all",
+      "rds_error"
+    ],
+    "query_order": "frozen_query_file_order",
+    "candidate_tie_break": "frozen_eligible_candidate_order"
+  },
+  "claim_boundary": "This protocol computes frozen full-pool RDS+ rankings and B=500 selection manifests. It does not train LoRA models or establish downstream accuracy gains."
+}

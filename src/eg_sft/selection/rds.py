@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any
 
 import torch
@@ -96,6 +96,7 @@ def encode_rds_texts(
     device: torch.device,
     batch_size: int,
     max_length: int,
+    batch_callback: Callable[[int, int], None] | None = None,
 ) -> torch.Tensor:
     """Encode texts as CPU float32 unit vectors."""
 
@@ -108,7 +109,11 @@ def encode_rds_texts(
 
     model.eval()
     chunks: list[torch.Tensor] = []
-    for start in range(0, len(texts), batch_size):
+    batch_count = (len(texts) + batch_size - 1) // batch_size
+    for batch_index, start in enumerate(
+        range(0, len(texts), batch_size),
+        start=1,
+    ):
         batch_texts = list(texts[start : start + batch_size])
         encoded = tokenizer(
             batch_texts,
@@ -127,6 +132,8 @@ def encode_rds_texts(
         )
         pooled = weighted_mean_pool(outputs.hidden_states[-1], attention_mask)
         chunks.append(pooled.float().cpu())
+        if batch_callback is not None:
+            batch_callback(batch_index, batch_count)
     return torch.cat(chunks, dim=0)
 
 
