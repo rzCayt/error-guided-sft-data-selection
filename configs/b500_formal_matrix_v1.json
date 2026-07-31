@@ -14,7 +14,7 @@
   },
   "execution_config": {
     "path": "configs/b500_formal_local_execution_v1.json",
-    "sha256": "1dcbe327f9a57de4b1d8925dfa4cb2794e5f8c45605a393ff0c2fc7a20410bfc"
+    "sha256": "4a6717837d33b673d87f9318726f5f5391cd9c8c4b11c19827347b033f06d276"
   },
   "data_manifest": {
     "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from eg_sft.experiment.run_manifest import stable_config_hash
+from eg_sft.experiment.formal_runtime import validate_execution_policy
 from eg_sft.training.b500 import (
     file_sha256,
     read_jsonl,
@@ -224,6 +225,7 @@ def preflight_b500_matrix(
         binding=spec["execution_config"],
         label="formal local execution config",
     )
+    validate_execution_policy(_read_json(execution_path))
     recipe = _read_json(recipe_path)
     if tuple(recipe["selection"]["allowed_strategies"]) != FORMAL_STRATEGIES:
         raise ValueError("recipe strategies changed")

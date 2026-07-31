@@ -43,7 +43,35 @@ def _fixture(tmp_path: Path, *, missing_rds: bool = False) -> dict:
             "formal_training_seeds": [17, 29, 41],
         },
     )
-    _write_json(execution_path, {"version": "test"})
+    _write_json(
+        execution_path,
+        {
+            "execution_policy_version": "b500-formal-local-resumable-v1",
+            "temperature": {
+                "start_max_c": 65,
+                "pause_at_c": 75,
+                "resume_at_c": 62,
+                "hard_stop_at_c": 80,
+                "poll_seconds": 10,
+            },
+            "training": {
+                "temperature_check_every_micro_batches": 1,
+                "inter_micro_batch_sleep_seconds": 0.5,
+                "checkpoint_every_optimizer_steps": 1,
+            },
+            "evaluation": {
+                "physical_batch_size": 1,
+                "temperature_check_every_examples": 1,
+                "inter_example_sleep_seconds": 1,
+            },
+            "resources": {
+                "cpu_threads": 2,
+                "min_free_system_memory_gib": 8,
+                "min_free_disk_gib": 100,
+                "max_peak_gpu_memory_gib": 7,
+            },
+        },
+    )
     runner_path.parent.mkdir(parents=True)
     runner_path.write_text("print('not executed')\n", encoding="utf-8")
     _write_json(gate_path, {"h1a_gate_passed": True})
