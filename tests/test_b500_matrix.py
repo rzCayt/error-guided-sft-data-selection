@@ -27,6 +27,7 @@ def _write_jsonl(path: Path, rows: list[dict]) -> None:
 def _fixture(tmp_path: Path, *, missing_rds: bool = False) -> dict:
     protocol_path = tmp_path / "configs" / "protocol.json"
     recipe_path = tmp_path / "configs" / "recipe.json"
+    execution_path = tmp_path / "configs" / "execution.json"
     runner_path = tmp_path / "scripts" / "runner.py"
     gate_path = tmp_path / "results" / "h1a" / "metrics.json"
     data_dir = tmp_path / "results" / "data"
@@ -42,6 +43,7 @@ def _fixture(tmp_path: Path, *, missing_rds: bool = False) -> dict:
             "formal_training_seeds": [17, 29, 41],
         },
     )
+    _write_json(execution_path, {"version": "test"})
     runner_path.parent.mkdir(parents=True)
     runner_path.write_text("print('not executed')\n", encoding="utf-8")
     _write_json(gate_path, {"h1a_gate_passed": True})
@@ -105,15 +107,15 @@ def _fixture(tmp_path: Path, *, missing_rds: bool = False) -> dict:
             "path": "scripts/runner.py",
             "sha256": file_sha256(runner_path),
         },
+        "execution_config": {
+            "path": "configs/execution.json",
+            "sha256": file_sha256(execution_path),
+        },
         "data_manifest": {
             "directory": "results/data",
             "required_files": {
-                "gsm8k_records.jsonl": file_sha256(
-                    data_dir / "gsm8k_records.jsonl"
-                ),
-                "tulu_candidate_pool.jsonl": file_sha256(
-                    data_dir / "tulu_candidate_pool.jsonl"
-                ),
+                "gsm8k_records.jsonl": file_sha256(data_dir / "gsm8k_records.jsonl"),
+                "tulu_candidate_pool.jsonl": file_sha256(data_dir / "tulu_candidate_pool.jsonl"),
             },
         },
         "h1a_gate": {
@@ -141,25 +143,27 @@ def test_ready_matrix_has_exactly_nine_jobs_and_one_common_contract(
         spec=spec,
         repo_root=tmp_path,
         python_executable="PYTHON",
+        matrix_config_path="configs/matrix.json",
     )
     assert report["status"] == "READY_FOR_MANUAL_ONE_JOB_AT_A_TIME"
     assert report["job_count"] == 9
     assert report["ready_selection_count"] == 3
-    assert {
-        (job["strategy"], job["seed"]) for job in report["jobs"]
-    } == {
-        (strategy, seed)
-        for strategy in ("random", "rds_all", "rds_error")
-        for seed in (17, 29, 41)
+    assert {(job["strategy"], job["seed"]) for job in report["jobs"]} == {
+        (strategy, seed) for strategy in ("random", "rds_all", "rds_error") for seed in (17, 29, 41)
     }
-    assert {
-        job["common_contract_sha256"] for job in report["jobs"]
-    } == {report["common_contract_sha256"]}
+    assert {job["common_contract_sha256"] for job in report["jobs"]} == {
+        report["common_contract_sha256"]
+    }
+    assert all(job["status"] == "READY_FOR_MANUAL_INVOCATION" for job in report["jobs"])
+    assert all(job["command"][0] == "PYTHON" for job in report["jobs"])
     assert all(
-        job["status"] == "READY_FOR_MANUAL_INVOCATION"
+        job["command"][2:4]
+        == [
+            "--matrix-config",
+            "configs/matrix.json",
+        ]
         for job in report["jobs"]
     )
-    assert all(job["command"][0] == "PYTHON" for job in report["jobs"])
 
 
 def test_missing_rds_manifests_block_the_whole_matrix(tmp_path: Path) -> None:
@@ -167,30 +171,19 @@ def test_missing_rds_manifests_block_the_whole_matrix(tmp_path: Path) -> None:
     report = preflight_b500_matrix(spec=spec, repo_root=tmp_path)
     assert report["status"] == "BLOCKED_INCOMPLETE_SELECTION_FREEZE"
     assert report["ready_selection_count"] == 1
-    assert {
-        (item["strategy"], item["status"])
-        for item in report["next_blockers"]
-    } == {
+    assert {(item["strategy"], item["status"]) for item in report["next_blockers"]} == {
         ("rds_all", "BLOCKED_MISSING_SELECTION_MANIFEST"),
         ("rds_error", "BLOCKED_MISSING_SELECTION_MANIFEST"),
     }
-    random_jobs = [
-        job for job in report["jobs"] if job["strategy"] == "random"
-    ]
-    assert all(
-        job["status"] == "BLOCKED_UNTIL_ALL_SELECTIONS_ARE_FROZEN"
-        for job in random_jobs
-    )
+    random_jobs = [job for job in report["jobs"] if job["strategy"] == "random"]
+    assert all(job["status"] == "BLOCKED_UNTIL_ALL_SELECTIONS_ARE_FROZEN" for job in random_jobs)
 
 
 def test_existing_manifest_without_frozen_hash_is_blocked(tmp_path: Path) -> None:
     spec = _fixture(tmp_path)
     spec["selections"]["rds_all"]["sha256"] = None
     report = preflight_b500_matrix(spec=spec, repo_root=tmp_path)
-    assert (
-        report["selections"]["rds_all"]["status"]
-        == "BLOCKED_UNFROZEN_SELECTION_SHA256"
-    )
+    assert report["selections"]["rds_all"]["status"] == "BLOCKED_UNFROZEN_SELECTION_SHA256"
 
 
 def test_schedule_must_contain_every_pair_once(tmp_path: Path) -> None:

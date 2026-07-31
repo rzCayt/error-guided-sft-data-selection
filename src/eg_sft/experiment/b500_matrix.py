@@ -54,9 +54,7 @@ def _verify_frozen_file(
         raise ValueError(f"{label} must have a frozen SHA-256")
     observed = file_sha256(path)
     if observed != expected:
-        raise ValueError(
-            f"{label} SHA-256 changed: observed {observed}, expected {expected}"
-        )
+        raise ValueError(f"{label} SHA-256 changed: observed {observed}, expected {expected}")
     return path, observed
 
 
@@ -71,11 +69,7 @@ def _validate_schedule(spec: dict[str, Any]) -> list[dict[str, Any]]:
         }
         for row in schedule
     ]
-    expected = {
-        (strategy, seed)
-        for strategy in FORMAL_STRATEGIES
-        for seed in FORMAL_SEEDS
-    }
+    expected = {(strategy, seed) for strategy in FORMAL_STRATEGIES for seed in FORMAL_SEEDS}
     observed = {(row["strategy"], row["seed"]) for row in normalized}
     if len(normalized) != len(expected) or observed != expected:
         raise ValueError("job_order must contain each strategy-seed pair exactly once")
@@ -102,15 +96,11 @@ def _validate_selected_candidate(
     )
     for field in fields:
         if selected.get(field) != frozen.get(field):
-            raise ValueError(
-                f"{selected.get('candidate_id')} changed frozen field {field}"
-            )
+            raise ValueError(f"{selected.get('candidate_id')} changed frozen field {field}")
     if int(selected.get("total_tokens", 0)) <= 0:
         raise ValueError(f"{selected['candidate_id']} has invalid total_tokens")
     if int(selected.get("supervised_tokens", 0)) <= 0:
-        raise ValueError(
-            f"{selected['candidate_id']} has no supervised response tokens"
-        )
+        raise ValueError(f"{selected['candidate_id']} has no supervised response tokens")
 
 
 def _selection_preflight(
@@ -195,6 +185,7 @@ def preflight_b500_matrix(
     spec: dict[str, Any],
     repo_root: Path,
     python_executable: str = "python",
+    matrix_config_path: str = "configs/b500_formal_matrix_v1.json",
 ) -> dict[str, Any]:
     """Return a deterministic nine-job report; never launch a subprocess."""
 
@@ -227,6 +218,11 @@ def preflight_b500_matrix(
         repo_root=repo_root,
         binding=spec["runner"],
         label="B500 runner",
+    )
+    execution_path, execution_sha256 = _verify_frozen_file(
+        repo_root=repo_root,
+        binding=spec["execution_config"],
+        label="formal local execution config",
     )
     recipe = _read_json(recipe_path)
     if tuple(recipe["selection"]["allowed_strategies"]) != FORMAL_STRATEGIES:
@@ -268,9 +264,7 @@ def preflight_b500_matrix(
     if h1a.get(required_field) != required_value:
         raise ValueError("the preregistered H1a gate does not permit B500 comparison")
 
-    candidate_pool = _candidate_pool_index(
-        data_directory / "tulu_candidate_pool.jsonl"
-    )
+    candidate_pool = _candidate_pool_index(data_directory / "tulu_candidate_pool.jsonl")
     selection_reports = {
         strategy: _selection_preflight(
             repo_root=repo_root,
@@ -282,9 +276,7 @@ def preflight_b500_matrix(
         )
         for strategy in FORMAL_STRATEGIES
     }
-    all_selections_ready = all(
-        report["status"] == "READY" for report in selection_reports.values()
-    )
+    all_selections_ready = all(report["status"] == "READY" for report in selection_reports.values())
 
     schedule = _validate_schedule(spec)
     common_contract = {
@@ -292,9 +284,8 @@ def preflight_b500_matrix(
         "protocol_config_sha256": protocol_sha256,
         "recipe_config_sha256": recipe_sha256,
         "runner_sha256": runner_sha256,
-        "data_file_sha256": {
-            name: report["sha256"] for name, report in data_files.items()
-        },
+        "execution_config_sha256": execution_sha256,
+        "data_file_sha256": {name: report["sha256"] for name, report in data_files.items()},
         "h1a_gate_sha256": h1a_sha256,
         "budget": budget,
         "selection_seed": selection_seed,
@@ -316,16 +307,8 @@ def preflight_b500_matrix(
         command = [
             python_executable,
             str(spec["runner"]["path"]),
-            "--protocol-config",
-            str(spec["protocol_config"]["path"]),
-            "--recipe-config",
-            str(spec["recipe_config"]["path"]),
-            "--selection-manifest",
-            str(selections[strategy]["path"]),
-            "--data-manifest-dir",
-            str(data_spec["directory"]),
-            "--output-root",
-            output_root,
+            "--matrix-config",
+            matrix_config_path,
             "--strategy",
             strategy,
             "--seed",
@@ -355,8 +338,7 @@ def preflight_b500_matrix(
         "automatic_execution": False,
         "job_count": len(jobs),
         "ready_selection_count": sum(
-            report["status"] == "READY"
-            for report in selection_reports.values()
+            report["status"] == "READY" for report in selection_reports.values()
         ),
         "common_contract": common_contract,
         "common_contract_sha256": common_contract_sha256,
@@ -372,6 +354,10 @@ def preflight_b500_matrix(
             "runner": {
                 "path": str(runner_path.relative_to(repo_root.resolve())),
                 "sha256": runner_sha256,
+            },
+            "execution_config": {
+                "path": str(execution_path.relative_to(repo_root.resolve())),
+                "sha256": execution_sha256,
             },
             "data_files": data_files,
             "h1a_gate": {

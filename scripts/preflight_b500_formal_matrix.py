@@ -42,7 +42,14 @@ def main() -> None:
     args = parser.parse_args()
 
     spec = _read_json(args.matrix_config.resolve())
-    report = preflight_b500_matrix(spec=spec, repo_root=ROOT)
+    matrix_config_path = args.matrix_config
+    if matrix_config_path.is_absolute():
+        matrix_config_path = matrix_config_path.resolve().relative_to(ROOT)
+    report = preflight_b500_matrix(
+        spec=spec,
+        repo_root=ROOT,
+        matrix_config_path=matrix_config_path.as_posix(),
+    )
     if args.output is not None:
         _write_json_exclusive(args.output.resolve(), report)
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))

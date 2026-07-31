@@ -9,8 +9,12 @@
     "sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
   },
   "runner": {
-    "path": "scripts/run_b500_lora.py",
-    "sha256": "11f18be117a90ce1e88ebb5a8473b2831d0d14b305e91091e9a9787816070d94"
+    "path": "scripts/run_b500_formal_resumable.py",
+    "sha256": "28efb1295196b6473383df71a63a5b1c0219b7d012a6aea84406217c5fa0d2fd"
+  },
+  "execution_config": {
+    "path": "configs/b500_formal_local_execution_v1.json",
+    "sha256": "1dcbe327f9a57de4b1d8925dfa4cb2794e5f8c45605a393ff0c2fc7a20410bfc"
   },
   "data_manifest": {
     "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
