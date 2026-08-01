@@ -5,6 +5,7 @@ import pytest
 
 from eg_sft.experiment.b500_formal_audit import (
     audit_checkpoint_directory,
+    audit_continuous_temperature_events,
     audit_formal_output_scope,
     audit_thermal_events,
     audit_training_contract,
@@ -213,6 +214,71 @@ def test_thermal_and_output_scope_gates() -> None:
             pause_at_c=75,
             resume_at_c=62,
             hard_stop_at_c=80,
+        )
+
+    continuous = audit_continuous_temperature_events(
+        events=[
+            {
+                "event": "continuous_temperature_sample",
+                "stage": "evaluation_before",
+                "progress": 1130,
+                "temperature_c": 70,
+                "memory_total_mib": 8151,
+                "memory_used_mib": 3382,
+                "power_w": 55.4,
+                "utilization_percent": 52,
+            },
+            {
+                "event": "continuous_temperature_sample",
+                "stage": "evaluation_before",
+                "progress": 1140,
+                "temperature_c": 84,
+                "memory_total_mib": 8151,
+                "memory_used_mib": 3382,
+                "power_w": 58.0,
+                "utilization_percent": 50,
+            },
+        ],
+        sample_every_examples=10,
+        emergency_stop_c=92,
+    )
+    assert continuous["max_temperature_c"] == 84
+    assert continuous["progress_strictly_increasing"] is True
+
+    with pytest.raises(ValueError, match="violates interval"):
+        audit_continuous_temperature_events(
+            events=[
+                {
+                    "event": "continuous_temperature_sample",
+                    "stage": "evaluation_before",
+                    "progress": 1131,
+                    "temperature_c": 70,
+                    "memory_total_mib": 8151,
+                    "memory_used_mib": 3382,
+                    "power_w": 55.4,
+                    "utilization_percent": 52,
+                }
+            ],
+            sample_every_examples=10,
+            emergency_stop_c=92,
+        )
+
+    with pytest.raises(ValueError, match="emergency stop"):
+        audit_continuous_temperature_events(
+            events=[
+                {
+                    "event": "continuous_temperature_sample",
+                    "stage": "evaluation_before",
+                    "progress": 1130,
+                    "temperature_c": 92,
+                    "memory_total_mib": 8151,
+                    "memory_used_mib": 3382,
+                    "power_w": 55.4,
+                    "utilization_percent": 52,
+                }
+            ],
+            sample_every_examples=10,
+            emergency_stop_c=92,
         )
 
     scope = audit_formal_output_scope(

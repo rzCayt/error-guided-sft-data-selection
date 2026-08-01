@@ -309,6 +309,61 @@ def audit_thermal_events(
     }
 
 
+def audit_continuous_temperature_events(
+    *,
+    events: Sequence[Mapping[str, Any]],
+    sample_every_examples: int,
+    emergency_stop_c: float,
+) -> dict[str, Any]:
+    """Validate sparse telemetry from an explicitly disclosed continuous run."""
+
+    if sample_every_examples <= 0:
+        raise ValueError("continuous temperature sample interval must be positive")
+    if not math.isfinite(emergency_stop_c) or emergency_stop_c <= 0:
+        raise ValueError("continuous emergency temperature must be finite and positive")
+    if not events:
+        raise ValueError("continuous runtime override has no temperature evidence")
+
+    progress_values: list[int] = []
+    temperatures: list[float] = []
+    for index, event in enumerate(events):
+        if event.get("event") != "continuous_temperature_sample":
+            raise ValueError(f"unexpected continuous temperature event at row {index}")
+        if event.get("stage") != "evaluation_before":
+            raise ValueError(f"unexpected continuous temperature stage at row {index}")
+        progress = int(event["progress"])
+        temperature = float(event["temperature_c"])
+        if progress < 0 or progress % sample_every_examples != 0:
+            raise ValueError(f"continuous temperature progress violates interval at row {index}")
+        if progress_values and progress <= progress_values[-1]:
+            raise ValueError("continuous temperature progress is not strictly increasing")
+        if not math.isfinite(temperature):
+            raise ValueError(f"non-finite continuous temperature at row {index}")
+        if temperature >= emergency_stop_c:
+            raise ValueError(f"continuous temperature reached emergency stop at row {index}")
+        for field in (
+            "memory_total_mib",
+            "memory_used_mib",
+            "power_w",
+            "utilization_percent",
+        ):
+            if not math.isfinite(float(event[field])):
+                raise ValueError(f"non-finite continuous telemetry field {field} at row {index}")
+        progress_values.append(progress)
+        temperatures.append(temperature)
+
+    return {
+        "event_count": len(events),
+        "first_progress": progress_values[0],
+        "last_progress": progress_values[-1],
+        "sample_every_examples": sample_every_examples,
+        "max_temperature_c": max(temperatures),
+        "emergency_stop_c": emergency_stop_c,
+        "all_samples_below_emergency_stop": True,
+        "progress_strictly_increasing": True,
+    }
+
+
 def audit_formal_output_scope(
     *,
     actual_jobs: Sequence[tuple[str, int]],

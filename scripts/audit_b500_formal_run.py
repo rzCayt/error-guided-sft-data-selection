@@ -30,6 +30,7 @@ from eg_sft.experiment.b500_engineering_audit import (  # noqa: E402
 )
 from eg_sft.experiment.b500_formal_audit import (  # noqa: E402
     audit_checkpoint_directory,
+    audit_continuous_temperature_events,
     audit_formal_output_scope,
     audit_thermal_events,
     audit_training_contract,
@@ -51,7 +52,10 @@ from eg_sft.training.b500 import (  # noqa: E402
 )
 
 
-AUDIT_SCHEMA_VERSION = "b500-formal-read-only-audit-v1"
+AUDIT_SCHEMA_VERSION = "b500-formal-read-only-audit-v2"
+APPROVED_CONTINUOUS_LAUNCHER_SHA256 = (
+    "c157cd55c70a564d05266b6f49567854e647aaf4604126a284d318d7c04e7650"
+)
 AUDIT_IMPLEMENTATION_PATHS = (
     Path("scripts/audit_b500_formal_run.py"),
     Path("src/eg_sft/experiment/b500_formal_audit.py"),
@@ -231,6 +235,112 @@ def _audit_artifact_hashes(
     if completion.get("status") != "PASS" or completion.get("next_job_started") is not False:
         raise ValueError("run_complete does not close exactly one passing job")
     return {**observed, "all_hash_bindings_match": True}
+
+
+def _audit_runtime_temperature_evidence(
+    *,
+    run_dir: Path,
+    strategy: str,
+    seed: int,
+    runner_path: Path,
+    runner_sha256: str,
+    execution: dict[str, Any],
+    recorded_max_temperature: float,
+    frozen_thermal_report: dict[str, Any],
+) -> dict[str, Any]:
+    override_path = run_dir / "runtime_policy_overrides.jsonl"
+    continuous_path = run_dir / "continuous_temperature_events.jsonl"
+    if not override_path.exists() and not continuous_path.exists():
+        frozen_max = frozen_thermal_report["max_pause_temperature_c"]
+        if frozen_max is not None and recorded_max_temperature != float(frozen_max):
+            raise ValueError("run_complete maximum temperature differs from thermal event evidence")
+        return {
+            "runtime_override_present": False,
+            "frozen_policy_followed": True,
+            "run_complete_max_temperature_c": recorded_max_temperature,
+        }
+    if not override_path.is_file() or not continuous_path.is_file():
+        raise ValueError("continuous runtime evidence is incomplete")
+
+    overrides = read_jsonl(override_path)
+    if len(overrides) != 1:
+        raise ValueError("expected exactly one continuous runtime override record")
+    override = overrides[0]
+    expected_scalars = {
+        "event": "continuous_evaluation_runtime_override",
+        "strategy": strategy,
+        "seed": seed,
+        "next_job_launch_allowed": False,
+    }
+    for key, expected in expected_scalars.items():
+        if override.get(key) != expected:
+            raise ValueError(f"continuous runtime override mismatch: {key}")
+    if override.get("semantic_changes") != []:
+        raise ValueError("continuous runtime override reports semantic changes")
+    if Path(str(override["resume_run_dir"])).resolve() != run_dir.resolve():
+        raise ValueError("continuous runtime override points to a different run")
+
+    recorded_runner = Path(str(override["runner_path"])).resolve()
+    if recorded_runner != runner_path.resolve():
+        raise ValueError("continuous runtime override runner path mismatch")
+    if override.get("runner_sha256") != runner_sha256:
+        raise ValueError("continuous runtime override runner hash mismatch")
+    if file_sha256(recorded_runner) != runner_sha256:
+        raise ValueError("current runner no longer matches continuous override")
+
+    launcher_path = Path(str(override["launcher_path"])).resolve()
+    if not launcher_path.is_file():
+        raise FileNotFoundError(f"continuous runtime launcher is missing: {launcher_path}")
+    launcher_sha256 = str(override.get("launcher_sha256", ""))
+    if launcher_sha256 != APPROVED_CONTINUOUS_LAUNCHER_SHA256:
+        raise ValueError("continuous runtime launcher hash is not approved")
+    if file_sha256(launcher_path) != launcher_sha256:
+        raise ValueError("continuous runtime launcher changed after execution")
+
+    changes = override.get("runtime_only_changes")
+    if not isinstance(changes, dict):
+        raise ValueError("continuous runtime override changes must be an object")
+    if float(changes.get("evaluation_inter_example_sleep_seconds", -1)) != 0.0:
+        raise ValueError("continuous runtime did not remove the evaluation sleep")
+    if changes.get("pause_at_c") != "disabled_during_evaluation":
+        raise ValueError("continuous runtime pause disclosure is invalid")
+    if changes.get("hardware_firmware_protection") != "unchanged":
+        raise ValueError("continuous runtime hardware protection disclosure is invalid")
+    sample_every = int(changes["temperature_sample_every_examples"])
+    emergency_stop_c = float(changes["software_emergency_stop_c"])
+    if emergency_stop_c > 92.0:
+        raise ValueError("continuous runtime emergency ceiling exceeds approved value")
+
+    continuous_report = audit_continuous_temperature_events(
+        events=read_jsonl(continuous_path),
+        sample_every_examples=sample_every,
+        emergency_stop_c=emergency_stop_c,
+    )
+    evidence_maxima = [continuous_report["max_temperature_c"]]
+    for key in ("max_pause_temperature_c", "max_resume_temperature_c"):
+        value = frozen_thermal_report.get(key)
+        if value is not None:
+            evidence_maxima.append(float(value))
+    combined_max = max(evidence_maxima)
+    if recorded_max_temperature != combined_max:
+        raise ValueError("run_complete maximum temperature differs from combined evidence")
+    return {
+        "runtime_override_present": True,
+        "frozen_policy_followed": False,
+        "semantic_fields_changed": False,
+        "runtime_efficiency_comparison_allowed": False,
+        "launcher_path": str(launcher_path),
+        "launcher_sha256": launcher_sha256,
+        "override_log_sha256": file_sha256(override_path),
+        "continuous_temperature_log_sha256": file_sha256(continuous_path),
+        "original_hard_stop_at_c": float(execution["temperature"]["hard_stop_at_c"]),
+        "run_complete_max_temperature_c": recorded_max_temperature,
+        "continuous_temperature": continuous_report,
+        "claim_boundary": (
+            "Accuracy artifacts remain auditable, but runtime speed, thermal, and "
+            "efficiency values are not comparable with frozen-policy jobs."
+        ),
+    }
 
 
 def _audit_evaluation(
@@ -528,10 +638,16 @@ def main() -> None:
     recorded_max_temperature = float(
         read_json(run_dir / "run_complete.json")["max_temperature_c_observed_by_runner"]
     )
-    if thermal_report["max_pause_temperature_c"] is not None and recorded_max_temperature != float(
-        thermal_report["max_pause_temperature_c"]
-    ):
-        raise ValueError("run_complete maximum temperature differs from thermal event evidence")
+    runtime_temperature_report = _audit_runtime_temperature_evidence(
+        run_dir=run_dir,
+        strategy=strategy,
+        seed=seed,
+        runner_path=_resolve_repo_path(matrix["runner"]["path"]),
+        runner_sha256=str(matrix["runner"]["sha256"]),
+        execution=execution,
+        recorded_max_temperature=recorded_max_temperature,
+        frozen_thermal_report=thermal_report,
+    )
     thermal_report["run_complete_max_temperature_c"] = recorded_max_temperature
     tokenizer_report = _audit_tokenizer_equivalence(
         reference_tokenizer_dir=reference_tokenizer_dir,
@@ -577,6 +693,7 @@ def main() -> None:
         "tokenizer_equivalence": tokenizer_report,
         "checkpoints": checkpoint_report,
         "thermal": thermal_report,
+        "runtime_temperature_evidence": runtime_temperature_report,
         "artifact_hashes": artifact_hashes,
         "invocations": invocations,
         "formal_output_scope": output_scope,
