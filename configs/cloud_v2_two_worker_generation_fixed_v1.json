@@ -1,0 +1,55 @@
+{
+  "calibration_version": "cloud-v2-two-worker-generation-v1",
+  "study_role": "same_gpu_concurrency_calibration_only_not_formal_training",
+  "base_calibration_config": {
+    "path": "configs/b500_cloud_v2_calibration_v1.json",
+    "sha256": "755b655f40f5c57bedcb5614b8cef2ffa3743acbeade2e3cdeba4edc833dda96"
+  },
+  "output_root": ".aris/compute/cloud_v2_two_worker_generation_runs_v1",
+  "worker_count": 2,
+  "physical_batch_size_per_worker": 1,
+  "cuda_device_index": 0,
+  "generation_protocol_split": "development",
+  "expected_record_count": 128,
+  "shards": [
+    {
+      "shard_id": "shard0",
+      "start_index": 0,
+      "end_index": 64
+    },
+    {
+      "shard_id": "shard1",
+      "start_index": 64,
+      "end_index": 128
+    }
+  ],
+  "generation": {
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "padding_side": "left"
+  },
+  "merge_policy": {
+    "require_both_worker_status_pass": true,
+    "require_same_adapter_sha256": true,
+    "require_same_gpu_uuid": true,
+    "require_no_missing_or_duplicate_records": true,
+    "restore_original_record_order": true
+  },
+  "comparison_policy": {
+    "reference": "existing_single_worker_batch1_development_run",
+    "required_exact_fields": [
+      "raw_output",
+      "parse_status",
+      "parsed_prediction",
+      "numeric_correct"
+    ],
+    "max_difference_examples": 20
+  },
+  "artifact_policy": {
+    "runtime_output_is_git_ignored": true,
+    "export_only_after_merge_and_reference_analysis_pass": true,
+    "never_write_worker_runtime_files_into_tracked_results_during_execution": true
+  }
+}
