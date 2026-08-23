@@ -1,0 +1,84 @@
+{
+  "calibration_version": "b500-cloud-v2-calibration-v1",
+  "study_role": "engineering_calibration_only_excluded_from_formal_matrix",
+  "source_v1_run_policy": {
+    "random_seed17_role": "pilot_only",
+    "may_enter_cloud_v2_formal_statistics": false
+  },
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "base_recipe_config": {
+    "path": "configs/b500_lora_frozen_v1.json",
+    "sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
+  },
+  "random_selection_manifest": {
+    "path": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+    "sha256": "f4f0c1a466ee17738583b25a7c623396a19e9525f0233b3995f7d2d8eaf074e0"
+  },
+  "data_manifest": {
+    "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+    "required_files": {
+      "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+      "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    }
+  },
+  "training_output_root": "results/research_public_gsm8k_v1/cloud_v2_training_calibration_runs_v1",
+  "generation_output_root": "results/research_public_gsm8k_v1/cloud_v2_generation_calibration_runs_v1",
+  "selection_strategy": "random",
+  "selection_prefix_rule": "first_64_in_frozen_manifest_order",
+  "training_seed": 17,
+  "training_example_count": 64,
+  "training_epochs": 1,
+  "training_profiles": {
+    "mb1_ga16": {
+      "micro_batch_size": 1,
+      "gradient_accumulation_steps": 16,
+      "nominal_effective_batch_size": 16
+    },
+    "mb2_ga8": {
+      "micro_batch_size": 2,
+      "gradient_accumulation_steps": 8,
+      "nominal_effective_batch_size": 16
+    },
+    "mb4_ga4": {
+      "micro_batch_size": 4,
+      "gradient_accumulation_steps": 4,
+      "nominal_effective_batch_size": 16
+    },
+    "mb8_ga2": {
+      "micro_batch_size": 8,
+      "gradient_accumulation_steps": 2,
+      "nominal_effective_batch_size": 16
+    }
+  },
+  "loss_normalization": "effective_batch_response_token_sum_over_count",
+  "attention_implementation": "sdpa",
+  "gradient_checkpointing": false,
+  "checkpoint_every_optimizer_steps": 10,
+  "generation_protocol_split": "development",
+  "generation_example_count": 128,
+  "generation_batch_sizes": [
+    1,
+    4,
+    8,
+    16
+  ],
+  "resource_guards": {
+    "max_peak_gpu_memory_gib": 20,
+    "start_max_temperature_c": 65,
+    "hard_stop_temperature_c": 80
+  },
+  "selection_rule": {
+    "required": [
+      "finite_loss_and_gradients",
+      "adapter_save_reload_pass",
+      "checkpoint_resume_contract_pass",
+      "peak_gpu_memory_at_most_20_gib",
+      "record_order_and_prefix_resume_pass"
+    ],
+    "prefer_mb4_ga4_unless_mb8_ga2_is_at_least_fraction_faster": 0.15,
+    "never_use_held_out_test_metric_to_choose_profile": true
+  }
+}
