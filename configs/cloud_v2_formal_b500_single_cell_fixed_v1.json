@@ -1,0 +1,100 @@
+{
+  "formal_protocol_version": "cloud-v2-formal-b500-single-cell-v1",
+  "study_role": "confirmatory_b500_matrix_cell",
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "base_recipe_config": {
+    "path": "configs/b500_lora_frozen_v1.json",
+    "sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
+  },
+  "data_manifest": {
+    "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+    "required_files": {
+      "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+      "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    }
+  },
+  "h1a_gate": {
+    "path": "results/research_public_gsm8k_v1/h1a_formal_tulu96_clean_3fdb8b5/metrics.json",
+    "sha256": "f27c91c8067e36bead8a3583681a9839e1cc90c092a61fe4934f31230b91c496",
+    "required_field": "h1a_gate_passed",
+    "required_value": true
+  },
+  "selections": {
+    "random": {
+      "path": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "sha256": "f4f0c1a466ee17738583b25a7c623396a19e9525f0233b3995f7d2d8eaf074e0"
+    },
+    "rds_all": {
+      "path": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "sha256": "891ca5b51840f3a914659c825b698222ee5943e5f4b0d3433635fa7813098f65"
+    },
+    "rds_error": {
+      "path": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "sha256": "ac050c659e09dfd0fbd40608ab2fa092ebfba90bff0a838a79053363cbaeff13"
+    }
+  },
+  "output_root": ".aris/compute/cloud_v2_formal_b500_runs_v1",
+  "methods": ["random", "rds_all", "rds_error"],
+  "seeds": [17, 29, 41],
+  "job_order": [
+    {"method": "rds_all", "seed": 17},
+    {"method": "rds_error", "seed": 17},
+    {"method": "rds_all", "seed": 29},
+    {"method": "rds_error", "seed": 29},
+    {"method": "rds_all", "seed": 41},
+    {"method": "rds_error", "seed": 41},
+    {"method": "random", "seed": 17},
+    {"method": "random", "seed": 29},
+    {"method": "random", "seed": 41}
+  ],
+  "training": {
+    "selection_budget": 500,
+    "epochs": 2,
+    "max_length": 512,
+    "micro_batch_size": 1,
+    "gradient_accumulation_steps": 16,
+    "nominal_effective_batch_size": 16,
+    "loss_normalization": "effective_batch_response_token_sum_over_count",
+    "checkpoint_every_optimizer_steps": 10,
+    "attention_implementation": "sdpa",
+    "gradient_checkpointing": false,
+    "single_training_process": true
+  },
+  "evaluation": {
+    "split": "held_out_test",
+    "expected_record_count": 1319,
+    "worker_count": 2,
+    "physical_batch_size_per_worker": 1,
+    "forbid_batch_size_above_one": true,
+    "cuda_device_index": 0,
+    "shards": [
+      {"shard_id": "test_shard0", "start_index": 0, "end_index": 660},
+      {"shard_id": "test_shard1", "start_index": 660, "end_index": 1319}
+    ],
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "padding_side": "left",
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback"
+  },
+  "resources": {
+    "min_free_system_memory_gib": 16,
+    "min_free_disk_gib": 50,
+    "max_training_peak_allocated_gib": 20,
+    "max_worker_peak_allocated_gib": 13,
+    "hard_stop_temperature_c": 80
+  },
+  "execution_policy": {
+    "one_cell_per_invocation": true,
+    "automatic_next_cell": false,
+    "require_clean_repo_before_new_run": true,
+    "runtime_output_is_git_ignored": true,
+    "stdout_withholds_accuracy_and_method_comparison": true,
+    "sealed_analysis_requires_all_nine_audits": true
+  }
+}
