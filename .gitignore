@@ -27,6 +27,7 @@ results/research_public_gsm8k_v1/rds_full_pool_10k_v1/
 # Formal local runs contain immutable checkpoints, raw generations, absolute
 # machine provenance, and large adapters. Publish a sanitized evidence package.
 results/research_public_gsm8k_v1/b500_formal_runs_v1/
+results/research_public_gsm8k_v1/b500_formal_cloud_4090_runs_v1/
 
 # Large local B=500 adapter/tokenizer artifacts. Their hashes and manifests are
 # tracked separately; weights remain local.

@@ -5,6 +5,9 @@
 *.ndjson text eol=lf
 *.csv text eol=lf
 *.toml text eol=lf
+*.sh text eol=lf
+requirements*.txt text eol=lf
+.gitignore text eol=lf
 
 # Frozen experiment artifacts are byte-addressed by SHA-256. Do not normalize
 # their mixed producer-specific line endings during checkout or commit.
