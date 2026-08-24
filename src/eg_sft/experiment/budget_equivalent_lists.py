@@ -9,6 +9,7 @@ from typing import Any
 
 import torch
 
+from eg_sft.experiment.budget_equivalent_inputs import eligible_candidate_rows
 from eg_sft.experiment.budget_equivalent_protocol import (
     preflight_protocol,
     read_json_object,
@@ -105,7 +106,11 @@ def build_phase1_lists(
     if not cluster_ready and not engineering_allow_exact_prompt_fallback:
         raise ValueError("formal list build requires the frozen near-duplicate cluster manifest")
 
-    candidates = read_jsonl(repository_path(repo_root, config["candidate_inventory"]["path"]))
+    candidates = eligible_candidate_rows(
+        read_jsonl(
+            repository_path(repo_root, config["candidate_inventory"]["path"])
+        )
+    )
     queries = read_jsonl(repository_path(repo_root, config["query_inventory"]["path"]))
     candidate_ids = [str(row["candidate_id"]) for row in candidates]
     query_ids = [str(row["record_id"]) for row in queries]

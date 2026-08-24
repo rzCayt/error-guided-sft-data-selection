@@ -5,6 +5,7 @@ import torch
 
 from eg_sft.experiment.budget_equivalent_inputs import (
     cluster_near_duplicate_prompts,
+    eligible_candidate_rows,
     export_similarity_artifact,
 )
 from eg_sft.training.b500 import file_sha256
@@ -39,6 +40,17 @@ def _chunk(directory: Path, kind: str, ids: list[str], values: torch.Tensor) -> 
         "artifact_sha256": file_sha256(artifact),
     }
     (directory / "chunk_0000.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def test_eligible_candidate_rows_filters_full_audit_inventory_in_order() -> None:
+    rows = [
+        {"candidate_id": "c0", "response_only_trainable": True},
+        {"candidate_id": "c1", "response_only_trainable": False},
+        {"candidate_id": "c2", "response_only_trainable": True},
+    ]
+    assert [
+        row["candidate_id"] for row in eligible_candidate_rows(rows)
+    ] == ["c0", "c2"]
 
 
 def test_similarity_export_binds_ids_and_values(tmp_path: Path) -> None:

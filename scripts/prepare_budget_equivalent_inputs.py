@@ -15,6 +15,7 @@ ROOT = add_src_to_path()
 from eg_sft.data.public_gsm8k import candidate_prompt_text, sha256_text  # noqa: E402
 from eg_sft.experiment.budget_equivalent_inputs import (  # noqa: E402
     cluster_near_duplicate_prompts,
+    eligible_candidate_rows,
     export_similarity_artifact,
     write_jsonl_exclusive,
 )
@@ -76,7 +77,9 @@ def main() -> None:
             split="train",
             revision=source["revision"],
         )
-        candidates = read_jsonl(args.candidate_inventory.resolve())
+        candidates = eligible_candidate_rows(
+            read_jsonl(args.candidate_inventory.resolve())
+        )
         candidate_ids, prompts = [], []
         for candidate in candidates:
             raw = dataset[int(candidate["source_index"])]

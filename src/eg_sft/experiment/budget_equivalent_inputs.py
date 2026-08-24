@@ -16,6 +16,32 @@ from eg_sft.selection.rds import cosine_similarity_matrix
 from eg_sft.training.b500 import file_sha256, read_jsonl
 
 
+def eligible_candidate_rows(
+    candidates: Sequence[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return the frozen response-only-trainable subset in inventory order.
+
+    The public full-pool inventory keeps all 10,000 audited rows, while RDS
+    embeddings exist only for rows whose response survives max-length
+    truncation. Older synthetic fixtures omit the eligibility field and are
+    treated as already filtered.
+    """
+
+    has_field = ["response_only_trainable" in row for row in candidates]
+    if any(has_field) and not all(has_field):
+        raise ValueError("candidate eligibility field is only partially present")
+    if not any(has_field):
+        return list(candidates)
+    invalid = [
+        str(row.get("candidate_id", ""))
+        for row in candidates
+        if not isinstance(row["response_only_trainable"], bool)
+    ]
+    if invalid:
+        raise ValueError("candidate eligibility values must be boolean")
+    return [row for row in candidates if row["response_only_trainable"]]
+
+
 def _read_json(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as handle:
         payload = json.load(handle)
@@ -84,7 +110,7 @@ def export_similarity_artifact(
     output_path: Path,
 ) -> dict[str, Any]:
     queries = read_jsonl(query_inventory_path)
-    candidates = read_jsonl(candidate_inventory_path)
+    candidates = eligible_candidate_rows(read_jsonl(candidate_inventory_path))
     query_ids = [str(row["record_id"]) for row in queries]
     candidate_ids = [str(row["candidate_id"]) for row in candidates]
     query_embeddings = load_embedding_chunks(
