@@ -87,7 +87,7 @@ def main() -> None:
             if not isinstance(messages, list):
                 raise ValueError(f"invalid source messages for {candidate['candidate_id']}")
             prompt = candidate_prompt_text(messages)
-            if sha256_text(prompt) != candidate["user_prompt_sha256"]:
+            if sha256_text(prompt) != candidate["prompt_sha256"]:
                 raise ValueError(f"source prompt hash changed for {candidate['candidate_id']}")
             candidate_ids.append(str(candidate["candidate_id"]))
             prompts.append(prompt)
