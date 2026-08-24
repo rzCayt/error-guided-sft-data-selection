@@ -1,0 +1,43 @@
+{
+  "protocol_version": "budget-equivalent-runtime-qualification-v2",
+  "matrix_config": {
+    "path": "configs/budget_equivalent_phase1_matrix_frozen_20260824_v2.json",
+    "sha256": "44d7288f4e785af61f8ebe21ec4ad1883b8b7bd542069c2fae675796724dd29a"
+  },
+  "qualification_data": {
+    "overfit_split": "development",
+    "overfit_example_count": 16,
+    "canary_split": "held_out_test",
+    "canary_example_count": 128,
+    "selection_rule": "ascending_source_index_then_record_id",
+    "formal_phase1_selection_consumed": false
+  },
+  "single_gpu_gates": {
+    "bf16_required": true,
+    "overfit_loss_ratio_at_most": 0.5,
+    "adapter_reload_loss_difference_at_most": 1e-6,
+    "canary_output_count": 128,
+    "parser_recompute_must_match": true,
+    "checkpoint_resume_required": true,
+    "optimizer_scheduler_rng_restore_required": true,
+    "output_directory_must_be_non_overwriting": true,
+    "ood_contract_preflight_required": true
+  },
+  "second_gpu_equivalence_gates": {
+    "same_gpu_model_required": true,
+    "same_matrix_config_sha256_required": true,
+    "same_model_tokenizer_revision_required": true,
+    "same_software_environment_hash_required": true,
+    "same_canary_record_ids_required": true,
+    "same_parser_outputs_required": true,
+    "method_must_not_be_bound_to_physical_gpu": true
+  },
+  "forbidden_during_qualification": [
+    "formal_phase1_cell_training",
+    "method_accuracy_comparison",
+    "hyperparameter_changes_after_formal_results",
+    "automatic_next_job",
+    "rds_all_full_training"
+  ],
+  "claim_boundary": "Qualification proves runtime integrity only; it is not evidence that any selector improves model accuracy."
+}

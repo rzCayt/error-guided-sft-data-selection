@@ -1,0 +1,304 @@
+{
+  "base_recipe_config": {
+    "path": "configs/budget_equivalent_lora_v3.json",
+    "sha256": "5e89eb0dca0e04bb7a35bf11523551510c4f9e8c2b9c5dd6f2389b1997dfe4c9"
+  },
+  "data_manifest": {
+    "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+    "required_files": {
+      "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+      "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    }
+  },
+  "evaluation": {
+    "cuda_device_index": 0,
+    "do_sample": false,
+    "expected_record_count": 1319,
+    "forbid_batch_size_above_one": true,
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "num_beams": 1,
+    "padding_side": "left",
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+    "physical_batch_size_per_worker": 1,
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "secondary_datasets": [
+      "svamp",
+      "asdiv_numeric",
+      "multiarith"
+    ],
+    "shards": [
+      {
+        "end_index": 660,
+        "shard_id": "test_shard0",
+        "start_index": 0
+      },
+      {
+        "end_index": 1319,
+        "shard_id": "test_shard1",
+        "start_index": 660
+      }
+    ],
+    "split": "held_out_test",
+    "worker_count": 2
+  },
+  "execution_policy": {
+    "accuracy_blind_until_all_audits": true,
+    "automatic_next_cell": false,
+    "one_cell_per_invocation": true,
+    "ood_audits_required_before_unblinding": true,
+    "require_clean_repo_before_new_run": true,
+    "required_audited_cells_before_unblinding": 16,
+    "runtime_output_is_git_ignored": true,
+    "stdout_withholds_accuracy_and_method_comparison": true
+  },
+  "information_gates": {
+    "path": ".aris/compute/budget_equivalent_v3_selections/information_gates.json",
+    "sha256": "35052b720c34a3fd59c4e25f7acb6f5e438c1802ce748c16c18a348de8c0767d"
+  },
+  "job_order": [
+    {
+      "cell_id": "rep1_random_free_mix_train17",
+      "method": "random_free_mix",
+      "replicate_index": 1,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_01/random_free_mix/selection_manifest.json",
+        "sha256": "e4004d8721719c7a80e52de3e897a4638b53a782f15ccb0cf8220723ad3954f3"
+      },
+      "selection_seed": 1101,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep1_rds_error_free_mix_train17",
+      "method": "rds_error_free_mix",
+      "replicate_index": 1,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_01/rds_error_free_mix/selection_manifest.json",
+        "sha256": "bce1a065e5dae928bfb35ddcb5e4ec003669d2f1eb1ba5f604e723ae0064b49c"
+      },
+      "selection_seed": 101,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep1_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 1,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_01/random_common_mix/selection_manifest.json",
+        "sha256": "a2d0c1085ca0db7878f85d421c6f696ba19b3158555e11e8b9837f8c9d01fa42"
+      },
+      "selection_seed": 1101,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep1_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 1,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_01/rds_error_common_mix/selection_manifest.json",
+        "sha256": "7a900e19f528f2491e4ae29462cacd00d6d53eab05e2c0348533852470dc0d50"
+      },
+      "selection_seed": 101,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep2_random_free_mix_train17",
+      "method": "random_free_mix",
+      "replicate_index": 2,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_02/random_free_mix/selection_manifest.json",
+        "sha256": "fcf5a51fd44476abfea5c73e02deabcffefe04eab66e4bb9567c585b1c8a6158"
+      },
+      "selection_seed": 1202,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep2_rds_error_free_mix_train17",
+      "method": "rds_error_free_mix",
+      "replicate_index": 2,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_02/rds_error_free_mix/selection_manifest.json",
+        "sha256": "bd5c9ee19479b7ebf01e5652056b1b267c1366b141b635fc5bd64f8164a05fa6"
+      },
+      "selection_seed": 202,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep2_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 2,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_02/random_common_mix/selection_manifest.json",
+        "sha256": "f5b6da35b88505a4d92e3a29056f5d0e0dbdb13eb5a636b4ec9cd1a56c4527ec"
+      },
+      "selection_seed": 1202,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep2_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 2,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_02/rds_error_common_mix/selection_manifest.json",
+        "sha256": "060aadae6e16b3bc7e7285b7f5364263cd22f44fac0704f2c75442e035ed560e"
+      },
+      "selection_seed": 202,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep3_random_free_mix_train17",
+      "method": "random_free_mix",
+      "replicate_index": 3,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_03/random_free_mix/selection_manifest.json",
+        "sha256": "d31ee510e083ebf8b5bc65b68f4231e37cf2010fbeee956543bdbe5ff534f0f9"
+      },
+      "selection_seed": 1303,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep3_rds_error_free_mix_train17",
+      "method": "rds_error_free_mix",
+      "replicate_index": 3,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_03/rds_error_free_mix/selection_manifest.json",
+        "sha256": "12ed3f77808b97f35c3c32a037454f66c79db9f170298dfd14059d71b00e8c2f"
+      },
+      "selection_seed": 303,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep3_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 3,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_03/random_common_mix/selection_manifest.json",
+        "sha256": "55e61d09f36e8b1004c7aa13bac7ef1f7c2efb48b614914136a0ab23ae293d47"
+      },
+      "selection_seed": 1303,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep3_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 3,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_03/rds_error_common_mix/selection_manifest.json",
+        "sha256": "e95dc83b336dc3fc31c015d33a38b602ebd4cb9f29bcca4d382997cc3224949b"
+      },
+      "selection_seed": 303,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep4_random_free_mix_train17",
+      "method": "random_free_mix",
+      "replicate_index": 4,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_04/random_free_mix/selection_manifest.json",
+        "sha256": "8a961161af3691e752b9035da01ca6d6327862caab679bd43d5fcd8e95798215"
+      },
+      "selection_seed": 1404,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep4_rds_error_free_mix_train17",
+      "method": "rds_error_free_mix",
+      "replicate_index": 4,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_04/rds_error_free_mix/selection_manifest.json",
+        "sha256": "941016af9f7b498d27a753e3951905a1f749830b4c74019df7cee4dda4b031cc"
+      },
+      "selection_seed": 404,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep4_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 4,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_04/random_common_mix/selection_manifest.json",
+        "sha256": "660adfc7b95828ed7524d500f43b1d99d6f7cf665b75523bca6b3dfd7b34dc2a"
+      },
+      "selection_seed": 1404,
+      "train_seed": 17
+    },
+    {
+      "cell_id": "rep4_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 4,
+      "selection_manifest": {
+        "path": ".aris/compute/budget_equivalent_v3_selections/replicate_04/rds_error_common_mix/selection_manifest.json",
+        "sha256": "7f9b86f4899757d5689d5d0f3110eadd36d3327665642abc872b18395094ac4c"
+      },
+      "selection_seed": 404,
+      "train_seed": 17
+    }
+  ],
+  "methods": [
+    "random_free_mix",
+    "rds_error_free_mix",
+    "random_common_mix",
+    "rds_error_common_mix"
+  ],
+  "ood_evaluation": {
+    "aggregation": "equal_weight_macro_average_across_three_datasets",
+    "datasets": {
+      "asdiv_numeric": {
+        "expected_record_count": 2067,
+        "path": ".aris/compute/budget_equivalent_ood_v1/asdiv_numeric_records.jsonl",
+        "sha256": "c9afe61eac96701f64845789151d95a20d6b026999a6e1220f062838506db23f"
+      },
+      "multiarith": {
+        "expected_record_count": 155,
+        "path": ".aris/compute/budget_equivalent_ood_v1/multiarith_records.jsonl",
+        "sha256": "cbff238208843dde8102e35e26338acd3d36c452aca805db7251ab4fe221c700"
+      },
+      "svamp": {
+        "expected_record_count": 300,
+        "path": ".aris/compute/budget_equivalent_ood_v1/svamp_records.jsonl",
+        "sha256": "032481b6f56355789ef1df0c8199c9398329a5903d4075d82d7ff67834db461d"
+      }
+    },
+    "manifest": {
+      "path": ".aris/compute/budget_equivalent_ood_v1/ood_manifest.json",
+      "sha256": "c057be50cfafeb2c24040eec4ad6421d5d66c6c859fc20a960b388f8accce302"
+    },
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "raw_dataset_text_in_manifest": false,
+    "required_before_unblinding": true
+  },
+  "output_root": ".aris/compute/budget_equivalent_phase1_runs_v3",
+  "parent_matrix_config": {
+    "path": "configs/budget_equivalent_phase1_matrix_frozen_20260824.json",
+    "sha256": "d6d97eae557639b212d4743417c6b18bff1ab915c39ac583e6d85a8d897ac362"
+  },
+  "phase1_protocol_version": "budget-equivalent-phase1-matrix-v3",
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "resources": {
+    "hard_stop_temperature_c": 80,
+    "max_training_peak_allocated_gib": 20,
+    "max_worker_peak_allocated_gib": 13,
+    "min_free_disk_gib": 50,
+    "min_free_system_memory_gib": 16
+  },
+  "selection_index": {
+    "path": ".aris/compute/budget_equivalent_v3_selections/selection_index.json",
+    "sha256": "876d333f121fa0d26c153c28dd181e3c03db6ae8dc4106520d23f10ecade6201"
+  },
+  "training": {
+    "attention_implementation": "sdpa",
+    "checkpoint_every_optimizer_steps": 8,
+    "epochs": 2,
+    "gradient_checkpointing": false,
+    "loss_normalization": "optimizer_step_response_token_sum_over_count",
+    "max_length": 512,
+    "micro_batch_size": 1,
+    "optimizer_steps": 64,
+    "selection_budget": 500,
+    "single_training_process": true
+  }
+}
