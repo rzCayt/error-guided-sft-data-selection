@@ -1,0 +1,70 @@
+{
+  "base_commit": "6d5bcea76af0d46bfd773f93e8eda072a63e2596",
+  "candidate_inventory": {
+    "expected_count": 8542,
+    "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/artifacts/candidate_inventory.jsonl",
+    "sha256": "4fe81283dccc9f630daf1c6db9f3716ca5a6785fa2be9fe35b067f2a573a04d9"
+  },
+  "formal_exact_cluster_fallback_allowed": false,
+  "information_gates": {
+    "maximum_error_vs_all_rank_spearman": 0.95,
+    "minimum_error_selection_stability_jaccard": 0.7,
+    "minimum_error_vs_all_top500_changed_fraction": 0.15
+  },
+  "methods": [
+    "random_free_mix",
+    "rds_error_free_mix",
+    "random_common_mix",
+    "rds_error_common_mix"
+  ],
+  "near_duplicate_clusters": {
+    "expected_count": 8542,
+    "formal_required": true,
+    "path": ".aris/compute/budget_equivalent_v3_inputs_v3/near_duplicate_clusters.jsonl",
+    "sha256": "a402b8ad118f5b2d9b90b1b2ea1679c302a43955208454b0617fff5a50c68fd1"
+  },
+  "output_root": ".aris/compute/budget_equivalent_v3_selections",
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "protocol_version": "budget-equivalent-selection-v3",
+  "query_inventory": {
+    "expected_count": 448,
+    "expected_error_count": 99,
+    "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/artifacts/query_inventory.jsonl",
+    "sha256": "344b1065d2bfa1e621705dc36b30dc15f2089490c4114fa90646a7d3e29c1e85"
+  },
+  "selection": {
+    "common_prompt_tolerance_fraction": 0.01,
+    "common_total_tolerance_fraction": 0.01,
+    "maximum_forced_selected_fraction": 0.1,
+    "minimum_freedom_ratio": 4.0,
+    "minimum_source_quota": 4,
+    "phase1_train_seed": 17,
+    "random_priority_seeds": [
+      1101,
+      1202,
+      1303,
+      1404
+    ],
+    "requested_response_length_bins": 5,
+    "response_tolerance_fraction": 0.005,
+    "selected_example_count": 500,
+    "selection_replicate_seeds": [
+      101,
+      202,
+      303,
+      404
+    ],
+    "target_response_supervision_tokens": 32000
+  },
+  "similarity_artifact": {
+    "path": ".aris/compute/budget_equivalent_v3_inputs_v3/query_candidate_similarity.pt",
+    "required_shape": [
+      448,
+      8542
+    ],
+    "sha256": "994583a61022f84c5128e42d71956fc44f7b9bd987b34b0ec7f0bb249ca58a11"
+  }
+}
