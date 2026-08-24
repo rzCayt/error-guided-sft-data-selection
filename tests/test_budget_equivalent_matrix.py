@@ -154,3 +154,32 @@ def test_matrix_rejects_exact_prompt_duplicate_fallback(tmp_path: Path) -> None:
     config_path.write_text(json.dumps(config), encoding="utf-8")
     with pytest.raises(ValueError, match="forbids exact-prompt"):
         resolve_phase1_contract(repo_root=tmp_path, config_path=config_path, cell_id=cell_id)
+
+
+def test_registry_requires_formal_and_ood_audits_when_configured(
+    tmp_path: Path,
+) -> None:
+    config_path, cell_id = _fixture(tmp_path)
+    config = json.loads(config_path.read_text())
+    config["execution_policy"]["ood_audits_required_before_unblinding"] = True
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    run_dir = tmp_path / ".aris" / "runs" / "run_001"
+    audit_dir = run_dir / "audit"
+    audit_dir.mkdir(parents=True)
+    (run_dir / "manifest.json").write_text(
+        json.dumps({"config": {"cell_id": cell_id}}), encoding="utf-8"
+    )
+    (audit_dir / "formal_cell_audit.json").write_text(
+        json.dumps({"status": "PASS"}), encoding="utf-8"
+    )
+
+    formal_only = phase1_registry(repo_root=tmp_path, config_path=config_path)
+    assert formal_only["jobs"][0]["status"] == "FORMAL_AUDITED_OOD_PENDING"
+    assert formal_only["audited_pass_count"] == 0
+
+    (audit_dir / "ood_audit.json").write_text(
+        json.dumps({"status": "PASS"}), encoding="utf-8"
+    )
+    complete = phase1_registry(repo_root=tmp_path, config_path=config_path)
+    assert complete["jobs"][0]["status"] == "AUDITED_PASS"
+    assert complete["audited_pass_count"] == 1

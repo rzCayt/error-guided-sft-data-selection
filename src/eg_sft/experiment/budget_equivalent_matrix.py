@@ -187,6 +187,11 @@ def phase1_registry(*, repo_root: Path, config_path: Path) -> dict[str, Any]:
     config = read_json_object(config_path)
     validate_matrix_config(config)
     output_root = repository_path(repo_root, str(config["output_root"]))
+    require_ood_audit = bool(
+        config.get("execution_policy", {}).get(
+            "ood_audits_required_before_unblinding", False
+        )
+    )
     jobs = []
     for job in config["job_order"]:
         matches = []
@@ -201,7 +206,21 @@ def phase1_registry(*, repo_root: Path, config_path: Path) -> dict[str, Any]:
             status = "PENDING"
         elif (matches[0] / "audit" / "formal_cell_audit.json").is_file():
             audit = read_json_object(matches[0] / "audit" / "formal_cell_audit.json")
-            status = "AUDITED_PASS" if audit.get("status") == "PASS" else "AUDIT_FAILED"
+            if audit.get("status") != "PASS":
+                status = "AUDIT_FAILED"
+            elif require_ood_audit:
+                ood_path = matches[0] / "audit" / "ood_audit.json"
+                if not ood_path.is_file():
+                    status = "FORMAL_AUDITED_OOD_PENDING"
+                else:
+                    ood_audit = read_json_object(ood_path)
+                    status = (
+                        "AUDITED_PASS"
+                        if ood_audit.get("status") == "PASS"
+                        else "OOD_AUDIT_FAILED"
+                    )
+            else:
+                status = "AUDITED_PASS"
         elif (matches[0] / "cell_complete.json").is_file():
             status = "COMPLETE_UNAUDITED"
         else:
@@ -212,6 +231,7 @@ def phase1_registry(*, repo_root: Path, config_path: Path) -> dict[str, Any]:
         "config_sha256": file_sha256(config_path),
         "job_count": len(jobs),
         "audited_pass_count": sum(row["status"] == "AUDITED_PASS" for row in jobs),
+        "ood_audits_required_before_unblinding": require_ood_audit,
         "jobs": jobs,
         "accuracy_withheld": True,
     }
