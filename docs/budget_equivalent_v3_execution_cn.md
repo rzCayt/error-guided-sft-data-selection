@@ -12,24 +12,26 @@
 - 实现相似度导出、近重复聚类、信息性闸门、16格矩阵和逐格审计；
 - 完整CPU测试265项通过，新增相关测试23项通过，ruff通过。
 
-## 为什么现在还不能直接跑16格
+## Phase 0当前结论
 
-旧公开证据只保留了每个候选的最终RDS排名，没有保留448个查询分别对应8542个候选的完整相似度矩阵。只改变旧排名的随机seed不会形成真实名单重复。
+- 单张RTX 4090D已完成7个查询块和67个候选块，深度哈希审计通过；
+- 完整相似度为`448×8542`，SHA-256为`994583a61022f84c5128e42d71956fc44f7b9bd987b34b0ec7f0bb249ca58a11`；
+- 近重复清单覆盖8542条候选、7869个簇，SHA-256为`a402b8ad118f5b2d9b90b1b2ea1679c302a43955208454b0617fff5a50c68fd1`；
+- 四种方法×四个selection replicate的16份名单已生成，独立审计PASS；
+- targeted policy gate通过：名单不同、分数非恒定、强制入选比例0、common-mix最小自由度9；
+- error-conditioning increment gate失败：最小Top-500更换率只有7%，完整排序Spearman最高0.998，虽稳定性中位数Jaccard为0.871；
+- 因此不运行`rds_all`完整训练矩阵，也不声称二元错误标签产生新增选择政策；
+- 这仍允许按预注册方案比较`rds_error`与`random`的16格核心矩阵。
 
-正式Phase 1还缺：
-
-1. `query_candidate_similarity.pt`；
-2. `near_duplicate_clusters.jsonl`。
-
-这两个文件可以优先从原AutoDL数据盘的完整RDS embedding chunks恢复。若原chunks不存在，再用一张4090重算表示；此时不需要租两张卡。
+printf 'progress='; wc -l "$RUN"/evaluation/workers/test_shard*/raw_outputs.jsonl 2>/dev/null | tail -1 | awk '{print $1+0}'LoRA下游有效性结论。
 
 ## 下一次执行顺序
 
-1. 清理单个临时占位文件；
-2. 提交并推送当前分支；
-3. 启动或创建一台4090实例；
-4. 恢复/生成两个Phase 0输入；
-5. 冻结SHA并运行16份名单构造；
-6. 查看信息性闸门，不看训练准确率；
-7. gate通过后才租第二张4090并做双卡qualification；
-8. qualification通过后运行Phase 1。
+1. 把Phase 0修复提交和冻结配置同步到公开分支；
+2. 下载并核验Phase 0完整归档；
+3. 保持正式Phase 1训练冻结；
+4. 用户确认第二张同型号4090后，进行两卡运行环境等价性检查；
+5. 完成16样本过拟合、adapter保存/重载/恢复和128题canary；
+6. qualification全部通过后，才冻结并启动Phase 1的16格。
+
+CV和教授邮件，不租第二张GPU，不启动正式LoRA矩阵。
