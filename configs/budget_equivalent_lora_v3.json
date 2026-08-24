@@ -1,0 +1,57 @@
+{
+  "protocol_version": "budget-equivalent-lora-v3",
+  "selection": {
+    "candidate_pool_size": 10000,
+    "eligible_candidate_count": 8542,
+    "selected_example_count": 500,
+    "unique_response_supervision_tokens": 32000,
+    "unique_token_tolerance_fraction": 0.005,
+    "response_exposure_tokens": 64000,
+    "exposure_token_tolerance_fraction": 0.005,
+    "allowed_strategies": [
+      "random_free_mix",
+      "rds_error_free_mix",
+      "random_common_mix",
+      "rds_error_common_mix"
+    ]
+  },
+  "training": {
+    "epochs": 2,
+    "optimizer_steps": 64,
+    "max_length": 512,
+    "micro_batch_size": 1,
+    "loss_normalization": "optimizer_step_response_token_sum_over_count",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "scheduler": "linear",
+    "gradient_clipping": 1.0,
+    "dtype": "bfloat16",
+    "response_only_loss": true,
+    "gradient_checkpointing": false,
+    "attention_implementation": "sdpa",
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "target_modules": "all-linear",
+      "bias": "none"
+    }
+  },
+  "evaluation": {
+    "primary_dataset": "gsm8k",
+    "primary_example_count": 1319,
+    "batch_size": 1,
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+    "secondary_datasets": ["svamp", "asdiv", "multiarith"],
+    "robustness_dataset": "gsm_plus_pending_revision_freeze"
+  },
+  "phase1_training_seeds": [17],
+  "confirmatory_training_seeds": [17, 29]
+}
