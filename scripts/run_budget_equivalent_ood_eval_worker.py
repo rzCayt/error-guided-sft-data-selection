@@ -173,7 +173,7 @@ def main() -> None:
         if gpu_uuid_changed:
             _append_jsonl(
                 worker_dir / "runtime_attempts.jsonl",
-                [{
+                {
                     "event": "resume_after_gpu_uuid_change",
                     "previous_gpu_uuid": _read_json(manifest_path)["gpu_uuid"],
                     "current_gpu_uuid": gpu_uuid,
@@ -181,7 +181,7 @@ def main() -> None:
                     "worker_code_commit": _git_commit(),
                     "recorded_at_utc": datetime.now(UTC).isoformat(),
                     "accuracy_withheld": True,
-                }],
+                },
             )
         if metrics_path.exists():
             if next_offset != len(shard_records):
