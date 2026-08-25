@@ -129,6 +129,23 @@ def contiguous_shard(
     return start, end, list(records[start:end])
 
 
+def validate_resume_worker_manifest(
+    *, existing: Mapping[str, Any], expected: Mapping[str, Any]
+) -> bool:
+    """Allow resume on a replacement GPU only when UUID is the sole difference."""
+    if dict(existing) == dict(expected):
+        return False
+    old = dict(existing)
+    new = dict(expected)
+    old_uuid = old.pop("gpu_uuid", None)
+    new_uuid = new.pop("gpu_uuid", None)
+    if old != new:
+        raise ValueError("OOD worker manifest changed beyond GPU UUID")
+    if not old_uuid or not new_uuid or old_uuid == new_uuid:
+        raise ValueError("OOD worker manifest changed")
+    return True
+
+
 def validate_worker_prefix(
     *, rows: Sequence[Mapping[str, Any]], frozen_records: Sequence[Mapping[str, Any]]
 ) -> int:

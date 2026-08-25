@@ -20,6 +20,7 @@ ROOT = add_src_to_path()
 
 from run_b500_formal_resumable import (  # noqa: E402
     _append_jsonl,
+    _git_commit,
     _read_json,
     _require_clean_git_worktree,
     _write_json_exclusive,
@@ -38,6 +39,7 @@ from eg_sft.experiment.budget_equivalent_ood_runtime import (  # noqa: E402
     OOD_DATASETS,
     contiguous_shard,
     resolve_ood_contract,
+    validate_resume_worker_manifest,
     validate_source_row,
     validate_worker_prefix,
 )
@@ -153,9 +155,11 @@ def main() -> None:
             },
         }
         manifest_path = worker_dir / "manifest.json"
+        gpu_uuid_changed = False
         if manifest_path.exists():
-            if _read_json(manifest_path) != worker_manifest:
-                raise ValueError("OOD worker manifest changed")
+            gpu_uuid_changed = validate_resume_worker_manifest(
+                existing=_read_json(manifest_path), expected=worker_manifest
+            )
         else:
             _write_json_exclusive(manifest_path, worker_manifest)
 
@@ -166,6 +170,19 @@ def main() -> None:
             rows=completed,
             frozen_records=shard_records,
         )
+        if gpu_uuid_changed:
+            _append_jsonl(
+                worker_dir / "runtime_attempts.jsonl",
+                [{
+                    "event": "resume_after_gpu_uuid_change",
+                    "previous_gpu_uuid": _read_json(manifest_path)["gpu_uuid"],
+                    "current_gpu_uuid": gpu_uuid,
+                    "validated_prefix_count": next_offset,
+                    "worker_code_commit": _git_commit(),
+                    "recorded_at_utc": datetime.now(UTC).isoformat(),
+                    "accuracy_withheld": True,
+                }],
+            )
         if metrics_path.exists():
             if next_offset != len(shard_records):
                 raise ValueError("OOD worker metrics exist before shard completion")

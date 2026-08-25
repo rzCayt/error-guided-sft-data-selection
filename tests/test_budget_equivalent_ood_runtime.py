@@ -7,6 +7,7 @@ from eg_sft.experiment.budget_equivalent_ood_runtime import (
     canonical_source_row_sha256,
     contiguous_shard,
     recompute_ood_metrics,
+    validate_resume_worker_manifest,
     validate_source_row,
     validate_worker_prefix,
 )
@@ -87,3 +88,17 @@ def test_recompute_metrics_distinguishes_strict_parse_from_correctness() -> None
     metrics = recompute_ood_metrics([correct, wrong])
     assert metrics["exact_numeric_accuracy"] == 0.5
     assert metrics["strict_parse_rate"] == 1.0
+
+
+def test_resume_manifest_allows_only_gpu_uuid_change() -> None:
+    existing = {"cell_id": "c1", "gpu_uuid": "gpu-old", "worker": {"shard": 0}}
+    expected = {"cell_id": "c1", "gpu_uuid": "gpu-new", "worker": {"shard": 0}}
+    assert validate_resume_worker_manifest(existing=existing, expected=expected) is True
+    assert validate_resume_worker_manifest(existing=existing, expected=existing) is False
+    changed = dict(expected) | {"cell_id": "c2"}
+    try:
+        validate_resume_worker_manifest(existing=existing, expected=changed)
+    except ValueError as error:
+        assert "beyond GPU UUID" in str(error)
+    else:
+        raise AssertionError("non-GPU manifest mutation was accepted")
