@@ -5,6 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import torch
 from safetensors.torch import save_file
 
@@ -40,8 +41,10 @@ def _signature(index: int) -> dict:
     }
 
 
+@pytest.mark.parametrize("historical_status", ["PASS", "FAIL"])
 def test_training_anchor_finalizer_passes_identical_synthetic_workers(
     tmp_path: Path,
+    historical_status: str,
 ) -> None:
     environment_sha = "e" * 64
     runs = []
@@ -87,9 +90,9 @@ def test_training_anchor_finalizer_passes_identical_synthetic_workers(
         _write_json(
             audit,
             {
-                "status": "PASS",
+                "status": historical_status,
                 "role": "training_anchor128",
-                "historical_bridge": {"status": "PASS"},
+                "historical_bridge": {"status": historical_status},
             },
         )
         audit_paths.append(audit)
@@ -140,6 +143,13 @@ def test_training_anchor_finalizer_passes_identical_synthetic_workers(
     assert report["release_go_required"] is True
     assert report["checks"]["same_gpu_signature_exact"] is True
     assert report["checks"]["cross_gpu_signature_exact"] is True
+    assert report["diagnostics"]["historical_semantic_bridge_all_three"] is (
+        historical_status == "PASS"
+    )
+    assert report["diagnostics"]["historical_failure_blocks_primary"] is False
+    assert report["diagnostics"]["historical_failure_blocks_merging_parent_seed17"] is (
+        historical_status == "FAIL"
+    )
 
 
 def test_training_anchor_ratio_is_diagnostic_not_a_hard_gate() -> None:

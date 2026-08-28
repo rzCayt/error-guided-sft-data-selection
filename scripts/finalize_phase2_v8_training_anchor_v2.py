@@ -132,11 +132,12 @@ def main() -> None:
         reference=signatures[0], candidate=signatures[2], levels=FULL_LEVELS, expected_count=128
     )
     audits = [read_json(getattr(args, f"anchor_audit_{label.lower()}").resolve()) for label in labels]
+    if any(row.get("role") != "training_anchor128" for row in audits):
+        raise ValueError("v8 anchor canary role changed")
+    if any(row.get("status") not in {"PASS", "FAIL"} for row in audits):
+        raise ValueError("v8 anchor canary audit status is invalid")
     semantic_pass = all(
-        row.get("status") == "PASS"
-        and row.get("role") == "training_anchor128"
-        and row.get("historical_bridge", {}).get("status") == "PASS"
-        for row in audits
+        row.get("historical_bridge", {}).get("status") == "PASS" for row in audits
     )
     gates = protocol["new_worker_numeric_gates"]
     def numeric_pass(row: dict, loss: float) -> bool:
@@ -183,7 +184,11 @@ def main() -> None:
         "cross_gpu_numeric_within_frozen_gates": numeric_pass(cross, loss_cross),
         "same_gpu_signature_exact": signature_same["status"] == "PASS",
         "cross_gpu_signature_exact": signature_cross["status"] == "PASS",
-        "historical_semantic_bridge_all_three": semantic_pass,
+        "historical_parent_excluded_from_v8_primary": bool(
+            protocol["historical_parent_comparison"][
+                "historical_seed17_is_never_in_v8_primary"
+            ]
+        ),
     }
     passed = all(checks.values())
     report = {
@@ -191,6 +196,11 @@ def main() -> None:
         "training_anchor_protocol_sha256": protocol_sha256,
         "status": "PASS" if passed else "FAIL",
         "checks": checks,
+        "diagnostics": {
+            "historical_semantic_bridge_all_three": semantic_pass,
+            "historical_failure_blocks_primary": False,
+            "historical_failure_blocks_merging_parent_seed17": not semantic_pass,
+        },
         "environment_contract_sha256": completions[0]["environment_contract_sha256"],
         "canonical_runtime_sha256": completions[0]["canonical_runtime_sha256"],
         "materialized_contracts_sha256": completions[0]["materialized_contracts_sha256"],

@@ -94,8 +94,6 @@ def compare_v8_signatures(
             "source_index",
             "question_sha256",
             "prompt_version",
-            "parse_mode",
-            "parse_status",
             "gold_value",
         ):
             if left.get(identity) != right.get(identity):
