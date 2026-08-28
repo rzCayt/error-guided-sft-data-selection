@@ -138,6 +138,34 @@ def resolve_phase1_contract(
     cell_id: str,
 ) -> dict[str, Any]:
     config = read_json_object(config_path)
+    if config.get("matrix_version") == "phase2-clean-common24-v8":
+        from eg_sft.experiment.phase2_clean_common_v8 import (
+            resolve_clean_common_contract,
+        )
+
+        return resolve_clean_common_contract(
+            repo_root=repo_root,
+            config_path=config_path,
+            cell_id=cell_id,
+        )
+    if config.get("matrix_version") == "phase2-crossed-48cell-v7":
+        from eg_sft.experiment.phase2_crossed_v7 import resolve_phase2_contract
+
+        return resolve_phase2_contract(
+            repo_root=repo_root,
+            config_path=config_path,
+            cell_id=cell_id,
+        )
+    if config.get("matrix_version") == "identifiable-budget-v4-extension-v1":
+        from eg_sft.experiment.identifiable_budget_v4 import (
+            resolve_identifiable_contract,
+        )
+
+        return resolve_identifiable_contract(
+            repo_root=repo_root,
+            config_path=config_path,
+            cell_id=cell_id,
+        )
     validate_matrix_config(config)
     matching = [row for row in config["job_order"] if row["cell_id"] == cell_id]
     if len(matching) != 1:
@@ -185,6 +213,18 @@ def resolve_phase1_contract(
 
 def phase1_registry(*, repo_root: Path, config_path: Path) -> dict[str, Any]:
     config = read_json_object(config_path)
+    if config.get("matrix_version") == "phase2-clean-common24-v8":
+        from eg_sft.experiment.phase2_clean_common_v8 import clean_common_registry
+
+        return clean_common_registry(repo_root=repo_root, config_path=config_path)
+    if config.get("matrix_version") == "phase2-crossed-48cell-v7":
+        from eg_sft.experiment.phase2_crossed_v7 import phase2_registry
+
+        return phase2_registry(repo_root=repo_root, config_path=config_path)
+    if config.get("matrix_version") == "identifiable-budget-v4-extension-v1":
+        from eg_sft.experiment.identifiable_budget_v4 import identifiable_registry
+
+        return identifiable_registry(repo_root=repo_root, config_path=config_path)
     validate_matrix_config(config)
     output_root = repository_path(repo_root, str(config["output_root"]))
     require_ood_audit = bool(

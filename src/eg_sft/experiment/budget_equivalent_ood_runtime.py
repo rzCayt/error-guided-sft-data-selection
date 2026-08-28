@@ -39,7 +39,31 @@ def resolve_ood_contract(
         raise ValueError(f"unsupported OOD dataset: {dataset}")
     matrix_config_path = matrix_config_path.resolve()
     matrix = read_json_object(matrix_config_path)
-    validate_matrix_config(matrix)
+    if matrix.get("matrix_version") == "phase2-clean-common24-v8":
+        from eg_sft.experiment.phase2_clean_common_v8 import (
+            materialize_runtime_matrix,
+        )
+
+        matrix = materialize_runtime_matrix(
+            repo_root=repo_root,
+            config_path=matrix_config_path,
+        )
+    elif matrix.get("matrix_version") == "phase2-crossed-48cell-v7":
+        from eg_sft.experiment.phase2_crossed_v7 import materialize_runtime_matrix
+
+        matrix = materialize_runtime_matrix(
+            repo_root=repo_root,
+            config_path=matrix_config_path,
+        )
+    elif matrix.get("matrix_version") == "identifiable-budget-v4-extension-v1":
+        from eg_sft.experiment.identifiable_budget_v4 import materialize_runtime_matrix
+
+        matrix = materialize_runtime_matrix(
+            repo_root=repo_root,
+            config_path=matrix_config_path,
+        )
+    else:
+        validate_matrix_config(matrix)
     ood = matrix.get("ood_evaluation")
     if not isinstance(ood, dict) or ood.get("required_before_unblinding") is not True:
         raise ValueError("formal OOD binding is missing")

@@ -90,6 +90,7 @@ def build_phase1_lists(
     config_path: Path,
     output_root: Path | None = None,
     engineering_allow_exact_prompt_fallback: bool = False,
+    response_tolerance_fraction_override: float | None = None,
 ) -> dict[str, Any]:
     config = read_json_object(config_path)
     validate_protocol_config(config)
@@ -126,6 +127,14 @@ def build_phase1_lists(
         clusters = _load_duplicate_clusters(cluster_path)
 
     selection = config["selection"]
+    if response_tolerance_fraction_override is not None:
+        if not 0.0 < response_tolerance_fraction_override < 1.0:
+            raise ValueError("response token tolerance override must be in (0, 1)")
+        response_tolerance_fraction = float(response_tolerance_fraction_override)
+    else:
+        response_tolerance_fraction = float(
+            selection["response_tolerance_fraction"]
+        )
     design = build_common_mix_design(
         candidates,
         selection_count=int(selection["selected_example_count"]),
@@ -152,6 +161,10 @@ def build_phase1_lists(
         "near_duplicate_clusters_sha256": file_sha256(cluster_path) if cluster_ready else None,
         "formal_near_duplicate_control": cluster_ready,
     }
+    if response_tolerance_fraction_override is not None:
+        provenance["response_tolerance_fraction_override"] = (
+            response_tolerance_fraction
+        )
     _write_json_exclusive(root / "common_mix_design.json", dataclasses.asdict(design))
 
     method_index: list[dict[str, Any]] = []
@@ -184,7 +197,7 @@ def build_phase1_lists(
                 priorities_by_method[method],
                 selection_count=int(selection["selected_example_count"]),
                 target_response_tokens=int(selection["target_response_supervision_tokens"]),
-                response_tolerance_fraction=float(selection["response_tolerance_fraction"]),
+                response_tolerance_fraction=response_tolerance_fraction,
                 common_design=design if is_common else None,
                 prompt_tolerance_fraction=float(selection["common_prompt_tolerance_fraction"]),
                 total_tolerance_fraction=float(selection["common_total_tolerance_fraction"]),
@@ -221,7 +234,7 @@ def build_phase1_lists(
             all_priorities,
             selection_count=int(selection["selected_example_count"]),
             target_response_tokens=int(selection["target_response_supervision_tokens"]),
-            response_tolerance_fraction=float(selection["response_tolerance_fraction"]),
+            response_tolerance_fraction=response_tolerance_fraction,
             common_design=None,
             prompt_tolerance_fraction=float(selection["common_prompt_tolerance_fraction"]),
             total_tolerance_fraction=float(selection["common_total_tolerance_fraction"]),

@@ -26,12 +26,23 @@ def main() -> None:
         action="store_true",
         help="Build non-formal engineering lists when fuzzy duplicate clusters are absent.",
     )
+    parser.add_argument(
+        "--strict-response-token-tolerance",
+        action="store_true",
+        help=(
+            "Use a symmetric +/-0.05%% response-token constraint instead of "
+            "the configured tolerance. This only builds lists; it does not run training."
+        ),
+    )
     args = parser.parse_args()
     result = build_phase1_lists(
         repo_root=ROOT,
         config_path=args.config.resolve(),
         output_root=args.output_root,
         engineering_allow_exact_prompt_fallback=args.engineering_allow_exact_prompt_fallback,
+        response_tolerance_fraction_override=(
+            0.0005 if args.strict_response_token_tolerance else None
+        ),
     )
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
 

@@ -2,12 +2,121 @@
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 from typing import Any
 
 from eg_sft.experiment.b500_engineering_audit import audit_completed_evaluation
 from eg_sft.experiment.budget_equivalent_matrix import resolve_phase1_contract
 from eg_sft.training.b500 import file_sha256, read_jsonl
+from eg_sft.training.token_budget import supervision_tokens_per_step
+
+
+def _require_sha256(value: Any, *, field: str) -> str:
+    text = str(value)
+    if len(text) != 64 or any(character not in "0123456789abcdef" for character in text):
+        raise ValueError(f"invalid SHA-256 field: {field}")
+    return text
+
+
+def audit_dose_only_token_cap_artifacts(
+    *,
+    training_metrics: dict[str, Any],
+    token_budget_audit: dict[str, Any],
+    optimizer_step_rows: list[dict[str, Any]],
+    supervision_token_cap: int,
+    token_cap_policy: str,
+) -> dict[str, Any]:
+    """Fail closed on every mask and coverage field in a dose-only run."""
+
+    expected_steps = 64
+    expected_per_step = supervision_tokens_per_step(
+        supervision_token_cap=supervision_token_cap,
+        optimizer_steps=expected_steps,
+        policy=token_cap_policy,
+    )
+    if len(optimizer_step_rows) != expected_steps:
+        raise ValueError("dose-only audit requires exactly 64 optimizer-step rows")
+    selected_token_set_sha256 = _require_sha256(
+        optimizer_step_rows[0].get("selected_token_set_sha256"),
+        field="selected_token_set_sha256",
+    )
+    boundary_split_occurrence_count = int(
+        optimizer_step_rows[0].get("boundary_split_occurrence_count", -1)
+    )
+    mask_shas: list[str] = []
+    for index, row in enumerate(optimizer_step_rows, start=1):
+        mask_sha = _require_sha256(
+            row.get("token_cap_mask_sha256"),
+            field=f"optimizer_step[{index}].token_cap_mask_sha256",
+        )
+        mask_shas.append(mask_sha)
+        if (
+            int(row.get("optimizer_step", -1)) != index
+            or int(row.get("response_supervision_tokens", -1)) != expected_per_step
+            or int(row.get("kept_response_supervision_tokens", -1))
+            != expected_per_step
+            or int(row.get("candidate_response_supervision_tokens", -1))
+            < expected_per_step
+            or int(row.get("cumulative_response_supervision_tokens", -1))
+            != index * expected_per_step
+            or row.get("token_cap_policy") != token_cap_policy
+            or row.get("selected_token_set_sha256") != selected_token_set_sha256
+            or row.get("legacy_sequence_step_boundaries_preserved") is not False
+            or int(row.get("boundary_split_occurrence_count", -1))
+            != boundary_split_occurrence_count
+            or int(row.get("selected_candidate_id_coverage", -1)) != 500
+            or int(row.get("candidate_id_count", -1)) != 500
+            or int(row.get("occurrence_with_kept_token_count", -1)) != 1000
+            or int(row.get("occurrence_count", -1)) != 1000
+            or int(row.get("mandatory_coverage_token_count", -1)) != 1000
+        ):
+            raise ValueError(f"dose-only optimizer-step evidence changed at step {index}")
+    if boundary_split_occurrence_count < 0:
+        raise ValueError("dose-only boundary split count is invalid")
+    mask_set_text = "\n".join(mask_shas) + "\n"
+    mask_set_sha256 = hashlib.sha256(mask_set_text.encode("utf-8")).hexdigest()
+    expected_fields = {
+        "supervision_token_cap": supervision_token_cap,
+        "supervision_tokens_per_optimizer_step": expected_per_step,
+        "token_cap_policy": token_cap_policy,
+        "selected_token_set_sha256": selected_token_set_sha256,
+        "legacy_sequence_step_boundaries_preserved": False,
+        "boundary_split_occurrence_count": boundary_split_occurrence_count,
+        "selected_candidate_id_coverage": 500,
+        "candidate_id_count": 500,
+        "occurrence_with_kept_token_count": 1000,
+        "occurrence_count": 1000,
+        "mandatory_coverage_token_count": 1000,
+    }
+    for artifact_name, artifact in (
+        ("training_metrics", training_metrics),
+        ("token_budget_audit", token_budget_audit),
+    ):
+        for field, value in expected_fields.items():
+            if artifact.get(field) != value:
+                raise ValueError(f"{artifact_name} dose-only field changed: {field}")
+    if int(training_metrics.get("supervised_tokens_seen", -1)) != supervision_token_cap:
+        raise ValueError("training metrics dose-only exposure changed")
+    if (
+        int(token_budget_audit.get("response_supervision_exposure_tokens", -1))
+        != supervision_token_cap
+        or token_budget_audit.get("optimizer_step_mask_set_sha256")
+        != mask_set_sha256
+    ):
+        raise ValueError("token budget dose-only aggregate evidence changed")
+    return {
+        "status": "PASS",
+        "optimizer_steps": expected_steps,
+        "tokens_per_optimizer_step": expected_per_step,
+        "supervision_token_cap": supervision_token_cap,
+        "token_cap_policy": token_cap_policy,
+        "selected_token_set_sha256": selected_token_set_sha256,
+        "optimizer_step_mask_set_sha256": mask_set_sha256,
+        "selected_candidate_id_coverage": 500,
+        "occurrence_with_kept_token_count": 1000,
+        "boundary_split_occurrence_count": boundary_split_occurrence_count,
+    }
 
 
 def audit_training_artifacts(

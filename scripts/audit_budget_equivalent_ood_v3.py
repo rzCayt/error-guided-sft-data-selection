@@ -29,6 +29,9 @@ from eg_sft.experiment.budget_equivalent_ood_runtime import (  # noqa: E402
     validate_worker_prefix,
 )
 from eg_sft.training.b500 import file_sha256, read_jsonl  # noqa: E402
+from eg_sft.evaluation.identifiable_batch_backend import (  # noqa: E402
+    validate_phase2_generation_evidence,
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -98,6 +101,8 @@ def _prevalidate_dataset(
             }
         )
 
+    if _read_json(config_path).get("matrix_version") == "phase2-crossed-48cell-v7":
+        validate_phase2_generation_evidence(combined, eos_token_id=151643)
     report = audit_complete_ood_dataset_from_raw(
         rows=combined,
         frozen_records=contract["records"],

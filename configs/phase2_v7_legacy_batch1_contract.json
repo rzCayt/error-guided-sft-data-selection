@@ -1,0 +1,56 @@
+{
+  "schema_version": "phase2-v7-legacy-batch1-contract-v1",
+  "contract_status": "GPU_CANARIES_REQUIRED",
+  "validated_status": "LEGACY_BATCH1_VALIDATED",
+  "eval_backend": {
+    "batch_size": 1,
+    "padding_policy": "natural_per_example",
+    "do_sample": false,
+    "num_beams": 1,
+    "max_input_tokens": 512,
+    "max_new_tokens": 256,
+    "dtype": "bf16",
+    "attention_backend": "sdpa",
+    "batch_gt1_authorized": false
+  },
+  "base_model_16": {
+    "reference_path": "artifacts/phase2_v7_canary/base_model_16.jsonl",
+    "reference_sha256": "026f38d4b3ecbc2000d9711f5683c87286ef9c252ee2e4a32ac5a6f92b4fa456",
+    "manifest_path": "artifacts/phase2_v7_canary/base_model_16_manifest.json",
+    "manifest_sha256": "6fdb06f0acddac4d155124c666340c782bc2da65658c5cbd791997413a19b4df",
+    "comparison_levels": [
+      "raw_ids",
+      "first_eos_ids",
+      "decoded_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ]
+  },
+  "archived_adapter_16": {
+    "adapter_id": "rep1_random_common_mix_train17",
+    "adapter_model_sha256": "9df7df3acae9ee5e8af4ad8fe5cefe4d8a3ed7d9cfce60de6721495dbea40eec",
+    "historical_semantic_reference_path": "artifacts/phase2_v7_canary/archived_adapter_16.jsonl",
+    "historical_semantic_reference_sha256": "dcd89b10aa26e243f55baef9884646f7d7573e71aae9a06c68aba429b5762bb2",
+    "historical_manifest_path": "artifacts/phase2_v7_canary/archived_adapter_16_manifest.json",
+    "historical_manifest_sha256": "9fad254d35c8814cc3f19f3e73a29a5cb5938e7dac63d8e9b0c2bacdf5ded738",
+    "bootstrap_comparison_levels": [
+      "decoded_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ],
+    "token_anchor_status": "CREATE_ON_FIRST_PARENT_GPU_AFTER_SEMANTIC_PASS",
+    "final_comparison_levels": [
+      "raw_ids",
+      "first_eos_ids",
+      "decoded_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ]
+  },
+  "fresh_process_required": true,
+  "fresh_output_path_required": true,
+  "fail_closed_on_mismatch": true
+}

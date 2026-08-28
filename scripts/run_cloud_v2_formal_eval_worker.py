@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import gc
 import json
+import os
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -27,11 +28,19 @@ from run_b500_formal_resumable import (  # noqa: E402
 from run_cloud_v2_generation_worker import _gpu_uuid  # noqa: E402
 
 from eg_sft.data.public_gsm8k import validate_gsm8k_source_row  # noqa: E402
-from eg_sft.evaluation.cloud_v2_batching import append_jsonl_rows_fsynced  # noqa: E402
+from eg_sft.evaluation.cloud_v2_batching import (  # noqa: E402
+    append_jsonl_rows_fsynced,
+    contiguous_record_batches,
+)
 from eg_sft.evaluation.formal_two_worker import (  # noqa: E402
     formal_shards,
     records_for_formal_shard,
     validate_formal_worker_prefix,
+)
+from eg_sft.evaluation.identifiable_batch_backend import (  # noqa: E402
+    generated_token_rows,
+    record_generated_token_ids,
+    resolve_eval_batch_size,
 )
 from eg_sft.evaluation.gsm8k_generation import (  # noqa: E402
     PROMPT_VERSION,
@@ -58,6 +67,11 @@ def main() -> None:
         required=True,
     )
     args = parser.parse_args()
+    config_path = args.config.resolve()
+    physical_batch_size, identifiable_v4 = resolve_eval_batch_size(
+        matrix_config=_read_json(config_path),
+        environ=os.environ,
+    )
 
     invocation_started = time.perf_counter()
     worker_dir: Path | None = None
@@ -73,7 +87,7 @@ def main() -> None:
         seed = int(run_manifest["seed"])
         contract = resolve_formal_contract(
             repo_root=ROOT,
-            config_path=args.config.resolve(),
+            config_path=config_path,
             method=method,
             seed=seed,
         )
@@ -114,7 +128,7 @@ def main() -> None:
                 "shard_id": shard.shard_id,
                 "start_index": shard.start_index,
                 "end_index": shard.end_index,
-                "physical_batch_size": 1,
+                "physical_batch_size": physical_batch_size,
                 "cuda_device_index": device_index,
             },
         }
@@ -154,16 +168,28 @@ def main() -> None:
             )
             return
         set_seed(seed)
+        torch.use_deterministic_algorithms(True)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats(device)
         load_started = time.perf_counter()
-        tokenizer = AutoTokenizer.from_pretrained(training_dir / "tokenizer", use_fast=True)
+        from eg_sft.experiment.phase2_v8_snapshot import frozen_model_source
+
+        model_source, source_kwargs = frozen_model_source(
+            contract["protocol"]["model"]
+        )
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_source, **source_kwargs, use_fast=True
+        )
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "left"
         base = AutoModelForCausalLM.from_pretrained(
-            contract["protocol"]["model"]["repo_id"],
-            revision=contract["protocol"]["model"]["revision"],
+            model_source,
+            **source_kwargs,
             dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             attn_implementation=str(contract["config"]["training"]["attention_implementation"]),
@@ -180,13 +206,21 @@ def main() -> None:
             revision=contract["protocol"]["datasets"]["gsm8k"]["revision"],
         )
         generation_started = time.perf_counter()
-        for offset in range(next_offset, len(shard_records)):
-            record = shard_records[offset]
-            source_row = gsm_test[int(record["source_index"])]
-            validate_gsm8k_source_row(record, source_row)
-            prompt = build_evaluation_prompt(source_row["question"])
+        batches = contiguous_record_batches(
+            records=shard_records,
+            start_index=next_offset,
+            batch_size=physical_batch_size,
+        )
+        for batch_start, batch_records in batches:
+            source_rows = []
+            prompts = []
+            for record in batch_records:
+                source_row = gsm_test[int(record["source_index"])]
+                validate_gsm8k_source_row(record, source_row)
+                source_rows.append(source_row)
+                prompts.append(build_evaluation_prompt(source_row["question"]))
             encoded = tokenizer(
-                [prompt],
+                prompts,
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
@@ -202,29 +236,51 @@ def main() -> None:
                     pad_token_id=tokenizer.pad_token_id,
                     eos_token_id=tokenizer.eos_token_id,
                 )
-            raw_output = tokenizer.decode(
-                generated[0, input_width:], skip_special_tokens=True
-            ).strip()
-            scored = score_generation(
-                record=record,
-                gold_answer_text=source_row["answer"],
-                generated_text=raw_output,
+            token_rows = generated_token_rows(
+                generated_ids=generated,
+                padded_input_width=input_width,
             )
-            scored.update(
-                {
-                    "shard_id": shard.shard_id,
-                    "shard_offset": offset,
-                    "global_record_index": shard.start_index + offset,
-                }
-            )
-            append_jsonl_rows_fsynced(raw_path, [scored])
-            if (offset + 1) % 25 == 0 or offset + 1 == shard.count:
+            scored_rows = []
+            for batch_offset, (record, source_row, token_ids) in enumerate(
+                zip(batch_records, source_rows, token_rows, strict=True)
+            ):
+                raw_output = tokenizer.decode(
+                    token_ids, skip_special_tokens=True
+                ).strip()
+                scored = score_generation(
+                    record=record,
+                    gold_answer_text=source_row["answer"],
+                    generated_text=raw_output,
+                )
+                offset = batch_start + batch_offset
+                scored.update(
+                    {
+                        "shard_id": shard.shard_id,
+                        "shard_offset": offset,
+                        "global_record_index": shard.start_index + offset,
+                    }
+                )
+                record_generated_token_ids(
+                    scored_row=scored,
+                    token_ids=token_ids,
+                    identifiable_v4=identifiable_v4,
+                    eos_token_id=tokenizer.eos_token_id,
+                    canonical_decoded_text=raw_output,
+                    parser_input=raw_output,
+                )
+                scored_rows.append(scored)
+            append_jsonl_rows_fsynced(raw_path, scored_rows)
+            batch_end = batch_start + len(batch_records)
+            if (
+                batch_end // 25 > batch_start // 25
+                or batch_end == shard.count
+            ):
                 print(
                     json.dumps(
                         {
                             "status": "RUNNING",
                             "stage": "formal_eval_worker",
-                            "progress": f"{offset + 1}/{shard.count}",
+                            "progress": f"{batch_end}/{shard.count}",
                         },
                         sort_keys=True,
                     ),

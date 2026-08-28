@@ -138,6 +138,22 @@ def test_formal_workers_merge_exactly_1319_in_original_order() -> None:
     assert [row["record_id"] for row in merged] == [row["record_id"] for row in _records()]
 
 
+def test_formal_merge_records_matching_v4_physical_batch_size() -> None:
+    shards, payloads = _worker_payloads()
+    for payload in payloads.values():
+        payload["manifest"]["worker"]["physical_batch_size"] = 4
+    _, report = merge_formal_worker_outputs(
+        frozen_records=_records(), shards=shards, worker_payloads=payloads
+    )
+    assert report["physical_batch_size_per_worker"] == 4
+
+    payloads["test_shard1"]["manifest"]["worker"]["physical_batch_size"] = 8
+    with pytest.raises(ValueError, match="different physical batch sizes"):
+        merge_formal_worker_outputs(
+            frozen_records=_records(), shards=shards, worker_payloads=payloads
+        )
+
+
 @pytest.mark.parametrize("fault", ["missing", "duplicate", "worker_fail", "gpu_mismatch"])
 def test_formal_merge_rejects_any_incomplete_or_inconsistent_worker(fault: str) -> None:
     shards, payloads = _worker_payloads()

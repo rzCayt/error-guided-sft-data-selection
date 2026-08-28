@@ -103,6 +103,7 @@ def test_engineering_builder_produces_four_real_replicates_and_sixteen_lists(
         config_path=config_path,
         output_root=output,
         engineering_allow_exact_prompt_fallback=True,
+        response_tolerance_fraction_override=0.0005,
     )
     assert index["selection_count"] == 16
     assert len(list(output.glob("replicate_*/**/selection_manifest.json"))) == 16
@@ -110,3 +111,15 @@ def test_engineering_builder_produces_four_real_replicates_and_sixteen_lists(
     assert gates["replicate_count"] == 4
     assert gates["formal_near_duplicate_control"] is False
     assert gates["phase1_core_matrix_permitted"] is False
+    manifests = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in output.glob("replicate_*/**/selection_manifest.json")
+    ]
+    assert all(
+        manifest["budget_audit"]["response_relative_error"] <= 0.0005
+        for manifest in manifests
+    )
+    assert all(
+        manifest["provenance"]["response_tolerance_fraction_override"] == 0.0005
+        for manifest in manifests
+    )

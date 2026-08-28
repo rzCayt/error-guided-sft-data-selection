@@ -1,0 +1,24 @@
+{
+  "allowed_identity_changes": [
+    "cell_id",
+    "parent_cell_id",
+    "train_seed",
+    "output_root",
+    "study",
+    "attempt_id",
+    "worker_id",
+    "timestamps",
+    "rng_derived_training_order"
+  ],
+  "child_cell_id": "v8_rep2_rds_error_common_mix_train41",
+  "child_static_view_sha256": "ec8347f096082d976516ce1b011d398c298977600b308eabefca77b06ca400ae",
+  "child_train_seed": 41,
+  "parent_cell_id": "rep2_rds_error_common_mix_train17",
+  "parent_static_view_sha256": "ec8347f096082d976516ce1b011d398c298977600b308eabefca77b06ca400ae",
+  "parent_train_seed": 17,
+  "schema_version": "phase2-v8-resolved-contract-diff-v1",
+  "scientific_static_views_equal": true,
+  "status": "PASS",
+  "train_seed_changed": true,
+  "unexpected_scientific_changes": []
+}

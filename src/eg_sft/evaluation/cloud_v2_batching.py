@@ -31,7 +31,7 @@ def append_jsonl_rows_fsynced(
     path: Path,
     rows: Sequence[dict[str, Any]],
 ) -> None:
-    """Append rows in order and durably flush each complete JSONL record."""
+    """Append rows in order and durably flush one complete JSONL batch."""
 
     if not rows:
         return
@@ -40,8 +40,8 @@ def append_jsonl_rows_fsynced(
     with path.open(mode, encoding="utf-8", newline="\n") as output:
         for row in rows:
             output.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
-            output.flush()
-            os.fsync(output.fileno())
+        output.flush()
+        os.fsync(output.fileno())
 
 
 def ordered_record_ids(

@@ -1,0 +1,57 @@
+{
+  "schema_version": "identifiable-transformers-qualification-v2",
+  "matrix": {
+    "path": "configs/identifiable_budget_v4_matrix.json",
+    "sha256": "bbb71c6879f64b35a1dd6d41cc7605ee7c298b2bba7c0f8cda9c90c28a5054c5"
+  },
+  "base_model": {
+    "model_id": "base",
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+  },
+  "tokenizer": {
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+  },
+  "adapters": [
+    {
+      "adapter_id": "random_common_rep1_seed17",
+      "source_cell_id": "rep1_random_common_mix_train17",
+      "evidence_archive": "rep1_random_common_mix_train17_evidence.tar.gz",
+      "evidence_archive_sha256": "88dd00bbe50f073d5dc54721a22d66636b0b4848b08cdd684a68dd8c9a9b91ce",
+      "formal_audit_sha256": "0c2d7716eed6d6ef5dfe39399ecdcd880e1ebb7fff8858eaddd58ab731c6d74b",
+      "training_metrics_sha256": "5725adee1a7180ae53599f78f565d4c3e0465225492819aa334fad9ecd892161",
+      "adapter_model_sha256": "9df7df3acae9ee5e8af4ad8fe5cefe4d8a3ed7d9cfce60de6721495dbea40eec"
+    },
+    {
+      "adapter_id": "rds_error_common_rep1_seed17",
+      "source_cell_id": "rep1_rds_error_common_mix_train17",
+      "evidence_archive": "rep1_rds_error_common_mix_train17_evidence.tar.gz",
+      "evidence_archive_sha256": "ecba9050332b1db66c8bfc4e005b464a5c70bd32bc073c5feea7fd78e89831f3",
+      "formal_audit_sha256": "f067a6c3afdb647c4627700ee25ac2b6121d44f78b2358edaba6c80cdec16614",
+      "training_metrics_sha256": "1551f5ad43a80761a5bbbba754ca75f94b109eae82cb18e1ea95eb77fd6bd844",
+      "adapter_model_sha256": "8ce51c485c8124c97750ce4cdba1508cdf423108d303ec2ed3590d03e0f8e640"
+    }
+  ],
+  "stages": {
+    "smoke128": {"record_count": 128, "batch_sizes": [1, 2, 4, 8], "models": "base_plus_two_adapters"},
+    "confirm512": {"record_count": 512, "batch_sizes": "batch1_plus_smoke_best", "models": "base_plus_two_adapters"},
+    "shadow3841": {"record_count": 3841, "batch_sizes": "batch1_plus_smoke_best", "models": "one_cli_selected_adapter"}
+  },
+  "resume_probe": {
+    "stage": "smoke128",
+    "model_id": "base",
+    "batch_size": 2,
+    "stop_after_records": 64
+  },
+  "gates": {
+    "minimum_examples_per_second_speedup": 1.5,
+    "minimum_shadow_wall_time_reduction": 0.25,
+    "strict_token_equality_record_counts": [128, 512],
+    "semantic_fallback_record_count": 3841,
+    "semantic_fields": ["record_id", "parsed_prediction", "numeric_correct", "strict_parse_status", "parse_mode", "parse_status"],
+    "actual_resume_required": true,
+    "replay_probe_required_for_every_successful_run": true
+  },
+  "accuracy_withheld": true
+}

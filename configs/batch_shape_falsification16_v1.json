@@ -1,0 +1,152 @@
+{
+  "schema_version": "batch-shape-falsification16-v1",
+  "frozen_date": "2026-08-27",
+  "purpose": "Distinguish reproducibility, padding-width and precision-by-batch-shape mechanisms without authorizing batch>1.",
+  "source_smoke": {
+    "required_runs": {
+      "1": {
+        "raw_outputs_sha256": "4389ef4bed64fc557df5a9c6173905ea7193a42bdab3341dc1c14fc65c67fc58",
+        "metrics_sha256": "0312a1aacd5c1a81c177a22a6a70877c0c0e24741e80be8ae2c4b3cce0b14be4",
+        "manifest_sha256": "0d015e54ff0275fe323e21d2d94959690ea66fb9a5f96a45539f64828ad2cf67"
+      },
+      "2": {
+        "raw_outputs_sha256": "a7d2dc64e32b6577ab5eba427a4f5aa462dd8f4265f129786ebbff031ebea324",
+        "metrics_sha256": "b459aac03da9dd21c2909019aec8b89b17602d1145113250b8ab3c15ffb3fe69",
+        "manifest_sha256": "12e026658b858f6b36665b48afcafdc34de3efee734d228c017ae04efd64497e"
+      },
+      "4": {
+        "raw_outputs_sha256": "e7490ab3edf24df9a32b3c46970f74872731dd315ff348aed26264a94201ceec",
+        "metrics_sha256": "ff174ea28a4ac52a537fce4bc311c4c0f92e21a0c473ecdcff3c02f675d9b184",
+        "manifest_sha256": "a18c33d162d0c38fb5f348f9bab926c286e52b828eaea581c891cdc4630a1af5"
+      },
+      "8": {
+        "raw_outputs_sha256": "95d65430c4cf779ceac6800e57c7371f70e056c39b1a8a65be6a2e7cdc0a34cf",
+        "metrics_sha256": "743d57612513084501fd615dd6b5406d2dd4aa85a3c9161ba02fb4d8722f0045",
+        "manifest_sha256": "6f3bcef8eeeec6f22fe637dcecf0c257773ec324d469474bf540c648c02dd3b3"
+      }
+    }
+  },
+  "model": {
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "attn_implementation": "sdpa"
+  },
+  "tokenizer": {
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "eos_token_id": 151643,
+    "pad_token_id": 151643,
+    "padding_side": "left"
+  },
+  "generation": {
+    "do_sample": false,
+    "num_beams": 1,
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "use_cache": true,
+    "position_ids_policy": "implicit_transformers_generate_from_attention_mask",
+    "explicit_position_ids_passed": false
+  },
+  "determinism": {
+    "seed": 20260722,
+    "cublas_workspace_config": "UNSET",
+    "torch_deterministic_algorithms": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": false
+  },
+  "selection": {
+    "rule": "all_12_persistent_semantic_mismatch_then_4_lowest_risk_controls_v1",
+    "expected_unique_count": 16,
+    "persistent_semantic_mismatch_ids": [
+      "gsm8k-test-0002-92e8af667512",
+      "gsm8k-test-0007-fde7aa359264",
+      "gsm8k-test-0039-0df5373de245",
+      "gsm8k-test-0043-d323a2064056",
+      "gsm8k-test-0045-9416a2928b24",
+      "gsm8k-test-0051-f5347c0a17bc",
+      "gsm8k-test-0058-a81dc6f2fad3",
+      "gsm8k-test-0068-fb0ae1db3c05",
+      "gsm8k-test-0085-9981fd2ef8b5",
+      "gsm8k-test-0087-63354a1e0ec3",
+      "gsm8k-test-0090-f9ede1517452",
+      "gsm8k-test-0098-b8dafca18c09"
+    ],
+    "lowest_risk_control_ids": [
+      "gsm8k-test-0030-847454263786",
+      "gsm8k-test-0063-e523da96c1b8",
+      "gsm8k-test-0118-fded1d4c8ff8",
+      "gsm8k-test-0033-c721c3ad10f8"
+    ]
+  },
+  "passes": [
+    {
+      "pass_id": "bf16_b1_natural_repeat",
+      "dtype": "bfloat16",
+      "batch_size": 1,
+      "padding_policy": "longest_per_batch"
+    },
+    {
+      "pass_id": "bf16_b4_fixed_a",
+      "dtype": "bfloat16",
+      "batch_size": 4,
+      "padding_policy": "fixed_selection_max"
+    },
+    {
+      "pass_id": "bf16_b4_fixed_b",
+      "dtype": "bfloat16",
+      "batch_size": 4,
+      "padding_policy": "fixed_selection_max"
+    },
+    {
+      "pass_id": "bf16_b1_fixed",
+      "dtype": "bfloat16",
+      "batch_size": 1,
+      "padding_policy": "fixed_selection_max"
+    },
+    {
+      "pass_id": "fp32_b1_fixed",
+      "dtype": "float32",
+      "batch_size": 1,
+      "padding_policy": "fixed_selection_max"
+    },
+    {
+      "pass_id": "fp32_b4_fixed",
+      "dtype": "float32",
+      "batch_size": 4,
+      "padding_policy": "fixed_selection_max"
+    }
+  ],
+  "phase_order": [
+    "bf16_b1_natural_repeat",
+    "bf16_b4_fixed_a",
+    "bf16_b4_fixed_b",
+    "bf16_b1_fixed",
+    "fp32_b1_fixed",
+    "fp32_b4_fixed"
+  ],
+  "audit_phases": [
+    "baseline_repeat",
+    "bf16_repeat",
+    "width_effect",
+    "final_mechanism"
+  ],
+  "gates": {
+    "exact_canonical_token_match_required": true,
+    "exact_l0_to_l4_match_required": true,
+    "fp32_near_equivalence_max_mismatch": 1,
+    "limited_debug_min_fp32_mismatch": 3,
+    "batch_gt_1_authorized": false,
+    "accuracy_aggregation_forbidden": true,
+    "max_unique_questions": 16,
+    "max_gpu_minutes": 25
+  },
+  "forbidden": [
+    "confirm512",
+    "shadow3841",
+    "dose_only_training",
+    "formal_matrix",
+    "aggregate_accuracy",
+    "batch_gt_1_authorization",
+    "gate_relaxation"
+  ]
+}

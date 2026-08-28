@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import gc
 import json
+import os
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -31,7 +32,15 @@ from eg_sft.evaluation.arithmetic_ood import (  # noqa: E402
     build_ood_prompt,
     score_ood_generation,
 )
-from eg_sft.evaluation.cloud_v2_batching import append_jsonl_rows_fsynced  # noqa: E402
+from eg_sft.evaluation.cloud_v2_batching import (  # noqa: E402
+    append_jsonl_rows_fsynced,
+    contiguous_record_batches,
+)
+from eg_sft.evaluation.identifiable_batch_backend import (  # noqa: E402
+    generated_token_rows,
+    record_generated_token_ids,
+    resolve_eval_batch_size,
+)
 from eg_sft.experiment.budget_equivalent_matrix import (  # noqa: E402
     resolve_phase1_contract,
 )
@@ -66,6 +75,30 @@ def _contract_payload(config_path: Path, dataset: str) -> dict[str, object]:
     }
 
 
+def _validated_ood_batch(
+    *,
+    records: list[dict],
+    source,
+    source_spec: dict,
+    dataset: str,
+) -> tuple[list[str], list[str]]:
+    """Validate every frozen source row before constructing its prompt."""
+
+    gold_values = []
+    prompts = []
+    for record in records:
+        source_row = dict(source[int(record["source_index"])])
+        gold_values.append(
+            validate_source_row(
+                record=record,
+                raw_row=source_row,
+                answer_field=str(source_spec["answer_field"]),
+            )
+        )
+        prompts.append(build_ood_prompt(dataset, source_row))
+    return gold_values, prompts
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -81,6 +114,10 @@ def main() -> None:
     args = parser.parse_args()
 
     config_path = args.config.resolve()
+    physical_batch_size, identifiable_v4 = resolve_eval_batch_size(
+        matrix_config=_read_json(config_path),
+        environ=os.environ,
+    )
     if args.contract_only:
         print(json.dumps(_contract_payload(config_path, args.dataset), sort_keys=True))
         return
@@ -150,7 +187,7 @@ def main() -> None:
                 "shard_count": args.shard_count,
                 "start_index": start_index,
                 "end_index": end_index,
-                "physical_batch_size": 1,
+                "physical_batch_size": physical_batch_size,
                 "cuda_device_index": device_index,
             },
         }
@@ -203,16 +240,28 @@ def main() -> None:
             return
 
         set_seed(int(phase1["seed"]))
+        torch.use_deterministic_algorithms(True)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats(device)
         load_started = time.perf_counter()
-        tokenizer = AutoTokenizer.from_pretrained(training_dir / "tokenizer", use_fast=True)
+        from eg_sft.experiment.phase2_v8_snapshot import frozen_model_source
+
+        model_source, source_kwargs = frozen_model_source(
+            phase1["protocol"]["model"]
+        )
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_source, **source_kwargs, use_fast=True
+        )
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "left"
         base = AutoModelForCausalLM.from_pretrained(
-            phase1["protocol"]["model"]["repo_id"],
-            revision=phase1["protocol"]["model"]["revision"],
+            model_source,
+            **source_kwargs,
             dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             attn_implementation=str(phase1["config"]["training"]["attention_implementation"]),
@@ -234,17 +283,20 @@ def main() -> None:
             raise ValueError("OOD source dataset count changed")
         evaluation = phase1["config"]["evaluation"]
         generation_started = time.perf_counter()
-        for offset in range(next_offset, len(shard_records)):
-            record = shard_records[offset]
-            source_row = dict(source[int(record["source_index"])])
-            gold_value = validate_source_row(
-                record=record,
-                raw_row=source_row,
-                answer_field=str(spec["answer_field"]),
+        batches = contiguous_record_batches(
+            records=shard_records,
+            start_index=next_offset,
+            batch_size=physical_batch_size,
+        )
+        for batch_start, batch_records in batches:
+            gold_values, prompts = _validated_ood_batch(
+                records=batch_records,
+                source=source,
+                source_spec=spec,
+                dataset=args.dataset,
             )
-            prompt = build_ood_prompt(args.dataset, source_row)
             encoded = tokenizer(
-                [prompt],
+                prompts,
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
@@ -260,31 +312,53 @@ def main() -> None:
                     pad_token_id=tokenizer.pad_token_id,
                     eos_token_id=tokenizer.eos_token_id,
                 )
-            raw_output = tokenizer.decode(
-                generated[0, input_width:], skip_special_tokens=True
-            ).strip()
-            scored = score_ood_generation(
-                record=record,
-                gold_value=gold_value,
-                generated_text=raw_output,
+            token_rows = generated_token_rows(
+                generated_ids=generated,
+                padded_input_width=input_width,
             )
-            scored.update(
-                {
-                    "shard_index": args.shard_index,
-                    "shard_count": args.shard_count,
-                    "shard_offset": offset,
-                    "global_record_index": start_index + offset,
-                }
-            )
-            append_jsonl_rows_fsynced(raw_path, [scored])
-            if (offset + 1) % 25 == 0 or offset + 1 == len(shard_records):
+            scored_rows = []
+            for batch_offset, (record, gold_value, token_ids) in enumerate(
+                zip(batch_records, gold_values, token_rows, strict=True)
+            ):
+                raw_output = tokenizer.decode(
+                    token_ids, skip_special_tokens=True
+                ).strip()
+                scored = score_ood_generation(
+                    record=record,
+                    gold_value=gold_value,
+                    generated_text=raw_output,
+                )
+                offset = batch_start + batch_offset
+                scored.update(
+                    {
+                        "shard_index": args.shard_index,
+                        "shard_count": args.shard_count,
+                        "shard_offset": offset,
+                        "global_record_index": start_index + offset,
+                    }
+                )
+                record_generated_token_ids(
+                    scored_row=scored,
+                    token_ids=token_ids,
+                    identifiable_v4=identifiable_v4,
+                    eos_token_id=tokenizer.eos_token_id,
+                    canonical_decoded_text=raw_output,
+                    parser_input=raw_output,
+                )
+                scored_rows.append(scored)
+            append_jsonl_rows_fsynced(raw_path, scored_rows)
+            batch_end = batch_start + len(batch_records)
+            if (
+                batch_end // 25 > batch_start // 25
+                or batch_end == len(shard_records)
+            ):
                 print(
                     json.dumps(
                         {
                             "status": "RUNNING",
                             "stage": "budget_equivalent_ood_eval_worker",
                             "dataset": args.dataset,
-                            "progress": f"{offset + 1}/{len(shard_records)}",
+                            "progress": f"{batch_end}/{len(shard_records)}",
                             "accuracy_withheld": True,
                         },
                         sort_keys=True,

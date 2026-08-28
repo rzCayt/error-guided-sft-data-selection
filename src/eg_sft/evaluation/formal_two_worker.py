@@ -1,9 +1,11 @@
-"""Accuracy-blind integrity helpers for two batch-one formal test workers."""
+"""Accuracy-blind integrity helpers for legacy and qualified v4 formal workers."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence
+
+from eg_sft.evaluation.identifiable_batch_backend import ALLOWED_EVAL_BATCH_SIZES
 
 
 @dataclass(frozen=True)
@@ -83,6 +85,7 @@ def merge_formal_worker_outputs(
     merged: list[dict[str, Any]] = []
     adapter_hashes: set[str] = set()
     gpu_uuids: set[str] = set()
+    physical_batch_sizes: set[int] = set()
     reports = []
     for shard in shards:
         payload = worker_payloads[shard.shard_id]
@@ -96,13 +99,15 @@ def merge_formal_worker_outputs(
         if metrics.get("status") != "PASS":
             raise ValueError(f"{shard.shard_id} did not finish with PASS")
         worker = manifest.get("worker", {})
+        physical_batch_size = int(worker.get("physical_batch_size", -1))
         if (
             worker.get("shard_id") != shard.shard_id
             or int(worker.get("start_index", -1)) != shard.start_index
             or int(worker.get("end_index", -1)) != shard.end_index
-            or int(worker.get("physical_batch_size", -1)) != 1
+            or physical_batch_size not in ALLOWED_EVAL_BATCH_SIZES
         ):
             raise ValueError(f"{shard.shard_id} worker binding changed")
+        physical_batch_sizes.add(physical_batch_size)
         frozen_shard = records_for_formal_shard(frozen_records, shard)
         validate_formal_worker_prefix(
             rows=rows,
@@ -134,6 +139,8 @@ def merge_formal_worker_outputs(
         raise ValueError("formal workers loaded different adapters")
     if len(gpu_uuids) != 1:
         raise ValueError("formal workers used different physical GPU UUIDs")
+    if len(physical_batch_sizes) != 1:
+        raise ValueError("formal workers used different physical batch sizes")
     merged_ids = [str(row["record_id"]) for row in merged]
     frozen_ids = [str(row["record_id"]) for row in frozen_records]
     if len(merged_ids) != 1319 or len(set(merged_ids)) != 1319:
@@ -144,7 +151,7 @@ def merge_formal_worker_outputs(
         "status": "PASS",
         "record_count": 1319,
         "worker_count": 2,
-        "physical_batch_size_per_worker": 1,
+        "physical_batch_size_per_worker": next(iter(physical_batch_sizes)),
         "adapter_model_sha256": next(iter(adapter_hashes)),
         "gpu_uuid": next(iter(gpu_uuids)),
         "workers": reports,

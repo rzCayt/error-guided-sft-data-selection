@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import os
 import tarfile
+import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable
@@ -41,6 +43,10 @@ def evidence_files(run_dir: Path) -> list[Path]:
         "training_complete/adapter/adapter_model.safetensors",
         "training_complete/adapter/adapter_config.json",
     ]
+    manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("config", {}).get("study") == "clean_new_environment_common_block":
+        required.append("training_input_contract.json")
+        required.append("release_binding.json")
     missing = [relative for relative in required if not (run_dir / relative).is_file()]
     if missing:
         raise ValueError(f"completed cell is missing required evidence: {missing}")
@@ -106,7 +112,8 @@ def package_cell_evidence(
     logs = [path.resolve() for path in extra_logs if path.is_file()]
     manifest = build_manifest(run_dir=run_dir, paths=paths, extra_logs=logs)
     output.parent.mkdir(parents=True, exist_ok=True)
-    with tarfile.open(output, mode="x:gz", compresslevel=6) as archive:
+    temporary = output.parent / f".{output.name}.{uuid.uuid4().hex}.tmp"
+    with tarfile.open(temporary, mode="x:gz", compresslevel=6) as archive:
         for path in paths:
             archive.add(path, arcname=path.relative_to(run_dir).as_posix(), recursive=False)
         for path in logs:
@@ -118,6 +125,7 @@ def package_cell_evidence(
         info.size = len(payload)
         info.mtime = 0
         archive.addfile(info, io.BytesIO(payload))
+    os.replace(temporary, output)
     archive_sha256 = file_sha256(output)
     sidecar = output.with_suffix(output.suffix + ".sha256")
     if sidecar.exists():

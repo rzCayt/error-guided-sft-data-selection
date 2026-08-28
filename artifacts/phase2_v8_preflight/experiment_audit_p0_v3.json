@@ -1,0 +1,28 @@
+{
+  "schema_version": "phase2-v8-experiment-audit-v3",
+  "status": "CONDITIONAL_PASS",
+  "external_review_sha256": "556f70ec4556f11983ef88c484d0421b7caf2c144e1b844a15db88bd62d89d9a",
+  "p0": {
+    "complete_release_bundle": "IMPLEMENTED_PENDING_FINAL_ARCHIVE_VERIFICATION",
+    "semantic_and_deployment_rehash": "PASS",
+    "offline_local_snapshot_all_gpu_paths": "PASS",
+    "materialized_contracts_24": "PASS",
+    "canary_reference_and_identity_checks": "PASS_CODE_PENDING_GPU",
+    "same_gpu_A1_A2_and_cross_gpu_B1": "PASS_CODE_PENDING_GPU",
+    "ood_macro_shared_block_bootstrap": "PASS",
+    "release_go_and_cell_entry_gate": "PASS_CODE_PENDING_HUMAN_GO"
+  },
+  "p1": {
+    "equivalence": "EXPLORATORY_ONLY",
+    "rds_effective_list_count": "CONDITIONAL_CURRENT_BOOTSTRAP_LISTS_ONLY",
+    "cell_random_intercept": "PLANNED_SENSITIVITY_NOT_PRIMARY",
+    "single_gpu_claim": "REMOVED_FROM_RELEASE"
+  },
+  "formal_block": "24_NEW_COMMON_MIX_CELLS",
+  "historical_seed17_role": "EXTERNAL_ONLY",
+  "gpu_scheme": "TWO_INDEPENDENT_SINGLE_RTX_4090D_INSTANCES",
+  "q0_status": "PENDING_CLEAN_GIT_AND_FINAL_RELEASE_ARCHIVE",
+  "q1_q2_status": "NOT_STARTED",
+  "formal_matrix_authorized": false,
+  "gpu_accessed_by_audit": false
+}

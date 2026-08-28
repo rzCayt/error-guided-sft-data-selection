@@ -10,6 +10,7 @@ from transformers import AutoModelForCausalLM
 
 from eg_sft.training.b500 import file_sha256
 from eg_sft.training.effective_batch import shifted_response_loss_sums
+from eg_sft.experiment.phase2_v8_snapshot import frozen_model_source
 
 
 def build_calibration_model(
@@ -23,9 +24,10 @@ def build_calibration_model(
     """Build the same BF16 LoRA model for every calibration profile."""
 
     model_config = protocol["model"]
+    model_source, source_kwargs = frozen_model_source(model_config)
     model = AutoModelForCausalLM.from_pretrained(
-        model_config["repo_id"],
-        revision=model_config["revision"],
+        model_source,
+        **source_kwargs,
         dtype=torch.bfloat16,
         low_cpu_mem_usage=True,
         attn_implementation=attention_implementation,

@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+import eg_sft.evaluation.cloud_v2_batching as cloud_v2_batching
 from eg_sft.evaluation.cloud_v2_batching import (
     append_jsonl_rows_fsynced,
     contiguous_record_batches,
@@ -124,6 +125,18 @@ def test_generation_batches_append_in_record_order_and_resume(tmp_path: Path) ->
         completed_rows=rows,
         frozen_records=records[2:],
     ) == 5
+
+
+def test_jsonl_append_fsyncs_once_per_batch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls = []
+    monkeypatch.setattr(cloud_v2_batching.os, "fsync", calls.append)
+    append_jsonl_rows_fsynced(
+        tmp_path / "batched.jsonl",
+        [{"record_id": "a"}, {"record_id": "b"}, {"record_id": "c"}],
+    )
+    assert len(calls) == 1
 
 
 def test_checkpoint_cursor_restores_exact_micro_batch_suffix(tmp_path: Path) -> None:

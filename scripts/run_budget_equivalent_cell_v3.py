@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import gc
+import hashlib
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
@@ -20,8 +21,12 @@ import run_budget_equivalent_cell as implementation  # noqa: E402
 from run_b500_formal_resumable import _optimizer_to_device, _write_json_exclusive  # noqa: E402
 
 from eg_sft.experiment.cloud_v2_train_runtime import mean_response_token_loss  # noqa: E402
+from eg_sft.experiment.phase2_v8_snapshot import frozen_model_source  # noqa: E402
 from eg_sft.training.b500 import file_sha256, read_jsonl  # noqa: E402
-from eg_sft.training.token_budget import optimizer_step_token_audit  # noqa: E402
+from eg_sft.training.token_budget import (  # noqa: E402
+    optimizer_step_token_audit,
+    supervision_tokens_per_step,
+)
 
 
 def _save_training_complete_v3(
@@ -43,15 +48,110 @@ def _save_training_complete_v3(
         return final_dir
     step_rows = read_jsonl(run_dir / "optimizer_step_tokens.jsonl")
     step_token_counts = [int(row["response_supervision_tokens"]) for row in step_rows]
-    expected_exposure = sum(int(row["supervised_tokens"]) for row in token_audit) * int(
-        recipe["training"]["epochs"]
-    )
+    supervision_token_cap = recipe["training"].get("supervision_token_cap")
+    token_cap_policy = recipe["training"].get("token_cap_policy")
+    if supervision_token_cap is None:
+        expected_exposure = sum(
+            int(row["supervised_tokens"]) for row in token_audit
+        ) * int(recipe["training"]["epochs"])
+        tolerance_fraction = 0.005
+    else:
+        expected_exposure = int(supervision_token_cap)
+        expected_per_step = supervision_tokens_per_step(
+            supervision_token_cap=expected_exposure,
+            optimizer_steps=int(recipe["training"]["optimizer_steps"]),
+            policy=str(token_cap_policy),
+        )
+        if not step_rows:
+            raise ValueError("token-cap training has no optimizer-step evidence")
+        selected_token_set_sha256 = str(
+            step_rows[0].get("selected_token_set_sha256", "")
+        )
+        boundary_split_occurrence_count = int(
+            step_rows[0].get("boundary_split_occurrence_count", -1)
+        )
+        selected_candidate_id_coverage = int(
+            step_rows[0].get("selected_candidate_id_coverage", -1)
+        )
+        candidate_id_count = int(step_rows[0].get("candidate_id_count", -1))
+        occurrence_with_kept_token_count = int(
+            step_rows[0].get("occurrence_with_kept_token_count", -1)
+        )
+        occurrence_count = int(step_rows[0].get("occurrence_count", -1))
+        mandatory_coverage_token_count = int(
+            step_rows[0].get("mandatory_coverage_token_count", -1)
+        )
+        cumulative = 0
+        for index, row in enumerate(step_rows, start=1):
+            kept = int(row.get("kept_response_supervision_tokens", -1))
+            candidate = int(row.get("candidate_response_supervision_tokens", -1))
+            cumulative += kept
+            if (
+                kept != expected_per_step
+                or int(row["response_supervision_tokens"]) != expected_per_step
+                or candidate < kept
+                or row.get("token_cap_policy") != token_cap_policy
+                or len(str(row.get("token_cap_mask_sha256", ""))) != 64
+                or int(row.get("cumulative_response_supervision_tokens", -1))
+                != cumulative
+                or row.get("selected_token_set_sha256")
+                != selected_token_set_sha256
+                or row.get("legacy_sequence_step_boundaries_preserved") is not False
+                or int(row.get("boundary_split_occurrence_count", -1))
+                != boundary_split_occurrence_count
+                or int(row.get("selected_candidate_id_coverage", -1))
+                != selected_candidate_id_coverage
+                or int(row.get("candidate_id_count", -1)) != candidate_id_count
+                or int(row.get("occurrence_with_kept_token_count", -1))
+                != occurrence_with_kept_token_count
+                or int(row.get("occurrence_count", -1)) != occurrence_count
+                or int(row.get("mandatory_coverage_token_count", -1))
+                != mandatory_coverage_token_count
+            ):
+                raise ValueError(f"invalid token-cap evidence at optimizer step {index}")
+        if (
+            len(selected_token_set_sha256) != 64
+            or boundary_split_occurrence_count < 0
+            or selected_candidate_id_coverage != candidate_id_count
+            or candidate_id_count != len(token_audit)
+            or occurrence_with_kept_token_count != occurrence_count
+            or occurrence_count != len(token_audit) * int(recipe["training"]["epochs"])
+            or mandatory_coverage_token_count != occurrence_count
+        ):
+            raise ValueError("token-cap plan identity evidence is invalid")
+        tolerance_fraction = 0.0
     budget_audit = optimizer_step_token_audit(
         step_token_counts=step_token_counts,
         expected_optimizer_steps=int(recipe["training"]["optimizer_steps"]),
         expected_exposure_tokens=expected_exposure,
-        tolerance_fraction=0.005,
+        tolerance_fraction=tolerance_fraction,
     )
+    if supervision_token_cap is not None:
+        mask_set_text = "\n".join(
+            str(row["token_cap_mask_sha256"]) for row in step_rows
+        ) + "\n"
+        budget_audit.update(
+            {
+                "token_cap_policy": token_cap_policy,
+                "supervision_token_cap": expected_exposure,
+                "supervision_tokens_per_optimizer_step": expected_per_step,
+                "optimizer_step_mask_set_sha256": hashlib.sha256(
+                    mask_set_text.encode("utf-8")
+                ).hexdigest(),
+                "candidate_response_supervision_tokens": sum(
+                    int(row["candidate_response_supervision_tokens"])
+                    for row in step_rows
+                ),
+                "selected_token_set_sha256": selected_token_set_sha256,
+                "legacy_sequence_step_boundaries_preserved": False,
+                "boundary_split_occurrence_count": boundary_split_occurrence_count,
+                "selected_candidate_id_coverage": selected_candidate_id_coverage,
+                "candidate_id_count": candidate_id_count,
+                "occurrence_with_kept_token_count": occurrence_with_kept_token_count,
+                "occurrence_count": occurrence_count,
+                "mandatory_coverage_token_count": mandatory_coverage_token_count,
+            }
+        )
     if not budget_audit["exposure_gate_passed"]:
         raise ValueError("Phase 1 response-token exposure gate failed")
 
@@ -68,9 +168,12 @@ def _save_training_complete_v3(
     del model, optimizer, scheduler
     gc.collect()
     torch.cuda.empty_cache()
+    model_source, source_kwargs = frozen_model_source(
+        contract["protocol"]["model"]
+    )
     reloaded_base = AutoModelForCausalLM.from_pretrained(
-        contract["protocol"]["model"]["repo_id"],
-        revision=contract["protocol"]["model"]["revision"],
+        model_source,
+        **source_kwargs,
         dtype=torch.bfloat16,
         low_cpu_mem_usage=True,
         attn_implementation=str(recipe["training"]["attention_implementation"]),
@@ -87,7 +190,11 @@ def _save_training_complete_v3(
         "selected_count": len(token_audit),
         "epochs": int(recipe["training"]["epochs"]),
         "micro_batch_size": int(recipe["training"]["micro_batch_size"]),
-        "optimizer_step_partition": "balanced_sequence_groups_16_or_15",
+        "optimizer_step_partition": (
+            "hash_uniform_global_dose_then_ordered_995_token_blocks"
+            if supervision_token_cap is not None
+            else "balanced_sequence_groups_16_or_15"
+        ),
         "optimizer_steps_planned": int(recipe["training"]["optimizer_steps"]),
         "optimizer_steps_completed": int(state["optimizer_steps"]),
         "supervised_tokens_seen": int(state["supervised_tokens_seen"]),
@@ -100,6 +207,22 @@ def _save_training_complete_v3(
         "accuracy_withheld": True,
         "completed_at_utc": datetime.now(UTC).isoformat(),
     }
+    if supervision_token_cap is not None:
+        metrics.update(
+            {
+                "supervision_token_cap": expected_exposure,
+                "token_cap_policy": token_cap_policy,
+                "tokens_per_optimizer_step": expected_per_step,
+                "selected_token_set_sha256": selected_token_set_sha256,
+                "legacy_sequence_step_boundaries_preserved": False,
+                "boundary_split_occurrence_count": boundary_split_occurrence_count,
+                "selected_candidate_id_coverage": selected_candidate_id_coverage,
+                "candidate_id_count": candidate_id_count,
+                "occurrence_with_kept_token_count": occurrence_with_kept_token_count,
+                "occurrence_count": occurrence_count,
+                "mandatory_coverage_token_count": mandatory_coverage_token_count,
+            }
+        )
     _write_json_exclusive(attempt / "training_metrics.json", metrics)
     _write_json_exclusive(attempt / "token_audit.json", token_audit)
     _write_json_exclusive(attempt / "token_budget_audit.json", budget_audit)

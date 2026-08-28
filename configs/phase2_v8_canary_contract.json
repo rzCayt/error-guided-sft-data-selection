@@ -1,0 +1,88 @@
+{
+  "schema_version": "phase2-v8-canary-contract-v1",
+  "status": "GPU_CANARIES_REQUIRED",
+  "backend": {
+    "batch_size": 1,
+    "padding_policy": "natural_per_example",
+    "do_sample": false,
+    "num_beams": 1,
+    "max_input_tokens": 512,
+    "max_new_tokens": 256,
+    "dtype": "bfloat16",
+    "attention_backend": "sdpa",
+    "tf32": false,
+    "batch_gt1_authorized": false
+  },
+  "base_exact_canary": {
+    "record_count": 16,
+    "reference_path": "artifacts/phase2_v7_canary/base_model_16.jsonl",
+    "reference_sha256": "026f38d4b3ecbc2000d9711f5683c87286ef9c252ee2e4a32ac5a6f92b4fa456",
+    "manifest_path": "artifacts/phase2_v7_canary/base_model_16_manifest.json",
+    "manifest_sha256": "6fdb06f0acddac4d155124c666340c782bc2da65658c5cbd791997413a19b4df",
+    "historical_comparison_levels": [
+      "raw_continuation_ids",
+      "first_eos_continuation_ids",
+      "decoded_canonical_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ],
+    "new_block_cross_worker_comparison_levels": [
+      "prompt_token_ids",
+      "attention_mask",
+      "raw_continuation_ids",
+      "first_eos_continuation_ids",
+      "decoded_canonical_text",
+      "parser_input_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ]
+  },
+  "archived_adapter_semantic_bridge": {
+    "record_count": 128,
+    "adapter_id": "rep1_random_common_mix_train17",
+    "adapter_model_sha256": "9df7df3acae9ee5e8af4ad8fe5cefe4d8a3ed7d9cfce60de6721495dbea40eec",
+    "reference_path": "artifacts/phase2_v8_canary/archived_adapter_128_semantic.jsonl",
+    "reference_sha256": "614434bc97eb1892b6d5a12292c5b04fad82c1c41a21714ab9fa44297ef1ab88",
+    "manifest_path": "artifacts/phase2_v8_canary/archived_adapter_128_manifest.json",
+    "manifest_sha256": "9a91463712959cdf766d250d1696477a3d31f952a389916303de29f2fa234459",
+    "historical_token_ids_available": false,
+    "historical_comparison_levels": [
+      "decoded_canonical_text",
+      "parser_input_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ],
+    "new_block_cross_worker_comparison_levels": [
+      "prompt_token_ids",
+      "attention_mask",
+      "raw_continuation_ids",
+      "first_eos_continuation_ids",
+      "decoded_canonical_text",
+      "parser_input_text",
+      "parsed_number",
+      "correctness",
+      "strict_status"
+    ],
+    "claim_boundary": "historical semantic bridge only"
+  },
+  "new_worker_token_anchor": {
+    "gpu0_bootstraps_after_historical_semantic_pass": true,
+    "gpu1_full_exact_match_required": true,
+    "claim_boundary": "token-exact equivalence within the new hardware block"
+  },
+  "eos_policy": {
+    "eos_token_ids": [151643],
+    "canonical_ids_include_first_eos": true,
+    "raw_ids_are_continuation_only": true,
+    "pad_token_equals_eos_token": true,
+    "parser_receives": "decoded_first_eos_continuation_skip_special_tokens_then_strip",
+    "unicode_normalization": "none",
+    "whitespace_normalization": "python_str_strip_only"
+  },
+  "fresh_process_required": true,
+  "fresh_output_path_required": true,
+  "fail_closed": true
+}

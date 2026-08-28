@@ -1,0 +1,39 @@
+{
+  "schema_version": "phase2-v7-environment-contract-v1",
+  "runtime_status": "TWO_GPU_MANIFESTS_REQUIRED",
+  "protocol_id": "phase2-crossed-48cell-v7",
+  "parent_run": {
+    "cell_id": "rep1_random_common_mix_train17",
+    "run_git_commit": "54a232d60cba939f0ea1f212e5c8aae2a73bbd3c",
+    "gpu_sku": "NVIDIA GeForce RTX 4090 D",
+    "python_major_minor": "3.12",
+    "torch": "2.8.0+cu128",
+    "cuda_runtime": "12.8",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "parent_matrix_sha256": "44d7288f4e785af61f8ebe21ec4ad1883b8b7bd542069c2fae675796724dd29a"
+  },
+  "comparison_policy": {
+    "same_gpu_sku_required": true,
+    "same_driver_version_between_new_workers": true,
+    "same_software_and_numerics_between_new_workers": true,
+    "different_gpu_uuid_required": true,
+    "parent_behavioral_equivalence_proved_by_base_and_adapter_canaries": true,
+    "git_commit_string_need_not_equal_parent": true,
+    "semantic_code_manifest_required": true
+  },
+  "known_training_contract": {
+    "micro_batch_size": 1,
+    "optimizer_steps": 64,
+    "loss_normalization": "optimizer_step_response_token_sum_over_count",
+    "dtype": "bfloat16",
+    "attention_backend": "sdpa",
+    "tf32": false,
+    "float32_matmul_precision": "highest"
+  },
+  "known_evaluation_contract": {
+    "batch_size": 1,
+    "padding_policy": "natural_per_example",
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback"
+  }
+}

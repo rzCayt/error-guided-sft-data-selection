@@ -9,10 +9,16 @@ from typing import Any
 
 from eg_sft.evaluation.resumable import aggregate_gsm8k_metrics
 from eg_sft.experiment.b500_engineering_audit import audit_completed_evaluation
-from eg_sft.experiment.budget_equivalent_audit import audit_training_artifacts
+from eg_sft.experiment.budget_equivalent_audit import (
+    audit_dose_only_token_cap_artifacts,
+    audit_training_artifacts,
+)
 from eg_sft.experiment.budget_equivalent_matrix import resolve_phase1_contract
 from eg_sft.gsm8k.parser import parse_generated_answer, parse_last_numeric_answer
 from eg_sft.training.b500 import file_sha256, read_jsonl
+from eg_sft.evaluation.identifiable_batch_backend import (
+    validate_phase2_generation_evidence,
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -111,6 +117,14 @@ def audit_phase1_run_v4(
         token_audit=token_audit,
         optimizer_step_rows=step_rows,
     )
+    if contract.get("supervision_token_cap") is not None:
+        training_report["dose_only_token_cap"] = audit_dose_only_token_cap_artifacts(
+            training_metrics=training_metrics,
+            token_budget_audit=token_budget,
+            optimizer_step_rows=step_rows,
+            supervision_token_cap=int(contract["supervision_token_cap"]),
+            token_cap_policy=str(contract["token_cap_policy"]),
+        )
     adapter_path = training_dir / "adapter" / "adapter_model.safetensors"
     if file_sha256(adapter_path) != training_metrics.get("adapter_model_sha256"):
         raise ValueError("adapter SHA-256 changed")
@@ -119,6 +133,8 @@ def audit_phase1_run_v4(
     raw_path = evaluation_dir / "raw_outputs.jsonl"
     metrics_path = evaluation_dir / "metrics.json"
     rows = read_jsonl(raw_path)
+    if contract.get("study") == "balanced_seed_extension":
+        validate_phase2_generation_evidence(rows, eos_token_id=151643)
     sealed_metrics = _read_json(metrics_path)
     validate_blind_merged_metrics(
         metrics=sealed_metrics,
