@@ -16,7 +16,6 @@ ROOT = add_src_to_path()
 from eg_sft.data.public_gsm8k import validate_gsm8k_source_row  # noqa: E402
 from eg_sft.evaluation.phase2_v7_canary import (  # noqa: E402
     canonical_json_bytes,
-    read_json,
     write_exclusive_or_verify,
 )
 from eg_sft.experiment.budget_equivalent_matrix import resolve_phase1_contract  # noqa: E402
