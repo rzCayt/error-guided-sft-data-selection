@@ -808,6 +808,21 @@
       "size_bytes": 99
     },
     {
+      "path": "configs/CANONICAL_RUNTIME_FILES_v8.json",
+      "sha256": "87169edca6acde5fae0f01e288ec19d077886d8b69c3ddd181772c76ef0246da",
+      "size_bytes": 2154
+    },
+    {
+      "path": "configs/CANONICAL_RUNTIME_FILES_v8_FINAL.json",
+      "sha256": "4f00a9be83e4aac3c271bdee9d74ef6ede1ece1f77e4fc5fc780d703a97dc3fc",
+      "size_bytes": 2157
+    },
+    {
+      "path": "configs/CANONICAL_RUNTIME_FILES_v8_RELEASE.json",
+      "sha256": "e68eddfac5c8bcc6225d67066dc1c267b8ba767c1db5173047107d5729418fa0",
+      "size_bytes": 2612
+    },
+    {
       "path": "configs/b500_cloud_env_v1.json",
       "sha256": "470f98caac8ed817b456f0f5bca4b6a09fac625d6e9b0db71ea79deeb531ee36",
       "size_bytes": 1370
@@ -891,21 +906,6 @@
       "path": "configs/budget_equivalent_v3_protocol_frozen_20260824.json",
       "sha256": "9cf9c9a983fffa38405fcee3f65a7d6906fab91b73bb7934e77684bd56808495",
       "size_bytes": 2354
-    },
-    {
-      "path": "configs/CANONICAL_RUNTIME_FILES_v8.json",
-      "sha256": "87169edca6acde5fae0f01e288ec19d077886d8b69c3ddd181772c76ef0246da",
-      "size_bytes": 2154
-    },
-    {
-      "path": "configs/CANONICAL_RUNTIME_FILES_v8_FINAL.json",
-      "sha256": "4f00a9be83e4aac3c271bdee9d74ef6ede1ece1f77e4fc5fc780d703a97dc3fc",
-      "size_bytes": 2157
-    },
-    {
-      "path": "configs/CANONICAL_RUNTIME_FILES_v8_RELEASE.json",
-      "sha256": "ecef8e6973c6e68dcf7c3cc52ba21467d02db4ecfd12ff340f350f13f022a423",
-      "size_bytes": 2680
     },
     {
       "path": "configs/cloud_v2_calibration_analysis_v1.json",
@@ -1286,6 +1286,11 @@
       "path": "results/research_public_gsm8k_v1/h1a_formal_tulu96_clean_3fdb8b5/permutation_statistics.jsonl",
       "sha256": "f8b71f56121c146bb88642b79ba1b174cf5f4aafddbfd60a96afcbb6e6993708",
       "size_bytes": 96007
+    },
+    {
+      "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/PUBLIC_EVIDENCE_MANIFEST.json",
+      "sha256": "c5c409aaab0121eba0f3b5f62e2658200b32038730ce9fa02cbe9e5d2f355830",
+      "size_bytes": 16722
     },
     {
       "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/artifacts/candidate_inventory.jsonl",
@@ -1691,11 +1696,6 @@
       "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/embedding_chunk_manifests/query/chunk_0006.json",
       "sha256": "ebe438e5221e84130bb75ca920d363c1c166261050be5d6b14ecaabd19a8405d",
       "size_bytes": 5666
-    },
-    {
-      "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/PUBLIC_EVIDENCE_MANIFEST.json",
-      "sha256": "c5c409aaab0121eba0f3b5f62e2658200b32038730ce9fa02cbe9e5d2f355830",
-      "size_bytes": 16722
     },
     {
       "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/public_run_contract.json",
