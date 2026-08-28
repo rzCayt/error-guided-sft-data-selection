@@ -90,6 +90,16 @@ from eg_sft.training.token_budget import (  # noqa: E402
 )
 
 
+def _write_json_exclusive_or_verify(path: Path, payload: dict[str, Any]) -> None:
+    """Preserve an immutable runtime contract across checkpoint recovery."""
+
+    if path.is_file():
+        if _read_json(path) != payload:
+            raise ValueError(f"existing immutable JSON differs during resume: {path}")
+        return
+    _write_json_exclusive(path, payload)
+
+
 def _resolved_recipe(
     contract: dict[str, Any],
     *,
@@ -359,7 +369,7 @@ def _train(
             expected=expected_training_contract,
             observed=observed_training_contract,
         )
-        _write_json_exclusive(
+        _write_json_exclusive_or_verify(
             run_dir / "training_input_contract.json",
             observed_training_contract
             | {"expected_contract_sha256": file_sha256(expected_path)},
@@ -658,10 +668,16 @@ def _train(
     if not token_budget_audit["exposure_gate_passed"]:
         raise ValueError("Phase 1 response-token exposure gate failed")
     fixed_batch = _to_device(next(iter(development_loader)), device)
+    reporting_recipe = copy.deepcopy(recipe)
+    if "gradient_accumulation_steps" not in reporting_recipe["training"]:
+        # The v8 balanced step plan contains 15/16 sequence groups per update.
+        # Keep the historical nominal field for the shared metrics writer; the
+        # exact per-step token counts remain authoritative in the step log.
+        reporting_recipe["training"]["gradient_accumulation_steps"] = 16
     completed = _save_training_complete(
         run_dir=run_dir,
         contract=contract,
-        recipe=recipe,
+        recipe=reporting_recipe,
         model=model,
         tokenizer=tokenizer,
         optimizer=optimizer,
