@@ -1,39 +1,16 @@
-# Code map: trace claims to implementation
+# Code and evidence map
 
-Use this map to navigate the project by scientific responsibility rather than
-by file count.
+| Research responsibility | Primary implementation | Verification or evidence |
+|---|---|---|
+| Frozen data preparation and split checks | `src/eg_sft/` and `scripts/prepare_public_gsm8k_v1.py` | data manifests, hashes, split and leakage tests |
+| Strict numeric answer parsing | parser modules under `src/eg_sft/` | parser tests and raw-output recomputation audits |
+| Candidate scoring and utility measurement | scoring/utility modules under `src/eg_sft/`; H1a scripts under `scripts/` | `results/public_summary/evidence/h1a/` |
+| Budget-equivalent list construction | Phase 2 selection modules and frozen configs | 500-example, token-budget, composition, determinism, and list-SHA tests |
+| LoRA training and immutable recovery | Phase 2 runner modules under `src/eg_sft/experiment/` and `scripts/` | training logs, adapter reload proof, recovery tests, per-cell audits |
+| GSM8K and OOD evaluation | evaluation workers under `scripts/` | raw outputs and formal/OOD audit artifacts |
+| Public result aggregation | `scripts/reproduce_public_summary.py` | `results/public_summary/main_results.json`, CSV, and Markdown table |
+| State Dependence v3 panel and preflight | `scripts/freeze_state_dependence_panel_v3.py`, `scripts/preflight_candidate_utility_state_dependence_v3.py` | `artifacts/state_dependence_*_v3.json` |
+| State Dependence v3 execution and analysis | `scripts/run_candidate_utility_state_drift.py`, `scripts/analyze_state_dependence_u0_v3.py`, `scripts/analyze_state_dependence_u1_v3.py` | CPU contracts and tests only; no GPU result yet |
+| Public release integrity | `scripts/verify_public_release.py` and GitHub Actions | hashes, claims, links, secret/path scan, full CPU tests |
 
-| Responsibility | Primary implementation | Verification | Evidence |
-|---|---|---|---|
-| Synthetic task generation and gold answers | `src/eg_sft/data/generator.py`, `src/eg_sft/data/solver.py` | `tests/test_generation_and_selection.py`, `tests/test_solver.py` | `data/samples/` |
-| Split and leakage controls | `scripts/audit_splits.py` | `tests/test_generation_and_selection.py` | generated split-audit outputs |
-| Model interface and raw-output retention | `scripts/run_scale_model_diagnostic.py` | `tests/test_scale_model_diagnostic.py` | `results/public_release_v1/model_pipeline_check_25/` |
-| Numeric parsing | `src/eg_sft/eval/parser.py` | parser cases in `tests/` | parser mode and prediction fields in raw JSONL |
-| Original selector identifiability | `scripts/audit_selector_identifiability.py` | `tests/test_selector_identifiability_audit.py` | `results/selector_identifiability_audit/` |
-| Residual selector identifiability | `scripts/audit_residual_selector_identifiability.py` | `tests/test_residual_selector_identifiability.py` | `results/residual_selector_identifiability/` |
-| Model-aware engineering gate | `scripts/run_model_aware_f0_f1.py` | `tests/test_model_aware_f0_f1.py` | `results/model_aware_signal_f0_f1/` |
-| Model-aware scientific gate | `scripts/run_model_aware_f2.py` | `tests/test_model_aware_f2.py` | `results/model_aware_signal_f2/summary.json` |
-| Claim/artifact consistency | `scripts/validate_public_release.py` | `tests/test_validate_public_release.py` | `results/public_release_v1/manifest.json` |
-
-## The shortest complete trace
-
-For one row in the 25-item pipeline check:
-
-1. Locate its `id` in `data/samples/dev_diagnostic.jsonl`.
-2. Recompute its gold answer using the solver logic.
-3. Locate the same `id` in the public raw-output JSONL.
-4. Identify `raw_continuation`, `parser_mode`, `parsed_prediction`, and
-   `numeric_accuracy`.
-5. Recompute the aggregate count reported by
-   `scale_model_diagnostic_summary.csv`.
-6. Explain why that row validates the interface/parser chain but says nothing
-   about selector or SFT effectiveness.
-
-## The shortest selector trace
-
-1. Read the four matching fields in the metadata-selector summary.
-2. Locate where the same fields enter the non-random score.
-3. Hold the exact stratum fixed and identify the remaining tie-breaker.
-4. Explain why changing selected IDs across seeds is not evidence of
-   candidate-level utility.
-5. Confirm that the audit sets `training_allowed` to `false`.
+The table names stable responsibilities rather than every historical script. Earlier implementations remain under [`docs/history/`](history/) and release snapshots so that current entry points are not confused with superseded ones.

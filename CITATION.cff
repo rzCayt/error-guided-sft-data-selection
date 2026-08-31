@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software or its public evidence, please cite it as below."
+title: "LLM Post-training Data Selection: A Controlled Study"
+type: software
+authors:
+  - family-names: Cao
+    given-names: Ruizhe
+repository-code: "https://github.com/rzCayt/error-guided-sft-data-selection"
+version: 0.5.0
+date-released: 2026-08-31
+license: MIT
+

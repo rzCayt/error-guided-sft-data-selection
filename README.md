@@ -1,91 +1,126 @@
-# Error-Guided SFT Data Selection
+# LLM Post-training Data Selection: A Controlled Study
 
-This project asks a narrow question: can diagnostic failures from a target
-language model identify training examples that are unusually useful for
-post-training?
+[中文说明](README_CN.md) · [Claims and limitations](CLAIMS_AND_LIMITATIONS.md) · [Reproduction guide](REPRODUCE.md) · [Research timeline](docs/research_timeline.md)
 
-## Status: candidate-utility gate passed; downstream SFT untested
+## What is the research question?
 
-The original synthetic selector audits remain negative. A newer public-data
-extension now provides a preregistered reason to run the bounded SFT comparison.
+This project asks a concrete question:
 
-- The first selector is not identifiable beyond the metadata already used by
-  an exact matched-random baseline.
-- A residual operation-aware selector remains constant after static operation
-  metadata is fixed.
-- An eight-candidate model-aware feasibility pilot fails one preregistered
-  effect-size gate (`0.0193 < permutation p90 0.0241`).
-- In a frozen 96-candidate Tulu experiment, the error-conditioned RDS+ score
-  predicts one-step candidate utility after controlling the all-query score
-  and training-token length: partial Spearman `0.22775`, one-sided
-  1,000-label-permutation `p=0.07293`, and positive top-minus-bottom utility.
-- No completed result yet shows that targeted selection improves downstream
-  LoRA/SFT accuracy or beats all-query RDS+ or random selection after training.
+> When the number of training examples, response-supervision tokens, and data composition are held constant, does targeted instruction selection improve post-training more reliably than matched random selection?
 
-The candidate-utility gate is therefore passed for the frozen Tulu pool. This
-authorizes the preregistered bounded `B=500` comparison; it is not itself an SFT
-effectiveness result.
+**Response-supervision tokens** are the answer tokens that actually contribute to the training loss. They are different from prompt tokens and padding tokens. **Candidate utility** is the reduction in loss on an independent utility set after one standardized update with one candidate example. **State dependence** asks whether the estimated value of the same example changes after the model has already been trained into a different parameter state.
 
-## Verified evidence
+The study focuses on a frozen RDS-based targeted-selection policy, Qwen2.5-1.5B Base, response-only LoRA supervised fine-tuning, and arithmetic reasoning tasks. It is a controlled study of this setting—not a general verdict on all data-selection methods.
 
-| Check | Scope | Result | Interpretation |
-|---|---:|---:|---|
-| Original selector identifiability | 500 candidates, budget 128 | Fail | Score is fully controlled by matched metadata |
-| Residual selector identifiability | 500 candidates, budget 128 | Fail | Score is still static at the operation-signature level |
-| Model-aware feasibility | 8 candidates | Fail | Representation is computable, but the effect gate is not cleared |
-| Formal Tulu candidate utility H1a | 96 candidates, 1,000 permutations | Pass | Incremental candidate-level signal clears all three preregistered gates |
-| Selector reproduction | 500 candidates, budget 128 | Exact SHA-256 match | Offline audit is deterministically reproducible |
-| Model pipeline check | Qwen3-1.7B, 25 mixed-family dev items | 19/25 numeric; 25/25 parsed | Raw output-to-parser-to-metric chain works end to end |
+## What has been completed?
 
-The 19/25 pipeline check uses the first 25 items of the mixed-family
-`data/samples/dev_diagnostic.jsonl`. It must not be compared directly with the
-older 8/25 Qwen3-1.7B row in the model-native baseline table, which uses a
-different weighted-aggregation-only input set.
+The main completed block contains 24 independently audited training and evaluation cells:
 
-## Read this first
-
-1. [Research note](docs/professor_research_note_en.md)
-2. [Claim and evidence ledger](docs/claim_evidence_ledger.md)
-3. [Results index](docs/results_index.md)
-4. [Reproducibility guide](docs/reproducibility.md)
-5. [Code takeover guide](docs/code_takeover_guide.md)
-6. [Code map](docs/code_map.md) and [personal scorecard](docs/code_takeover_scorecard.md)
-7. [Public release scope](docs/public_release_scope.md)
-
-The sanitized bounded-check artifacts and their SHA-256 manifest are built by
-`scripts/build_public_release_artifacts.py` under `results/public_release_v1/`.
-
-## Quick verification
-
-```powershell
-git clone https://github.com/rzCayt/error-guided-sft-data-selection.git
-cd error-guided-sft-data-selection
-python -m pip install -e ".[dev]"
-pytest -q
-
-# CPU-only deterministic audits
-python scripts/audit_selector_identifiability.py `
-  --output-dir results/reproduction/selector_identifiability
-python scripts/audit_residual_selector_identifiability.py `
-  --output-dir results/reproduction/residual_selector_identifiability
+```text
+2 selection methods × 4 independently constructed lists × 3 training seeds
+= 24 cells
 ```
 
-The model-aware F1/F2 checks require a CUDA environment and the frozen
-Qwen3-1.7B revision. See [the reproducibility guide](docs/reproducibility.md)
-before running them.
+Each list contains exactly 500 examples. The targeted and matched-random conditions use the same model, LoRA configuration, optimizer protocol, number of examples, response-supervision budget, and source × answer-length composition. Every completed cell includes the frozen configuration, selected-example manifest, training log, adapter save/reload evidence, raw generations, parsed metrics, and an independent audit result.
 
-## Research boundary
+Before this block, the project also measured one-step candidate utility on 96 Tulu candidates and ran a 48-candidate GSM8K-domain boundary check. The Tulu experiment passed its original preregistered screening gate; the domain-boundary check did not. These are candidate-level measurements and are not themselves evidence of downstream set-level improvement.
 
-Development diagnostics are used for selector design and audit. They are not a
-held-out final test set. Tulu-pool H1a is complete, but the 48-candidate
-GSM8K-domain boundary check and all downstream LoRA/SFT comparisons remain
-unfinished.
+## What are the main results?
 
-## 中文摘要
+The canonical numbers below are generated from [`results/public_summary/main_results.json`](results/public_summary/main_results.json). Positive values favor targeted RDS selection.
 
-本项目研究：目标模型在诊断集上的错误，能否形成超越 all-query 分数和训练词元
-长度的候选级训练数据效用信号。旧的 metadata selector、residual selector 和八候选
-试验仍是负结果；新的 96 候选 Tulu 正式 H1a 则通过了预注册的三项门槛：
-partial Spearman 为 0.22775，单侧 1,000 次标签置换 `p=0.07293`，高分组平均效用
-高于低分组。该结果只说明可以继续做固定预算的 `B=500` 训练比较，尚不能声称
-error-conditioned RDS+ 能提高最终准确率或优于 random/all-query RDS+。
+| Evaluation metric | RDS minus Random | 95% interval | Current judgment |
+|---|---:|---:|---|
+| GSM8K exact numeric accuracy | +0.480 percentage points | [-0.954, +1.889] | Insufficient evidence |
+| Mean accuracy over three out-of-domain tasks | -0.094 percentage points | [-1.316, +1.149] | Insufficient evidence |
+
+![Estimated downstream differences with 95% intervals](figures/fig_main_effects.png)
+
+The current experiment did not find a reliable accuracy improvement for RDS over matched Random. However, both intervals include practically relevant positive and negative effects, so the results also do not establish that RDS is ineffective or that the methods are equivalent. The conclusion applies only to the current model, training budget, candidate pool, and arithmetic-task evaluation.
+
+The three out-of-domain tasks are SVAMP, ASDiv numeric, and MultiArith. Their individual results and the seed-resampled sensitivity analysis are available in the canonical JSON and generated CSV rather than being duplicated throughout the documentation.
+
+## What do the results mean?
+
+The project found a gap between a local screening signal and downstream training performance. On the Tulu candidate pool, the error-conditioned score had a partial Spearman correlation of 0.228 with one-step utility and a one-sided permutation value of 0.073 under the original gate. The GSM8K-domain boundary check did not pass that gate. More importantly, the limited Tulu signal did not become a stable gain when 500 selected examples were trained together.
+
+![Candidate-level screening and downstream set-level results](figures/fig_candidate_to_set_gap.png)
+
+This gap matters because selecting examples one at a time and training on a set of examples are different problems. At least three explanations remain open:
+
+1. candidate utility may be too noisy to measure reliably;
+2. an example's value may change as the model's parameters change during training;
+3. individually useful examples may become redundant, conflicting, or complementary when combined.
+
+The project also tested a frozen response-composition explanation for a strict-format behavior difference. No feature passed the prespecified source-sensitivity and multiplicity gates, so that branch was stopped without additional GPU retraining. This is a negative mechanism audit, not evidence that formatting can never matter.
+
+## What remains uncertain?
+
+The completed evidence does not establish any of the following:
+
+- that RDS is generally ineffective;
+- that RDS and Random are equivalent;
+- that error conditioning supplies incremental information over an all-query policy;
+- that candidate utility is reliable across repeated measurements;
+- that state dependence caused the downstream result;
+- that a local probe at a final adapter reconstructs the historical optimizer trajectory.
+
+The 24 cells are a controlled pilot for one model and one supervision budget. Broader model-scale, task-family, budget, and external-selector conclusions require new confirmatory experiments.
+
+## What is the next experiment?
+
+The next stage first checks whether candidate utility can be measured consistently at a fixed model state. Only if that measurement is reliable will the project compare value rankings between the standardized zero-LoRA state and completed LoRA adapter states.
+
+```text
+Fixed-state measurement is unreliable
+→ study and reduce utility-measurement uncertainty
+
+Fixed-state measurement is reliable, but rankings change after training
+→ study when examples need to be revalued
+
+Fixed-state measurement is reliable and rankings remain stable
+→ study redundancy, conflict, and complementarity within training sets
+```
+
+![State Dependence v3 decision flow](figures/fig_state_dependence_decision.png)
+
+**State Dependence v3 status: CPU contracts, panel freezing, overlap checks, and preflight are complete; GPU qualification and formal measurements have not started.** The frozen panel contains 48 candidates that are unseen by all four initial target adapters. Fourteen candidates with direct training exposure were removed before the panel was frozen.
+
+## How can the results be verified?
+
+For the lightweight public checks:
+
+```bash
+python -m pip install -e ".[dev]"
+python scripts/reproduce_public_summary.py --check
+python scripts/verify_public_release.py
+python -m pytest -q
+python -m ruff check .
+```
+
+The first command after installation recomputes the public summary from the audited evidence and checks it against the committed JSON, CSV, and Markdown table. The release verifier checks required files, evidence hashes, README numbers, current-versus-historical labeling, secrets, local absolute paths, restricted artifacts, and Markdown links. See [`REPRODUCE.md`](REPRODUCE.md) for scopes, expected outputs, and the difference between CPU verification and GPU reproduction.
+
+Large raw generations, adapter weights, cloud credentials, and restricted dataset text are not committed. Public evidence contains permitted aggregates, IDs, hashes, frozen configurations, and audit records.
+
+## Repository structure
+
+```text
+configs/frozen/          Frozen public research configurations
+docs/current/            Current research description and protocols
+docs/history/            Earlier stages, explicitly marked as historical
+figures/                 Figures generated from public summary data
+results/public_summary/  Canonical results and audited evidence
+src/                     Reusable Python implementation
+scripts/                 Experiment, analysis, and verification entry points
+tests/                   CPU tests and small licensed fixtures
+workflow/                Stage contracts and audit workflow
+releases/                Release-specific manifests and historical notes
+```
+
+[`docs/research_timeline.md`](docs/research_timeline.md) explains why each research branch continued or stopped. [`docs/decision_log.md`](docs/decision_log.md) records the evidence, decision, alternatives, and claim restrictions at major checkpoints. [`docs/code_map.md`](docs/code_map.md) maps research questions to code and artifacts.
+
+## Limitations and AI assistance
+
+The main limitations are the single model family and scale, one 500-example budget, a single candidate pool, arithmetic-focused evaluation, highly overlapping targeted-list replicates, and the absence of completed State Dependence v3 measurements. The internal [experiment-integrity audit](EXPERIMENT_AUDIT.md) remains WARN because raw cell generations and adapters are not stored in Git and no independent external reviewer backend was available. Full claim boundaries are listed in [`CLAIMS_AND_LIMITATIONS.md`](CLAIMS_AND_LIMITATIONS.md).
+
+LLM tools contributed substantially to code scaffolding, debugging, documentation, and adversarial review. The project owner selected the research questions, authorized protocol freezes and executions, inspected evidence, accepted or rejected research branches, and is responsible for the reported claims. This repository does not describe all code as independently authored without AI. See [`AI_ASSISTANCE.md`](AI_ASSISTANCE.md) for the detailed disclosure.
