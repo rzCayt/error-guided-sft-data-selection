@@ -14,7 +14,8 @@ dependencies = []
 dev = [
   "pytest>=8.0",
   "ruff>=0.5",
-  "numpy==2.3.2",
+  "numpy==2.2.6; python_version < '3.11'",
+  "numpy==2.3.2; python_version >= '3.11'",
   "scipy>=1.11",
   "torch==2.8.0",
   "transformers==4.57.2",
