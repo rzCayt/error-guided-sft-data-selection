@@ -1616,9 +1616,9 @@
       "sha256": "cf3764e99adc78a950ab467ef1a934a6cbc3c507045a3d1505fcb3c1fc99ca11"
     },
     {
-      "bytes": 787,
+      "bytes": 808,
       "path": "pyproject.toml",
-      "sha256": "15d64a73025b54f44977fb507431bf886ba22c45ae0f3ff968fef409f78e8ac7"
+      "sha256": "7973b4f1490568a541f12652fa3e708bf078abdffb60e87b08db1708cd5dd2e5"
     },
     {
       "bytes": 2831,
