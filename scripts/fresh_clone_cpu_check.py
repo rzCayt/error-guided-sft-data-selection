@@ -15,6 +15,7 @@ COMMANDS = (
     ("scripts/snapshot_public_configs.py", "--check"),
     ("scripts/generate_experiment_registry.py", "--check"),
     ("figures/generate_public_figures.py", "--check"),
+    ("scripts/build_research_snapshot.py", "--check"),
     ("scripts/mark_historical_snapshots.py", "--check"),
     ("scripts/verify_public_release.py",),
 )

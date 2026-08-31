@@ -33,7 +33,11 @@ REQUIRED_PATHS = (
     "docs/code_map.md",
     "docs/current/research_overview_en.md",
     "docs/current/research_overview_zh.md",
+    "docs/current/research_snapshot_2p.md",
+    "docs/current/research_snapshot_2p.pdf",
+    "docs/current/research_snapshot_manifest.json",
     "docs/current/claim_evidence_ledger.md",
+    "docs/index.html",
     "results/public_summary/main_results.json",
     "results/public_summary/main_results.csv",
     "results/public_summary/main_results_table.md",
@@ -46,6 +50,8 @@ REQUIRED_PATHS = (
     "releases/v0.5-public-research/MANIFEST.json",
     "releases/v0.5.1-public-research/README.md",
     "releases/v0.5.1-public-research/MANIFEST.json",
+    "releases/ra-review-v1/README.md",
+    "releases/ra-review-v1/MANIFEST.json",
 )
 PUBLIC_FACING_ROOT_FILES = {
     "README.md",
@@ -289,11 +295,51 @@ def check_internal_audit_disclosure() -> None:
         raise RuntimeError("integrity-audit warning boundary changed")
 
 
+def check_public_pages_entry() -> None:
+    current = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+    required = (
+        "Qwen2.5-1.5B Base",
+        "24 budget-equivalent LoRA SFT cells",
+        "+0.480 pp",
+        "-0.094 pp",
+        "no v3 GPU result",
+        "research_snapshot_2p.pdf",
+    )
+    missing = [text for text in required if text not in current]
+    if missing:
+        raise RuntimeError(f"current Pages entry is missing text: {missing}")
+    forbidden = ("Qwen2.5-0.5B", "numeric accuracy 0.21", "20-30 real error")
+    leaked = [text for text in forbidden if text in current]
+    if leaked:
+        raise RuntimeError(f"current Pages entry exposes legacy status: {leaked}")
+
+    historical = (
+        ROOT / "docs" / "history" / "legacy_repository_docs" / "index.html"
+    ).read_text(encoding="utf-8")
+    historical_required = (
+        'name="robots" content="noindex, nofollow, noarchive"',
+        "Historical snapshot - Error-Guided SFT Data Selection",
+        'rel="canonical" href="https://rzcayt.github.io/error-guided-sft-data-selection/"',
+    )
+    missing_historical = [text for text in historical_required if text not in historical]
+    if missing_historical:
+        raise RuntimeError(
+            f"historical Pages entry lacks deindexing: {missing_historical}"
+        )
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    if "independently constructed lists" in readme:
+        raise RuntimeError("README still overstates list independence")
+    if "targeted lists overlap substantially" not in readme:
+        raise RuntimeError("README does not disclose targeted-list overlap")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.parse_args()
     check_required_paths()
     check_internal_audit_disclosure()
+    check_public_pages_entry()
     summary = json.loads((ROOT / "results" / "public_summary" / "main_results.json").read_text(encoding="utf-8"))
     if summary.get("schema_version") != "public-research-summary-v1":
         raise ValueError("unexpected public result schema")

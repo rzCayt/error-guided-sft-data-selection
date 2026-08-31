@@ -1,0 +1,37 @@
+{
+  "inputs": [
+    {
+      "bytes": 7387,
+      "path": "results/public_summary/main_results.json",
+      "sha256": "49b741f99ae7aa5d3a3ea3e74ae3234e1ee97e5b6c1f40743896c36459e6f98f"
+    },
+    {
+      "bytes": 79752,
+      "path": "figures/fig_main_effects.png",
+      "sha256": "8e046586a2f8e98684e8fd0051e7826fb7289b3e71c14a85f999ba87a2f72be3"
+    },
+    {
+      "bytes": 130323,
+      "path": "figures/fig_candidate_to_set_gap.png",
+      "sha256": "c94ed162a0567786c9976b4cea238916f4387d81c4bd4c97d2aed3a8c1be4742"
+    },
+    {
+      "bytes": 160928,
+      "path": "figures/fig_state_dependence_decision.png",
+      "sha256": "c3563a2672ecc6f4370cfca672478757d72bcf6abb788869a69b526ee679fdb0"
+    }
+  ],
+  "outputs": [
+    {
+      "bytes": 2944,
+      "path": "docs/current/research_snapshot_2p.md",
+      "sha256": "7a4767880b6467d63a3eae6ace1087b0d4b487a5eb22debadd3f6395f693d6a4"
+    },
+    {
+      "bytes": 413596,
+      "path": "docs/current/research_snapshot_2p.pdf",
+      "sha256": "b412f448233e70a8cccad12c9b50ac1ff2aefc11d194502d39c1a4e652137ac5"
+    }
+  ],
+  "schema_version": "research-snapshot-manifest-v1"
+}
