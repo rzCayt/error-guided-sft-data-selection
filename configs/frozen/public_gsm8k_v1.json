@@ -1,0 +1,32 @@
+{
+  "protocol_version": "public-gsm8k-v1",
+  "seed": 20260722,
+  "datasets": {
+    "gsm8k": {
+      "repo_id": "openai/gsm8k",
+      "config": "main",
+      "revision": "740312add88f781978c0658806c59bc2815b9866",
+      "license": "mit"
+    },
+    "candidate_pool": {
+      "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+      "config": "default",
+      "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+      "license": "not_specified_on_dataset_card"
+    }
+  },
+  "model": {
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "license": "apache-2.0"
+  },
+  "gsm8k_train_splits": {
+    "interface_calibration": 64,
+    "selection_diagnostic": 448,
+    "candidate_utility_validation": 128,
+    "development": 128,
+    "in_domain_candidate_pool": 6705
+  },
+  "candidate_pool_size": 10000,
+  "public_text_policy": "store_ids_hashes_and_generated_outputs_only"
+}

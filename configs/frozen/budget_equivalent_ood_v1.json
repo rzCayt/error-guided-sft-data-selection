@@ -1,0 +1,65 @@
+{
+  "protocol_version": "budget-equivalent-arithmetic-ood-v1",
+  "role": "key_secondary_evaluation",
+  "primary_metric_remains": "gsm8k_exact_numeric_match",
+  "datasets": {
+    "svamp": {
+      "repo_id": "ChilleD/SVAMP",
+      "revision": "5e0bf1e5e7c0e9c4bc39180d224f41f3f801b7ef",
+      "config": "default",
+      "split": "test",
+      "source_count": 300,
+      "license": "mit",
+      "body_field": "Body",
+      "question_field": "Question",
+      "answer_field": "Answer"
+    },
+    "asdiv_numeric": {
+      "repo_id": "EleutherAI/asdiv",
+      "revision": "8f95807222d87b4c688c3c22a6ba2801e1fa03e2",
+      "config": "asdiv",
+      "split": "validation",
+      "source_count": 2305,
+      "expected_unique_numeric_count_before_decontamination": 2089,
+      "license": "cc-by-nc-4.0",
+      "body_field": "body",
+      "question_field": "question",
+      "answer_field": "answer",
+      "eligibility_rule": "exactly_one_decimal_or_integer_token_in_answer"
+    },
+    "multiarith": {
+      "repo_id": "ChilleD/MultiArith",
+      "revision": "144d44c3fb87c0b9097ac9593c789e716a282e3e",
+      "config": "default",
+      "split": "test",
+      "source_count": 180,
+      "license": "not_specified_on_dataset_card",
+      "question_field": "question",
+      "answer_field": "final_ans"
+    }
+  },
+  "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+  "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+  "decontamination": {
+    "exact_normalized_hash": true,
+    "ngram_size": 5,
+    "jaccard_threshold": 0.8,
+    "containment_threshold": 0.8,
+    "references": [
+      "tulu_10000_candidate_user_prompts",
+      "gsm8k_train_questions",
+      "gsm8k_held_out_test_questions"
+    ],
+    "test_text_use": "mechanical_decontamination_only"
+  },
+  "aggregation": {
+    "report_each_dataset": true,
+    "macro_average_equal_dataset_weight": true,
+    "never_pool_all_items_into_one_micro_average": true
+  },
+  "public_release": {
+    "store_raw_dataset_text": false,
+    "store_ids_hashes_parser_status_and_model_outputs": true,
+    "multiarith_license_requires_manual_verification_before_public_redistribution": true
+  }
+}

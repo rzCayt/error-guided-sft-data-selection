@@ -1,0 +1,70 @@
+{
+  "schema_version": "state-dependence-overlap-audit-v3",
+  "status": "PASS",
+  "candidate_scores_sha256": "857b0795ef988b86aed2d4d29f3cb319a5c05aa4ee9d6b8947a515e163039a07",
+  "adapter_index_sha256": "0d6dade391f71d3a4f8c9f3d0170c03a59086812601010eaced70c39def954fe",
+  "manifest_root_recorded_as_external_input": true,
+  "target_state_count": 4,
+  "target_manifests": [
+    {
+      "state_id": "v8_rep1_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 1,
+      "selection_manifest_sha256": "a2d0c1085ca0db7878f85d421c6f696ba19b3158555e11e8b9837f8c9d01fa42",
+      "selected_id_sha256": "6c1204674b1ef6ece1a1516493446e4d2e6269b01dcc8452631e9b62b212d803",
+      "selected_count": 500
+    },
+    {
+      "state_id": "v8_rep1_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 1,
+      "selection_manifest_sha256": "7a900e19f528f2491e4ae29462cacd00d6d53eab05e2c0348533852470dc0d50",
+      "selected_id_sha256": "fbbbdf6ef4de2e2ce8460637a76cd338faa8b769e7c1da80f86e6e7c4b316e16",
+      "selected_count": 500
+    },
+    {
+      "state_id": "v8_rep4_random_common_mix_train17",
+      "method": "random_common_mix",
+      "replicate_index": 4,
+      "selection_manifest_sha256": "660adfc7b95828ed7524d500f43b1d99d6f7cf665b75523bca6b3dfd7b34dc2a",
+      "selected_id_sha256": "790482aeab4ecd3c37de04313888c686a200c17f8d51771854d49e14072da580",
+      "selected_count": 500
+    },
+    {
+      "state_id": "v8_rep4_rds_error_common_mix_train17",
+      "method": "rds_error_common_mix",
+      "replicate_index": 4,
+      "selection_manifest_sha256": "7f9b86f4899757d5689d5d0f3110eadd36d3327665642abc872b18395094ac4c",
+      "selected_id_sha256": "1b820a96e471c11f8eb0cf18c082472c21a8aafbc4359af06ba0b53decbd4a3a",
+      "selected_count": 500
+    }
+  ],
+  "target_training_union_count": 1375,
+  "score_panel_count": 96,
+  "score_panel_seen_count": 14,
+  "score_panel_unseen_count": 82,
+  "score_panel_seen_ids": [
+    "tulu-010405-85c4fd812112",
+    "tulu-011085-0af4876e2f4b",
+    "tulu-023427-04ba958b8472",
+    "tulu-023880-71db409e95b0",
+    "tulu-065457-f55fd9aa7300",
+    "tulu-071283-93b20d524d51",
+    "tulu-088406-d44efb8e9b16",
+    "tulu-091111-9ed2970a655f",
+    "tulu-094483-1cdca3b1ce7e",
+    "tulu-130665-486278bc9c46",
+    "tulu-148893-f1d519b27e0b",
+    "tulu-164961-1b1abe79b281",
+    "tulu-182815-e708d414f581",
+    "tulu-185108-0e2908908775"
+  ],
+  "unseen_counts_by_quartile": {
+    "q0": 18,
+    "q1": 18,
+    "q2": 22,
+    "q3": 24
+  },
+  "frozen_panel_overlap_count": 0,
+  "frozen_panel_selected_id_sha256": "eb8440744cb73ed0582becc6559463bf136fd308823fe95eb286d6adebd3bc23"
+}

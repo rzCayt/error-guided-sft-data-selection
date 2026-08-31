@@ -1,0 +1,156 @@
+{
+  "common_mix_design_sha256": "01ab79a24a6039f5cfc3d679907d7f7cea8af0d59283c7bf5fae1afa1524bb18",
+  "expected_selection_count": 16,
+  "formal_phase1_ready": true,
+  "index_content_sha256": "f572ea6928f0f32fbb8de71fb7f43ef05cf8edbc297b3c286766630371b8e523",
+  "information_gates_sha256": "35052b720c34a3fd59c4e25f7acb6f5e438c1802ce748c16c18a348de8c0767d",
+  "protocol_config_sha256": "9cf9c9a983fffa38405fcee3f65a7d6906fab91b73bb7934e77684bd56808495",
+  "schema_version": "budget-equivalent-phase1-selection-index-v3",
+  "selection_count": 16,
+  "selections": [
+    {
+      "method": "random_free_mix",
+      "path": "replicate_01/random_free_mix/selection_manifest.json",
+      "replicate_index": 1,
+      "selected_id_sha256": "873e8ff994bd1387268e4f865e6210c21dabc4c32f5cffb22887afddc18c7e65",
+      "selection_seed": 1101,
+      "sha256": "e4004d8721719c7a80e52de3e897a4638b53a782f15ccb0cf8220723ad3954f3",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_free_mix",
+      "path": "replicate_01/rds_error_free_mix/selection_manifest.json",
+      "replicate_index": 1,
+      "selected_id_sha256": "72a948845746b047235a699b3542079e92f68a38f98a5052e64187b29f54618a",
+      "selection_seed": 101,
+      "sha256": "bce1a065e5dae928bfb35ddcb5e4ec003669d2f1eb1ba5f604e723ae0064b49c",
+      "train_seed": 17
+    },
+    {
+      "method": "random_common_mix",
+      "path": "replicate_01/random_common_mix/selection_manifest.json",
+      "replicate_index": 1,
+      "selected_id_sha256": "6c1204674b1ef6ece1a1516493446e4d2e6269b01dcc8452631e9b62b212d803",
+      "selection_seed": 1101,
+      "sha256": "a2d0c1085ca0db7878f85d421c6f696ba19b3158555e11e8b9837f8c9d01fa42",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_common_mix",
+      "path": "replicate_01/rds_error_common_mix/selection_manifest.json",
+      "replicate_index": 1,
+      "selected_id_sha256": "fbbbdf6ef4de2e2ce8460637a76cd338faa8b769e7c1da80f86e6e7c4b316e16",
+      "selection_seed": 101,
+      "sha256": "7a900e19f528f2491e4ae29462cacd00d6d53eab05e2c0348533852470dc0d50",
+      "train_seed": 17
+    },
+    {
+      "method": "random_free_mix",
+      "path": "replicate_02/random_free_mix/selection_manifest.json",
+      "replicate_index": 2,
+      "selected_id_sha256": "2b56e63f007e187d39e34405cbdcef164f92f064ccf8eace1862a17f0b60c94e",
+      "selection_seed": 1202,
+      "sha256": "fcf5a51fd44476abfea5c73e02deabcffefe04eab66e4bb9567c585b1c8a6158",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_free_mix",
+      "path": "replicate_02/rds_error_free_mix/selection_manifest.json",
+      "replicate_index": 2,
+      "selected_id_sha256": "cff2e0794be412073498fb6c189d4eead0bd6d099acf60bc92c341b596f54242",
+      "selection_seed": 202,
+      "sha256": "bd5c9ee19479b7ebf01e5652056b1b267c1366b141b635fc5bd64f8164a05fa6",
+      "train_seed": 17
+    },
+    {
+      "method": "random_common_mix",
+      "path": "replicate_02/random_common_mix/selection_manifest.json",
+      "replicate_index": 2,
+      "selected_id_sha256": "29492f4469ebb4d8a7aba44d56fe1b3b4936e606226ef5952cd3e5568a7860aa",
+      "selection_seed": 1202,
+      "sha256": "f5b6da35b88505a4d92e3a29056f5d0e0dbdb13eb5a636b4ec9cd1a56c4527ec",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_common_mix",
+      "path": "replicate_02/rds_error_common_mix/selection_manifest.json",
+      "replicate_index": 2,
+      "selected_id_sha256": "f68a3da5523c1dfa83163ee2f9a10471e0745e33be075a5a501585a1c69e8b56",
+      "selection_seed": 202,
+      "sha256": "060aadae6e16b3bc7e7285b7f5364263cd22f44fac0704f2c75442e035ed560e",
+      "train_seed": 17
+    },
+    {
+      "method": "random_free_mix",
+      "path": "replicate_03/random_free_mix/selection_manifest.json",
+      "replicate_index": 3,
+      "selected_id_sha256": "b2a270fd50814c8721e3fc76b165487a2125891395ad370fa59fe08998c28d3a",
+      "selection_seed": 1303,
+      "sha256": "d31ee510e083ebf8b5bc65b68f4231e37cf2010fbeee956543bdbe5ff534f0f9",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_free_mix",
+      "path": "replicate_03/rds_error_free_mix/selection_manifest.json",
+      "replicate_index": 3,
+      "selected_id_sha256": "fd42a4095abfa9f1d6d2629910c3b5b4ec58109bb4c91b42fb1f3f147aaf50fb",
+      "selection_seed": 303,
+      "sha256": "12ed3f77808b97f35c3c32a037454f66c79db9f170298dfd14059d71b00e8c2f",
+      "train_seed": 17
+    },
+    {
+      "method": "random_common_mix",
+      "path": "replicate_03/random_common_mix/selection_manifest.json",
+      "replicate_index": 3,
+      "selected_id_sha256": "871ae17eb852f3a58a2dfc4b3cf4e276c6608299c6f039de275bd2611f2cf842",
+      "selection_seed": 1303,
+      "sha256": "55e61d09f36e8b1004c7aa13bac7ef1f7c2efb48b614914136a0ab23ae293d47",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_common_mix",
+      "path": "replicate_03/rds_error_common_mix/selection_manifest.json",
+      "replicate_index": 3,
+      "selected_id_sha256": "8468f93b7ea2daadbbb3691102b110db0f5f7884db1ac5e415d03cc17d74c9d2",
+      "selection_seed": 303,
+      "sha256": "e95dc83b336dc3fc31c015d33a38b602ebd4cb9f29bcca4d382997cc3224949b",
+      "train_seed": 17
+    },
+    {
+      "method": "random_free_mix",
+      "path": "replicate_04/random_free_mix/selection_manifest.json",
+      "replicate_index": 4,
+      "selected_id_sha256": "10f46435be977948194d992cef0d4dbf7fa1355f3726f5c1d392dcfae4e12f0e",
+      "selection_seed": 1404,
+      "sha256": "8a961161af3691e752b9035da01ca6d6327862caab679bd43d5fcd8e95798215",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_free_mix",
+      "path": "replicate_04/rds_error_free_mix/selection_manifest.json",
+      "replicate_index": 4,
+      "selected_id_sha256": "db77ed26d9cd1ca49a98ccf4221d48bbdbd5b47578aa67b0bd445bf9dac30e1e",
+      "selection_seed": 404,
+      "sha256": "941016af9f7b498d27a753e3951905a1f749830b4c74019df7cee4dda4b031cc",
+      "train_seed": 17
+    },
+    {
+      "method": "random_common_mix",
+      "path": "replicate_04/random_common_mix/selection_manifest.json",
+      "replicate_index": 4,
+      "selected_id_sha256": "790482aeab4ecd3c37de04313888c686a200c17f8d51771854d49e14072da580",
+      "selection_seed": 1404,
+      "sha256": "660adfc7b95828ed7524d500f43b1d99d6f7cf665b75523bca6b3dfd7b34dc2a",
+      "train_seed": 17
+    },
+    {
+      "method": "rds_error_common_mix",
+      "path": "replicate_04/rds_error_common_mix/selection_manifest.json",
+      "replicate_index": 4,
+      "selected_id_sha256": "1b820a96e471c11f8eb0cf18c082472c21a8aafbc4359af06ba0b53decbd4a3a",
+      "selection_seed": 404,
+      "sha256": "7f9b86f4899757d5689d5d0f3110eadd36d3327665642abc872b18395094ac4c",
+      "train_seed": 17
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "bottom_group_mean_utility": 0.028428371096326312,
+  "candidate_count": 48,
+  "claim_boundary": "This is the preregistered 48-candidate GSM8K-domain boundary test. It does not establish downstream SFT gains.",
+  "direction_gate_passed": true,
+  "error_query_count": 99,
+  "h1a_gate_passed": false,
+  "observed_partial_spearman": 0.19393496805793697,
+  "one_sided_permutation_p": 0.18581418581418582,
+  "permutation_count": 1000,
+  "permutation_gate_passed": false,
+  "permutation_greater_or_equal_count": 185,
+  "query_count": 448,
+  "rho_gate_passed": true,
+  "scope": "gsm8k_domain",
+  "top_group_count": 12,
+  "top_group_mean_utility": 0.029323691073980918,
+  "top_minus_bottom_mean_utility": 0.0008953199776546052
+}

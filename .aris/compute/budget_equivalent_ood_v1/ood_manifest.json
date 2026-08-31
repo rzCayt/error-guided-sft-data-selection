@@ -1,0 +1,67 @@
+{
+  "artifacts": {
+    "asdiv_numeric": {
+      "path": "asdiv_numeric_records.jsonl",
+      "retained_count": 2067,
+      "sha256": "c9afe61eac96701f64845789151d95a20d6b026999a6e1220f062838506db23f"
+    },
+    "multiarith": {
+      "path": "multiarith_records.jsonl",
+      "retained_count": 155,
+      "sha256": "cbff238208843dde8102e35e26338acd3d36c452aca805db7251ab4fe221c700"
+    },
+    "svamp": {
+      "path": "svamp_records.jsonl",
+      "retained_count": 300,
+      "sha256": "032481b6f56355789ef1df0c8199c9398329a5903d4075d82d7ff67834db461d"
+    }
+  },
+  "candidate_inventory_sha256": "4fe81283dccc9f630daf1c6db9f3716ca5a6785fa2be9fe35b067f2a573a04d9",
+  "claim_boundary": "These text-free manifests freeze arithmetic OOD membership and mechanical decontamination only; they contain no model results.",
+  "cross_ood_cluster_audit": {
+    "band_size": 4,
+    "candidate_count": 2568,
+    "candidate_pair_checks": 127,
+    "cluster_count": 2522,
+    "containment_threshold": 0.8,
+    "jaccard_threshold": 0.8,
+    "maximum_cluster_size": 3,
+    "minhash_count": 64,
+    "multi_member_cluster_count": 45,
+    "ngram_size": 5,
+    "oversized_lsh_bucket_count": 0,
+    "schema_version": "budget-equivalent-near-duplicate-clusters-v3"
+  },
+  "excluded_cross_ood_duplicate_count": 46,
+  "excluded_non_numeric_count": 216,
+  "excluded_reference_overlap_count": 1,
+  "gsm8k_records_sha256": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+  "ood_config_sha256": "99235d009d4a89edfe53d8bcef1a4a83ff2b82dd31ed13ec0c8dae1549aa6e40",
+  "protocol_config_sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce",
+  "raw_dataset_text_stored": false,
+  "reference_text_count": 17334,
+  "retained_counts": {
+    "asdiv_numeric": 2067,
+    "multiarith": 155,
+    "svamp": 300
+  },
+  "retained_total": 2522,
+  "schema_version": "budget-equivalent-arithmetic-ood-manifest-v1",
+  "source_audit": {
+    "asdiv_numeric": {
+      "numeric_eligible_count": 2089,
+      "reference_overlap_exclusion_count": 1,
+      "source_count": 2305
+    },
+    "multiarith": {
+      "numeric_eligible_count": 180,
+      "reference_overlap_exclusion_count": 0,
+      "source_count": 180
+    },
+    "svamp": {
+      "numeric_eligible_count": 300,
+      "reference_overlap_exclusion_count": 0,
+      "source_count": 300
+    }
+  }
+}

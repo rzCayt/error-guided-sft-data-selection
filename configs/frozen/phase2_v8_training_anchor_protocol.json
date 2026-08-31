@@ -1,0 +1,68 @@
+{
+  "anchor_cell_id": "v8_rep1_random_common_mix_train17",
+  "anchor_runs": {
+    "A1": {
+      "fresh_process": true,
+      "worker_id": "gpu0"
+    },
+    "A2": {
+      "fresh_process": true,
+      "worker_id": "gpu0"
+    },
+    "B1": {
+      "fresh_process": true,
+      "worker_id": "gpu1"
+    }
+  },
+  "cross_gpu_repeat_required": true,
+  "cross_to_same_drift_multiplier_max": 5.0,
+  "determinism": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "PYTHONHASHSEED": "17",
+    "attention_backend": "sdpa",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "tf32": false,
+    "torch_deterministic_algorithms": true
+  },
+  "drift_ratio_policy": {
+    "adapter_same_gpu_floor": 1e-10,
+    "loss_same_gpu_floor": 1e-08,
+    "reason": "when same-GPU drift is near zero, cross/same ratios are numerically unstable; frozen absolute gates remain authoritative",
+    "status": "DIAGNOSTIC_ONLY"
+  },
+  "fail_closed": true,
+  "historical_parent_cell_id": "rep1_random_common_mix_train17",
+  "historical_parent_comparison": {
+    "adapter_sha_exact_required": false,
+    "failure_blocks_merging_historical_seed17_into_primary": true,
+    "historical_seed17_is_never_in_v8_primary": true,
+    "semantic_output_comparison_reported": true,
+    "tensor_metrics_reported": true
+  },
+  "historical_parent_role": "external_semantic_reference_not_token_exact",
+  "instantaneous_loss_vector_required": true,
+  "new_worker_numeric_gates": {
+    "adapter_flat_cosine_minimum": 0.9999999,
+    "adapter_norm_relative_difference_maximum": 1e-06,
+    "adapter_tensor_max_absolute_difference": 1e-06,
+    "loss_trajectory_max_absolute_difference": 1e-05,
+    "semantic_128_exact_match_required": true
+  },
+  "required_exact_evidence": [
+    "selection_manifest_sha256",
+    "selected_id_set_sha256",
+    "selected_id_order_sha256",
+    "ordered_sample_occurrence_sha256",
+    "tokenized_input_sha256",
+    "label_mask_sha256",
+    "optimizer_step_plan_sha256",
+    "step_response_token_counts_sha256",
+    "training_config_sha256",
+    "rng_map_sha256"
+  ],
+  "same_gpu_repeat_required": true,
+  "schema_version": "phase2-v8-training-anchor-v2",
+  "status": "GPU_ANCHORS_REQUIRED",
+  "worker_count": 2
+}

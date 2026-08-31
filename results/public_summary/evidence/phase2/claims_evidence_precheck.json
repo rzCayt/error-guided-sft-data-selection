@@ -1,0 +1,50 @@
+{
+  "schema_version": "phase2-v8-claims-evidence-precheck-v1",
+  "helper_status": "evidence_check_py_unavailable_policy_b",
+  "fallback": "exact JSON parsing plus downloaded SHA-256 verification",
+  "results": [
+    {
+      "id": "gsm8k_random_mean",
+      "value": 0.6001389941875158,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/method_summary.json",
+      "status": "verified"
+    },
+    {
+      "id": "gsm8k_rds_mean",
+      "value": 0.604940611574425,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/method_summary.json",
+      "status": "verified"
+    },
+    {
+      "id": "gsm8k_primary_delta",
+      "value": 0.004801617386909207,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/accuracy_fixed_seed_primary.json",
+      "status": "verified"
+    },
+    {
+      "id": "gsm8k_primary_ci95",
+      "value": [-0.009540055597674901, 0.018890573666919264],
+      "source": "final_analysis_v8_20260831/unblinded_analysis/accuracy_fixed_seed_primary.json",
+      "status": "verified"
+    },
+    {
+      "id": "ood_macro_accuracy_delta",
+      "value": -0.0009422821154409325,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/accuracy_fixed_seed_primary.json",
+      "status": "verified"
+    },
+    {
+      "id": "ood_macro_strict_delta",
+      "value": -0.0548418525974825,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/strict_format_fixed_seed_primary.json",
+      "status": "verified"
+    },
+    {
+      "id": "multiarith_strict_delta",
+      "value": -0.06881720430107519,
+      "source": "final_analysis_v8_20260831/unblinded_analysis/strict_format_fixed_seed_primary.json",
+      "status": "verified"
+    }
+  ],
+  "summary": {"verified": 7, "value_not_found": 0, "path_missing": 0}
+}
