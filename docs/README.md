@@ -1,5 +1,9 @@
 # Documentation map
 
+The current GitHub Pages entry point is [`index.html`](index.html). Historical
+HTML under [`history/`](history/) is retained for provenance, marked as
+superseded, and excluded from search indexing.
+
 Use these entry points instead of reading files in directory order:
 
 - [`current/research_overview_en.md`](current/research_overview_en.md): current English research overview;
