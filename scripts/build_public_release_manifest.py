@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE = "v0.5.1-public-research"
+RELEASE = "ra-review-v1"
 OUTPUT = ROOT / "releases" / RELEASE / "MANIFEST.json"
 EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv"}
 

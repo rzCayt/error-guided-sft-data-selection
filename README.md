@@ -1,6 +1,6 @@
 # LLM Post-training Data Selection: A Controlled Study
 
-[中文说明](README_CN.md) · [Claims and limitations](CLAIMS_AND_LIMITATIONS.md) · [Reproduction guide](REPRODUCE.md) · [Research timeline](docs/research_timeline.md)
+[中文说明](README_CN.md) · [2-page research snapshot](docs/current/research_snapshot_2p.pdf) · [Claims and limitations](CLAIMS_AND_LIMITATIONS.md) · [Reproduction guide](REPRODUCE.md) · [Research timeline](docs/research_timeline.md)
 
 ## What is the research question?
 
@@ -12,16 +12,24 @@ This project asks a concrete question:
 
 The study focuses on a frozen RDS-based targeted-selection policy, Qwen2.5-1.5B Base, response-only LoRA supervised fine-tuning, and arithmetic reasoning tasks. It is a controlled study of this setting—not a general verdict on all data-selection methods.
 
+## Research at a glance
+
+- **Completed:** 24 budget-equivalent LoRA SFT cells with separate cell-level audits.
+- **Main result:** no reliable accuracy advantage for targeted RDS over matched Random in the tested setting.
+- **Open problem:** a limited one-step candidate signal did not translate into a stable set-level gain.
+- **Frozen next step:** test candidate-utility reliability at one fixed model state before any cross-state comparison.
+- **Near-term study:** a four-week reliability module covering measurement repeatability, state transfer, and a preregistered stop/go decision.
+
 ## What has been completed?
 
-The main completed block contains 24 independently audited training and evaluation cells:
+The main completed block contains 24 separately executed training and evaluation cells, each checked by a cell-level audit:
 
 ```text
-2 selection methods × 4 independently constructed lists × 3 training seeds
+2 selection methods × 4 frozen list realizations per method × 3 training seeds
 = 24 cells
 ```
 
-Each list contains exactly 500 examples. The targeted and matched-random conditions use the same model, LoRA configuration, optimizer protocol, number of examples, response-supervision budget, and source × answer-length composition. Every completed cell includes the frozen configuration, selected-example manifest, training log, adapter save/reload evidence, raw generations, parsed metrics, and an independent audit result.
+Each list contains exactly 500 examples. The RDS lists were generated under distinct query-bootstrap seeds, while the Random lists used distinct selection seeds. The targeted lists overlap substantially, so their effective independence is lower than the nominal count of four; training seeds do not create additional selection policies. The targeted and matched-random conditions use the same model, LoRA configuration, optimizer protocol, number of examples, response-supervision budget, and source × answer-length composition. Every completed cell includes the frozen configuration, selected-example manifest, training log, adapter save/reload evidence, raw generations, parsed metrics, and a separate audit result.
 
 Before this block, the project also measured one-step candidate utility on 96 Tulu candidates and ran a 48-candidate GSM8K-domain boundary check. The Tulu experiment passed its original preregistered screening gate; the domain-boundary check did not. These are candidate-level measurements and are not themselves evidence of downstream set-level improvement.
 

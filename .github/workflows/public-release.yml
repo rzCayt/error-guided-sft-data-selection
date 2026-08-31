@@ -33,6 +33,8 @@ jobs:
         run: python scripts/generate_experiment_registry.py --check
       - name: Verify figure provenance
         run: python figures/generate_public_figures.py --check
+      - name: Verify two-page research snapshot
+        run: python scripts/build_research_snapshot.py --check
       - name: Verify full release manifest
         run: python scripts/build_public_release_manifest.py --check
       - name: Verify public release

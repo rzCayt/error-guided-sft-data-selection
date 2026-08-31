@@ -49,6 +49,16 @@ def test_internal_integrity_audit_is_explicitly_non_independent() -> None:
     module.check_internal_audit_disclosure()
 
 
+def test_pages_entry_uses_current_study_and_deindexes_legacy_html() -> None:
+    module = load_module(ROOT / "scripts" / "verify_public_release.py")
+    module.check_public_pages_entry()
+
+
+def test_research_snapshot_matches_canonical_results() -> None:
+    module = load_module(ROOT / "scripts" / "build_research_snapshot.py")
+    module.check_snapshot()
+
+
 def test_public_tree_has_no_sensitive_or_restricted_artifacts() -> None:
     module = load_module(ROOT / "scripts" / "verify_public_release.py")
     files = module.iter_repository_files()

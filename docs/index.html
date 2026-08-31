@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="A controlled, auditable study of budget-equivalent data selection for LoRA post-training.">
+  <link rel="canonical" href="https://rzcayt.github.io/error-guided-sft-data-selection/">
+  <title>LLM Post-training Data Selection - Controlled Study</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5d6678;
+      --line: #dce2ea;
+      --paper: #ffffff;
+      --wash: #f5f8fb;
+      --blue: #0072b2;
+      --green: #009e73;
+      --orange: #d55e00;
+      --shadow: 0 14px 40px rgba(23, 32, 51, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1080px, calc(100% - 36px)); margin: 0 auto; }
+    header {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+    nav { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    nav strong { margin-right: auto; }
+    .hero {
+      padding: 72px 0 46px;
+      background: linear-gradient(145deg, #ffffff 0%, #eef6fb 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 750;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 860px;
+      margin: 10px 0 18px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    .lead { max-width: 820px; color: var(--muted); font-size: 1.08rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .button {
+      display: inline-block;
+      padding: 10px 15px;
+      border: 1px solid var(--blue);
+      border-radius: 9px;
+      font-weight: 700;
+    }
+    .button.primary { color: #fff; background: var(--blue); }
+    main { padding: 42px 0 66px; }
+    section { margin: 0 0 38px; }
+    h2 { margin: 0 0 16px; font-size: 1.55rem; }
+    h3 { margin: 0 0 6px; font-size: 1rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+    }
+    .card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+    .metric strong { display: block; font-size: 1.55rem; color: var(--blue); }
+    .metric span { color: var(--muted); font-size: 0.86rem; }
+    .results {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(270px, 0.55fr);
+      gap: 24px;
+      align-items: center;
+    }
+    .figure {
+      width: 100%;
+      display: block;
+      padding: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+    .boundary {
+      border-left: 5px solid var(--orange);
+      background: #fff8f2;
+    }
+    .boundary ul, .next ul { margin: 8px 0 0; padding-left: 20px; }
+    .status {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 9px;
+      color: #075f49;
+      background: #e7f7f1;
+      border: 1px solid #b9e8d8;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    footer {
+      padding: 28px 0 40px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .results { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap">
+      <strong>Controlled LLM Post-training Study</strong>
+      <a href="../README.md">Full README</a>
+      <a href="current/research_snapshot_2p.pdf">2-page snapshot</a>
+      <a href="../REPRODUCE.md">Reproduce</a>
+      <a href="https://github.com/rzCayt/error-guided-sft-data-selection">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Data selection · LoRA SFT · Measurement reliability</div>
+      <h1>When budget and composition are controlled, does targeted data selection still help?</h1>
+      <p class="lead">
+        This project studies a frozen RDS-based selection policy on Qwen2.5-1.5B Base.
+        It compares targeted and matched-random training under the same example count,
+        response-supervision budget, source composition, answer-length composition, and
+        optimization protocol.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="current/research_snapshot_2p.pdf">Read the 2-page snapshot</a>
+        <a class="button" href="../CLAIMS_AND_LIMITATIONS.md">Claims and limitations</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section>
+      <h2>Research at a glance</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Completed</h3>
+          <p>24 budget-equivalent LoRA SFT cells with separate cell-level audits.</p>
+        </article>
+        <article class="card">
+          <h3>Main result</h3>
+          <p>No reliable accuracy advantage for RDS over matched Random in this setting.</p>
+        </article>
+        <article class="card">
+          <h3>Open problem</h3>
+          <p>A limited one-step candidate signal did not yield a stable set-level gain.</p>
+        </article>
+        <article class="card">
+          <h3>Frozen next step</h3>
+          <p>Measure fixed-state utility reliability before any cross-state comparison.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Controlled design</h2>
+      <div class="grid">
+        <div class="card metric"><strong>2</strong><span>selection methods</span></div>
+        <div class="card metric"><strong>4</strong><span>frozen list realizations per method</span></div>
+        <div class="card metric"><strong>3</strong><span>training seeds</span></div>
+        <div class="card metric"><strong>24</strong><span>training and evaluation cells</span></div>
+      </div>
+      <p>
+        RDS lists used distinct query-bootstrap seeds and Random lists used distinct
+        selection seeds. The RDS lists overlap substantially, so their effective
+        independence is lower than the nominal count of four.
+      </p>
+    </section>
+
+    <section class="results">
+      <div>
+        <h2>Main results</h2>
+        <img class="figure" src="../figures/fig_main_effects.png" alt="RDS minus matched Random effects with 95 percent intervals">
+      </div>
+      <aside class="card boundary">
+        <h3>Current interpretation</h3>
+        <p><strong>GSM8K:</strong> +0.480 pp, 95% interval [-0.954, +1.889].</p>
+        <p><strong>OOD macro:</strong> -0.094 pp, 95% interval [-1.316, +1.149].</p>
+        <ul>
+          <li>No reliable gain was observed.</li>
+          <li>Ineffectiveness was not established.</li>
+          <li>Equivalence was not established.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="results">
+      <div>
+        <h2>Why the project continues</h2>
+        <img class="figure" src="../figures/fig_candidate_to_set_gap.png" alt="Candidate-level screening and downstream set-level results">
+      </div>
+      <aside class="card next">
+        <h3>Three falsifiable explanations</h3>
+        <ul>
+          <li>candidate utility is not measured reliably;</li>
+          <li>utility changes with model state;</li>
+          <li>useful candidates become redundant, conflicting, or complementary as a set.</li>
+        </ul>
+        <span class="status">CPU preflight complete · no v3 GPU result</span>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Current evidence and claim boundaries are generated from the audited public summary.
+      Earlier 0.5B diagnostics are retained only as
+      <a href="history/">historical snapshots</a> and are not the current project status.
+    </div>
+  </footer>
+</body>
+</html>
