@@ -16,7 +16,7 @@ def test_v8_release_bundle_includes_source_and_only_canonical_configs() -> None:
     assert 'ROOT / "configs"' in source
     assert 'ROOT / "configs",' in source
     assert "test-only/noncanonical" in (
-        ROOT / "docs/20260828_PHASE2_V8_RELEASE_README.md"
+        ROOT / "releases/phase2_v8/20260828_PHASE2_V8_RELEASE_README.md"
     ).read_text(encoding="utf-8")
     assert "phase2_v8_materialized_contracts_v4" in source
     assert "SSH_ENDPOINT" in source

@@ -22,4 +22,3 @@ RDS minus Random was +0.480 percentage points on GSM8K with 95% interval [-0.954
 State Dependence v3 first tests repeated candidate-utility measurement at one fixed zero-LoRA state. Cross-state measurement begins only if the fixed-state reliability gate passes. CPU contracts and preflight are complete; no v3 GPU result exists.
 
 See the [claim–evidence ledger](claim_evidence_ledger.md), [timeline](../research_timeline.md), and [canonical result JSON](../../results/public_summary/main_results.json).
-

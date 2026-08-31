@@ -43,7 +43,7 @@
     {
       "path": "artifacts/phase2_v8_preflight/semantic_code_manifest_v8_2.json",
       "role": "semantic_code_manifest",
-      "sha256": "3f759906adabfcba5388187dc72691c8009fa600d1df759f606c4e7a1345624e"
+      "sha256": "13efb94e4fa29699e554a76f29725ad3b1a97c37b521363cb7b39db0293ae049"
     },
     {
       "path": "configs/phase2_v8_statistical_protocol.json",

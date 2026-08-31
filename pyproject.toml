@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "error-guided-sft-data-selection"
-version = "0.1.0"
-description = "Error-guided data selection for data-efficient LoRA SFT in small numerical reasoning language models."
+version = "0.5.0"
+description = "Controlled evaluation of targeted data selection for LoRA post-training."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []

@@ -58,7 +58,7 @@ def _deployment_files() -> list[Path]:
         ROOT / "artifacts/phase2_v7_canary",
         ROOT / "artifacts/phase2_v7_preflight",
         ROOT
-        / "review_pack/phase2_v7_parent_anchor_rep1_random_common_seed17/training_complete/adapter",
+        / "tests/fixtures/phase2_v7_anchor/training_complete/adapter",
     ]
     files = [ROOT / "pyproject.toml", ROOT / "requirements-budget-equivalent.txt", ROOT / "requirements-cloud-b500.txt"]
     for root in roots:

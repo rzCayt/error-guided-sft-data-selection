@@ -1,5 +1,7 @@
-> **Historical snapshot.**  
-> This document records an earlier research stage and is not the current result.  
+> **Historical snapshot.**
+>
+> This document records an earlier research stage and is not the current result.
+>
 > **历史快照：本文档记录早期研究阶段，不代表当前研究结论。**
 
 # Phase 1准备状态 v3.2

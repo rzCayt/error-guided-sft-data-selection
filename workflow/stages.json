@@ -20,13 +20,13 @@
       "name_zh": "主线程与审核线程流程固化",
       "goal_zh": "把阶段计划、自评、审核包、审核输出和评分门槛固定为文档与机器可校验模板。",
       "required_artifacts": [
-        "docs/workflow_cn.md",
-        "docs/adversarial_review_rubric_cn.md",
+        "docs/history/legacy_repository_docs/workflow_cn.md",
+        "docs/history/legacy_repository_docs/adversarial_review_rubric_cn.md",
         "workflow/templates/stage_plan.json",
         "workflow/templates/review_package.json",
         "workflow/templates/review_response.json",
         "workflow/templates/main_self_check.json",
-        "docs/reviewer_external_evidence_policy_cn.md",
+        "docs/history/legacy_repository_docs/reviewer_external_evidence_policy_cn.md",
         "workflow/external_sources_seed.json",
         "scripts/validate_workflow_packet.py",
         "tests/test_workflow_validation.py"

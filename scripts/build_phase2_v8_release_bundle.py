@@ -123,8 +123,8 @@ def _deployment_sources(cpu_validation: Path) -> list[Path]:
         ROOT / "artifacts/phase2_v8_canary",
         ROOT / "artifacts/phase2_v8_materialized_contracts_v4",
         ROOT / "artifacts/phase2_v8_parent_evidence",
-        ROOT / "review_pack/phase2_v7_parent_anchor_rep1_random_common_seed17/training_complete/adapter",
-        ROOT / "review_pack/phase2_v7_parent_anchor_rep1_random_common_seed17/training_complete/tokenizer",
+        ROOT / "tests/fixtures/phase2_v7_anchor/training_complete/adapter",
+        ROOT / "tests/fixtures/phase2_v7_anchor/training_complete/tokenizer",
     )
     exact = [
         ROOT / "pyproject.toml",
@@ -136,18 +136,18 @@ def _deployment_sources(cpu_validation: Path) -> list[Path]:
         ROOT / "artifacts/phase2_v8_preflight/experiment_audit_p0_v3.json",
         ROOT / "artifacts/phase2_v8_preflight/final_gate_v5/preflight_report.json",
         ROOT / "artifacts/phase2_v8_preflight/final_gate_v5/commands.jsonl",
-        ROOT / "docs/20260828_PHASE2_V8_LONG_EXPERIMENT_READINESS.md",
-        ROOT / "docs/20260828_PHASE2_V8_EXPERIMENT_AUDIT.md",
-        ROOT / "docs/20260828_PHASE2_V8_GPTPRO_REVIEW_PROMPT.md",
-        ROOT / "docs/20260828_PHASE2_V8_RELEASE_README.md",
-        ROOT / "docs/20260828_PHASE2_V8_2_FINAL_AUDIT.md",
-        ROOT / "docs/20260828_PHASE2_V8_2_START_HERE.md",
-        ROOT / "docs/20260828_PHASE2_V8_2_CODEX_EXECUTION_DIRECTIVE.md",
-        ROOT / "docs/workflow_cn.md",
-        ROOT / "docs/adversarial_review_rubric_cn.md",
-        ROOT / "docs/reviewer_external_evidence_policy_cn.md",
-        ROOT / "docs/workflow.md",
-        ROOT / "docs/adversarial_review_protocol.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_LONG_EXPERIMENT_READINESS.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_EXPERIMENT_AUDIT.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_GPTPRO_REVIEW_PROMPT.md",
+        ROOT / "releases/phase2_v8/20260828_PHASE2_V8_RELEASE_README.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_2_FINAL_AUDIT.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_2_START_HERE.md",
+        ROOT / "docs/history/legacy_repository_docs/20260828_PHASE2_V8_2_CODEX_EXECUTION_DIRECTIVE.md",
+        ROOT / "docs/history/legacy_repository_docs/workflow_cn.md",
+        ROOT / "docs/history/legacy_repository_docs/adversarial_review_rubric_cn.md",
+        ROOT / "docs/history/legacy_repository_docs/reviewer_external_evidence_policy_cn.md",
+        ROOT / "docs/history/legacy_repository_docs/workflow.md",
+        ROOT / "docs/history/legacy_repository_docs/adversarial_review_protocol.md",
         cpu_validation.resolve(),
         ROOT / "artifacts/phase2_v8_preflight/v8_2_local_validation/targeted_v8_pytest.log",
         ROOT / "artifacts/phase2_v8_preflight/v8_2_local_validation/full_pytest.log",
@@ -178,7 +178,7 @@ def _write_tar(path: Path, files: list[tuple[str, bytes]]) -> dict:
         f"{_sha256(payload)}  {relative}\n" for relative, payload in files
     ).encode("ascii")
     release_readme = (
-        ROOT / "docs/20260828_PHASE2_V8_RELEASE_README.md"
+        ROOT / "releases/phase2_v8/20260828_PHASE2_V8_RELEASE_README.md"
     ).read_bytes()
     with tarfile.open(path, "x:gz", compresslevel=6) as archive:
         for relative, payload in files:
@@ -225,7 +225,7 @@ def _write_review(path: Path, deployment_manifest: dict, files: list[tuple[str, 
     selected.append(
         (
             "RELEASE_README.md",
-            (ROOT / "docs/20260828_PHASE2_V8_RELEASE_README.md").read_bytes(),
+            (ROOT / "releases/phase2_v8/20260828_PHASE2_V8_RELEASE_README.md").read_bytes(),
         )
     )
     manifest = _manifest(selected, kind="independent_review_with_actual_source")

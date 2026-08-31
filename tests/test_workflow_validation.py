@@ -89,7 +89,7 @@ def test_review_package_must_cover_stage_required_checks(tmp_path: Path) -> None
 
 def test_review_package_must_cover_stage_required_artifacts(tmp_path: Path) -> None:
     payload = load_template("review_package.json")
-    payload["changed_files"].remove("docs/workflow_cn.md")
+    payload["changed_files"].remove("docs/history/legacy_repository_docs/workflow_cn.md")
 
     result = run_validator("review_package", write_packet(tmp_path, "bad_package.json", payload))
 

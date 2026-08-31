@@ -15,8 +15,8 @@
     }
   ],
   "required_artifacts": [
-    "docs/workflow_cn.md",
-    "docs/adversarial_review_rubric_cn.md",
+    "docs/history/legacy_repository_docs/workflow_cn.md",
+    "docs/history/legacy_repository_docs/adversarial_review_rubric_cn.md",
     "workflow/stages.json",
     "scripts/validate_workflow_packet.py",
     "tests/test_workflow_validation.py"

@@ -13,4 +13,3 @@ This page lists the public current-stage artifacts. Historical result files are 
 | [`claim_evidence_ledger.md`](claim_evidence_ledger.md) | Supported, unsupported, and untested claims | Every numeric claim points to a public evidence artifact |
 
 The evidence file hashes used to construct the canonical result are stored inside `main_results.json`. Run `python scripts/verify_public_release.py` to check every identity.
-

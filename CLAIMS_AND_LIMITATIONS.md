@@ -31,4 +31,3 @@ The evidence does not establish that:
 ## Statistical interpretation
 
 “Insufficient evidence” means that the uncertainty interval contains both beneficial and harmful effects. It does not mean “no effect,” and it does not establish practical equivalence. The canonical point estimates and intervals are stored in [`results/public_summary/main_results.json`](results/public_summary/main_results.json).
-

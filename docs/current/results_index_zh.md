@@ -13,4 +13,3 @@
 | [`claim_evidence_ledger.md`](claim_evidence_ledger.md) | 已支持、未支持和未测试的结论 | 每个数字都能定位到公开证据 |
 
 构建规范结果所使用的证据文件哈希已经写入 `main_results.json`。运行 `python scripts/verify_public_release.py` 可一次检查全部身份。
-

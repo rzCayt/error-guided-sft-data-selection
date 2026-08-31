@@ -21,4 +21,3 @@ This timeline shows how evidence changed the research plan. A stopped branch is 
 - `release/public-research-v0.1`: public narrative, canonical results, and release verification.
 
 Commit identifiers mark code states, not proof by themselves. Current numerical evidence is defined by the hashes in [`results/public_summary/main_results.json`](../results/public_summary/main_results.json).
-

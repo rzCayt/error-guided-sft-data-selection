@@ -8,6 +8,17 @@ build/
 *.egg-info/
 .aris/
 
+# Small, text-free frozen bindings required by the public CPU contract tests.
+!.aris/
+!.aris/compute/
+!.aris/compute/budget_equivalent_v3_selections/
+!.aris/compute/budget_equivalent_v3_selections/**
+!.aris/compute/budget_equivalent_ood_v1/
+!.aris/compute/budget_equivalent_ood_v1/ood_manifest.json
+!.aris/compute/budget_equivalent_ood_v1/svamp_records.jsonl
+!.aris/compute/budget_equivalent_ood_v1/asdiv_numeric_records.jsonl
+!.aris/compute/budget_equivalent_ood_v1/multiarith_records.jsonl
+
 # Local experiment outputs that can become large.
 data/generated/
 results/adapters/

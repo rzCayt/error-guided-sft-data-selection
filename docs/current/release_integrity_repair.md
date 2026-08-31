@@ -18,4 +18,3 @@ The public release keeps the latest `6924290` behavior and regenerates the activ
 ## Boundary
 
 This repair changes only the identity record for the current public code. It does not alter selected examples, model outputs, metrics, confidence intervals, or any completed research claim. Historical deployment identities remain available in the release snapshot.
-

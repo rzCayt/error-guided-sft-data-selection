@@ -22,4 +22,3 @@ GSM8K 上 RDS 相对 Random 为 +0.480 个百分点，95% 区间 [-0.954, +1.889
 State Dependence v3 先在同一个固定 zero-LoRA 状态下重复测量候选效用。只有固定状态可靠性通过门槛，才进入跨状态比较。CPU 合同和预检已经完成，目前没有 v3 GPU 结果。
 
 详细内容见[结论—证据账本](claim_evidence_ledger.md)、[研究时间线](../research_timeline.md)和[规范结果 JSON](../../results/public_summary/main_results.json)。
-

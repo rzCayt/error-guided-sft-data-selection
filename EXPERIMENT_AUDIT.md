@@ -1,8 +1,8 @@
 # Experiment Integrity Audit
 
-**Date:** 2026-08-31  
-**Auditor:** Internal checklist fallback using the `experiment-audit` A–F contract  
-**Independence:** No. The required external reviewer backend was unavailable, so this report must not be described as a cross-model independent audit.  
+**Date:** 2026-08-31
+**Auditor:** Internal checklist fallback using the `experiment-audit` A–F contract
+**Independence:** No. The required external reviewer backend was unavailable, so this report must not be described as a cross-model independent audit.
 **Project:** LLM Post-training Data Selection: A Controlled Study
 
 ## Overall verdict: WARN
@@ -85,4 +85,3 @@ The current README uses “controlled study” and “pilot,” explicitly limit
 - **C3 — RDS and Random are equivalent:** unsupported.
 - **C4 — Tulu96 passed its original candidate-utility gate:** supported for that frozen proxy experiment; does not imply set-level gain.
 - **C5 — state dependence exists:** untested and prohibited.
-

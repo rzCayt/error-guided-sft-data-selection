@@ -12,4 +12,3 @@ The MIT license in this repository applies to original project code and document
 | MultiArith | Frozen source recorded in `configs/frozen/budget_equivalent_ood_v1.json` | Upstream license was not specified in the frozen configuration; manual verification is required before redistribution | Raw benchmark text is not redistributed. |
 
 The exact dataset and model revisions are part of the frozen configuration. Users are responsible for reviewing upstream terms before downloading or using any third-party asset.
-
