@@ -146,9 +146,9 @@
       "sha256": "81076cedbbf41e0e56c688aed7066dcffe3ca3de45bdb19b400c8961ff342c12"
     },
     {
-      "bytes": 1362,
+      "bytes": 1514,
       "path": ".github/workflows/public-release.yml",
-      "sha256": "b0d15a8fb7e5d966a783338e6fdefc11236c4464a5b9d64f5e19b5c41b52de61"
+      "sha256": "87203d9d7fc48ea729400960bfc23cba842089479fb65346219f309839dea93e"
     },
     {
       "bytes": 1897,
@@ -1616,9 +1616,9 @@
       "sha256": "61a8c4f2d31810d383fa7dd1e1e1953c3ff441a71b0623ba4a9e9c16dfda1299"
     },
     {
-      "bytes": 634,
+      "bytes": 762,
       "path": "pyproject.toml",
-      "sha256": "77ad10182762c852e81e99a390ec48910e715f8b7bdbb41124a342e1a18178ad"
+      "sha256": "0ade333ec925698537bddea4010d806a85a7cb2d55a47c667b02c23a2f716f09"
     },
     {
       "bytes": 2831,
