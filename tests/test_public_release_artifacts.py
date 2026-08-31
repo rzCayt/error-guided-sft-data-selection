@@ -3,6 +3,8 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,6 +30,18 @@ def test_frozen_public_config_snapshots_match_runtime_sources() -> None:
 def test_public_figures_match_canonical_result_source() -> None:
     module = load_module(ROOT / "figures" / "generate_public_figures.py")
     module.check_figures()
+
+
+def test_public_figure_layout_validator_rejects_text_overlap() -> None:
+    import matplotlib.pyplot as plt
+
+    module = load_module(ROOT / "figures" / "generate_public_figures.py")
+    fig = plt.figure(figsize=(3, 2))
+    fig.text(0.5, 0.5, "first label", ha="center")
+    fig.text(0.5, 0.5, "second label", ha="center")
+    with pytest.raises(RuntimeError, match="text overlap"):
+        module.validate_text_layout(fig, "overlap_reproducer")
+    plt.close(fig)
 
 
 def test_internal_integrity_audit_is_explicitly_non_independent() -> None:
