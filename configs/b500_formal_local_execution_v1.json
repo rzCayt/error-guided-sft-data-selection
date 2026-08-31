@@ -1,0 +1,55 @@
+{
+  "execution_policy_version": "b500-formal-local-resumable-v1",
+  "temperature": {
+    "start_max_c": 65,
+    "pause_at_c": 75,
+    "resume_at_c": 62,
+    "hard_stop_at_c": 80,
+    "poll_seconds": 10
+  },
+  "training": {
+    "temperature_check_every_micro_batches": 1,
+    "inter_micro_batch_sleep_seconds": 0.5,
+    "checkpoint_every_optimizer_steps": 1
+  },
+  "evaluation": {
+    "physical_batch_size": 1,
+    "temperature_check_every_examples": 1,
+    "inter_example_sleep_seconds": 1.0
+  },
+  "resources": {
+    "cpu_threads": 2,
+    "min_free_system_memory_gib": 8,
+    "min_free_disk_gib": 100,
+    "max_peak_gpu_memory_gib": 7
+  },
+  "semantic_fields_unchanged": {
+    "training": [
+      "epochs",
+      "max_length",
+      "micro_batch_size",
+      "gradient_accumulation_steps",
+      "nominal_effective_batch_size",
+      "optimizer",
+      "learning_rate",
+      "weight_decay",
+      "warmup_ratio",
+      "scheduler",
+      "gradient_clipping",
+      "dtype",
+      "response_only_loss",
+      "gradient_checkpointing",
+      "lora"
+    ],
+    "evaluation": [
+      "split",
+      "example_count",
+      "max_input_length",
+      "max_new_tokens",
+      "do_sample",
+      "num_beams",
+      "prompt_version",
+      "parser_policy"
+    ]
+  }
+}

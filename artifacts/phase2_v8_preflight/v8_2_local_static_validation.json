@@ -1,0 +1,33 @@
+{
+  "artifacts": {
+    "canonical_runtime_sha256": "4f0487cb23cae4656adc0e20cf72a7c63d2c750c7edf41f5fa0c315936cc1207",
+    "full_pytest_log_sha256": "db11771eb9255ceeda5ec447c57e436b89c2b79cf3ee7ca48fce2e115ccdfd7a",
+    "materialized_audit_sha256": "934de84775178bab3a139c38e073533b0713a9d75d11d2b799d03c7c51bcceb9",
+    "matrix_sha256": "87110b8602f8c8d53562369767e0e774b0fecb997e33180e83edd2243689ee6a",
+    "semantic_manifest_sha256": "5bf1db53db46e1cee4c928060ef16d93b01d0037291c8521248b8521c0a1a35f",
+    "targeted_v8_pytest_log_sha256": "104a81806988f7050516b8b972df94227d96012cb3a999b2ebf691d8f8d594c6"
+  },
+  "checks": {
+    "canonical_roles_12": true,
+    "cpu_release_gate_forces_offline_mode": true,
+    "full_pytest_in_current_container": "UNAVAILABLE_DEPENDENCY_MISMATCH",
+    "materialized_contract_audit_v4": "PASS",
+    "matrix_cells_24": true,
+    "scientific_matrix_unchanged_except_runtime_contract_hashes": true,
+    "semantic_files_50_py_compile": true,
+    "semantic_python_files_38_compiled": true,
+    "targeted_v8_pytest_35_passed": true
+  },
+  "created_at_utc": "2026-08-27T23:50:03.524019+00:00",
+  "formal_matrix_authorized": false,
+  "gpu_accessed": false,
+  "limitations": [
+    "Current container uses Python 3.13 rather than frozen Python 3.12.",
+    "Current container lacks transformers, peft, datasets and CUDA runtime required for full Q0.",
+    "Formal AutoDL Q0, offline dataset qualification and all GPU qualification remain mandatory."
+  ],
+  "next_gate": "Stage the pinned model/datasets, run full offline Q0 in the pinned AutoDL environment, then host qualification and Q1/Q2.",
+  "schema_version": "phase2-v8-2-local-static-validation-v1",
+  "scope": "local container static and targeted validation only",
+  "status": "PASS_FOR_PACKAGING_NOT_Q0"
+}

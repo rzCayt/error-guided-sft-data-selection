@@ -1,0 +1,26 @@
+{
+  "all_query_count": 448,
+  "audited_candidate_count": 10000,
+  "candidate_chunk_count": 67,
+  "candidate_inventory": {
+    "ordered_candidate_id_sha256": "dba131171a3f434ef1f1f7a2fdb459a5da3dffbaab8f50687c8ef06cf5120beb",
+    "ordered_eligible_id_sha256": "7006e65ba427644bc2b538f3a313dcb161cb0e97aae47657719b2fa55b639335",
+    "path": "candidate_inventory.jsonl",
+    "sha256": "4fe81283dccc9f630daf1c6db9f3716ca5a6785fa2be9fe35b067f2a573a04d9"
+  },
+  "completed_at_utc": "2026-07-30T18:50:24.020710+00:00",
+  "eligible_candidate_count": 8542,
+  "error_query_count": 99,
+  "excluded_fully_truncated_count": 1458,
+  "preparation_elapsed_seconds": 10.51574619999883,
+  "query_chunk_count": 7,
+  "query_inventory": {
+    "ordered_query_id_sha256": "45db76acb8edd5d641b9b227e56ac87011e110a82155c362d1ab207991209d6d",
+    "path": "query_inventory.jsonl",
+    "sha256": "344b1065d2bfa1e621705dc36b30dc15f2089490c4114fa90646a7d3e29c1e85"
+  },
+  "run_contract_sha256": "175add6c3083f7d1e697819a8db1fbeee57d91b33e6907b313a38749f9cfeb5d",
+  "schema_version": "rds-full-pool-prepared-v1",
+  "scope": "formal_10000_candidate_pool",
+  "status": "COMPLETE"
+}

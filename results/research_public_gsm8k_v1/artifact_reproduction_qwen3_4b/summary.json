@@ -1,0 +1,36 @@
+{
+  "artifact_type": "official_precomputed_plot_data_reproduction",
+  "budget": 500,
+  "claim_boundary": "These values reproduce rows released by the official repository; they are not results from a new local training run.",
+  "csv_sha256": {
+    "binning_ce_loss_quantile.csv": "c72459e1873f03775e2cb054ce8df2695e95e0a4e717d9be16d4716da82712ff",
+    "binning_true_metric_quantile.csv": "32bd73aa788173cb2873ba6441a4041b29300fe606b500bc2b7e80dbc4793c8b",
+    "budget_ce_loss_budget.csv": "9c0b6d58f224fcb67b706d440c440416be59a0800da97677dd05efabc5388a0f",
+    "budget_ce_loss_zero_shot.csv": "9ad83bd380e7290e21fda3de78d7103a694652e3dae2e44ddf01cf25df9488a0",
+    "budget_true_metric_budget.csv": "cfa7ad850829df82379d1370a276df8659a997ff3ca26b24bc570d180471ba29",
+    "budget_true_metric_zero_shot.csv": "46d1e3b8e3f4c90797d85ba616b6cd6d29cf6d072685e01ad2b41b9ea9b413f6"
+  },
+  "dataset": "gsm8k",
+  "methods": [
+    "Random",
+    "RDS+ (RR)",
+    "LESS (RR)"
+  ],
+  "metric_summary": {
+    "LESS (RR)": {
+      "mean": 82.73944907758403,
+      "sample_std": 0.7669441953749554
+    },
+    "RDS+ (RR)": {
+      "mean": 80.6419004296184,
+      "sample_std": 0.683737642581182
+    },
+    "Random": {
+      "mean": 82.36037402072277,
+      "sample_std": 0.08754363444876538
+    }
+  },
+  "model": "Qwen/Qwen3-4B-Base",
+  "not_a_training_rerun": true,
+  "official_commit": "c1dc0286b06b9e2a857d925e516938f4c9619dc2"
+}

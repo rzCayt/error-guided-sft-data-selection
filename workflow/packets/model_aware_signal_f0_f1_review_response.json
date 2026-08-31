@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "review_response",
+  "language": "zh-CN",
+  "reviewer_role": "只读反对线程：F0/F1工程完整性与F2入口审计",
+  "evidence_checked": [
+    "changed_files",
+    "key_artifacts",
+    "verification_commands",
+    "workflow/stages.json",
+    "内联完整脚本与测试",
+    "内联F0/F1正式和attempt1 artifacts",
+    "内联correct-query长度补充artifact"
+  ],
+  "阻塞项": [],
+  "主要问题": [
+    "F0/F1只证明冻结输入上的单样本工程可行性，不证明gradient representation有效。",
+    "F2只有8个candidate，所有统计只能作为tiny feasibility描述。"
+  ],
+  "次要问题": [
+    "首次candidate时间包含CUDA warmup，F2成本必须使用多样本中位时间重新估计。",
+    "256 tokens是拒绝上限；冻结F2输入的真实最大长度为152 tokens。"
+  ],
+  "检索记录": [
+    {"query": "PyTorch CUDA max_memory_allocated max_memory_reserved", "purpose": "核对显存指标含义。", "affected_verdict": true},
+    {"query": "Qwen3-1.7B model card", "purpose": "核对模型与no-thinking模板边界。", "affected_verdict": true},
+    {"query": "LESS sequence gradient cosine length bias", "purpose": "限制工程gate与signal validity的声明边界。", "affected_verdict": true},
+    {"query": "A Critical Look at Targeted Instruction Selection 2602.14696", "purpose": "核对representation与selector必须分开。", "affected_verdict": true}
+  ],
+  "外部资料核验": [
+    {
+      "title": "PyTorch CUDA semantics",
+      "url": "https://docs.pytorch.org/docs/stable/notes/cuda.html",
+      "source_type": "official_doc",
+      "primary_source": true,
+      "checked_date": "2026-07-11",
+      "source_summary": "allocated与reserved是不同的CUDA allocator指标。",
+      "key_claim": "正式F1必须分别报告tensor峰值与allocator reserved峰值。",
+      "impact_on_project": "当前artifact分别报告3621.316MiB和3678MiB。",
+      "blocker": false
+    },
+    {
+      "title": "LESS: Selecting Influential Data for Targeted Instruction Tuning",
+      "url": "https://arxiv.org/abs/2402.04333",
+      "source_type": "paper",
+      "primary_source": true,
+      "checked_date": "2026-07-11",
+      "source_summary": "gradient representation仍需长度与最终训练验证。",
+      "key_claim": "单样本backward不能替代representation和selector evaluation。",
+      "impact_on_project": "F0/F1通过后只允许F2。",
+      "blocker": false
+    },
+    {
+      "title": "A Critical Look at Targeted Instruction Selection",
+      "url": "https://arxiv.org/abs/2602.14696v2",
+      "source_type": "paper",
+      "primary_source": true,
+      "checked_date": "2026-07-11",
+      "source_summary": "targeted selection需要分开审计representation与selector。",
+      "key_claim": "F2只能检查representation feasibility。",
+      "impact_on_project": "继续禁止F3和训练声明。",
+      "blocker": false
+    }
+  ],
+  "必修复": [],
+  "评分表": {
+    "test_leakage_split_contamination": {"score": 3, "max_score": 3, "reason": "输入allowlist且未使用test、manifest、hidden groups。"},
+    "matched_random_baseline_fairness": {"score": 2, "max_score": 3, "reason": "本阶段不做selector比较；F2仍需实现全部对照。"},
+    "selection_signal_validity": {"score": 2, "max_score": 3, "reason": "只通过工程gate，尚未产生representation证据。"},
+    "result_overclaiming_risk": {"score": 3, "max_score": 3, "reason": "artifact与文档明确禁止把工程pass写成signal有效。"},
+    "reproducibility": {"score": 3, "max_score": 3, "reason": "revision、hash、mask、参数、长度、显存阈值和失败重跑均可追溯。"},
+    "external_facing_wording": {"score": 2, "max_score": 2, "reason": "只声明冻结输入上的单样本工程可行。"},
+    "actionability": {"score": 2, "max_score": 2, "reason": "correct-query blocker已关闭，F2边界明确。"}
+  },
+  "total_score": 17,
+  "阶段判定": {
+    "verdict": "pass",
+    "allow_next_stage": true,
+    "allowed_next_stage": "model_aware_signal_f2_tiny_feasibility",
+    "结论说明": "F0/F1工程gate通过，attempt1重跑合规，F2三类输入长度均被覆盖。允许进入F2设计并运行；继续禁止F3、训练和selection claim，用户无需标注。"
+  }
+}

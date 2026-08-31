@@ -1,0 +1,21 @@
+{
+  "artifact_role": "frozen_selection_diagnostic",
+  "claim_boundary": "These 448 training-split examples define the frozen correct/error query groups for later selector research. They are not held-out test results and do not establish selector effectiveness.",
+  "code_commit": "34ad476c704a5a468f703d9cdd8e3879664b638d",
+  "code_was_clean": true,
+  "dataset_split": "selection_diagnostic",
+  "example_count": 448,
+  "correct_count": 349,
+  "error_count": 99,
+  "error_group_minimum_required": 64,
+  "error_group_gate_passed": true,
+  "strict_parsed_count": 316,
+  "fallback_parsed_count": 132,
+  "resolved_parsed_count": 448,
+  "numeric_accuracy": 0.7790178571428571,
+  "files": {
+    "manifest.json": "bbeeb34f627c9a4d4f9fa6d9b4c10b813e1781f0f598bce19be124ff8856997d",
+    "metrics.json": "1b97ba672d92b806738a841a82fbfabfe1374b3dec302d44698bf0e580452b89",
+    "raw_outputs.jsonl": "2d6644eaa76a5916454080bc77a4db4ffec41106a4e1686e47b1f957c840b73f"
+  }
+}

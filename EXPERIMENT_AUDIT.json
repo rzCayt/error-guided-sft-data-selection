@@ -1,0 +1,57 @@
+{
+  "auditor": "internal-checklist-fallback",
+  "checks": {
+    "dead_code_reported_path": {
+      "details": "Reported GSM8K, OOD, and bootstrap functions have formal worker/audit call sites.",
+      "status": "pass"
+    },
+    "eval_type": {
+      "candidate_utility": "supervised_proxy",
+      "main_accuracy": "real_gt",
+      "synthetic_history": "simulation_only"
+    },
+    "gt_provenance": {
+      "details": "Dataset-provided answers are parsed and hash-validated; predictions are not used as ground truth.",
+      "status": "pass"
+    },
+    "result_existence": {
+      "details": "Nine evidence sources exist and match byte counts and SHA-256; raw generations and adapters are not in Git.",
+      "status": "warn"
+    },
+    "scope": {
+      "details": "One 1.5B model, one main budget, one candidate pool, arithmetic-focused tasks.",
+      "status": "warn"
+    },
+    "score_normalization": {
+      "details": "Reported accuracy is a fixed-denominator mean of numeric-correctness indicators; no self-max normalization.",
+      "status": "pass"
+    }
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "impact": "supported_with_scope_and_public_artifact_warning"
+    },
+    {
+      "id": "C2",
+      "impact": "unsupported"
+    },
+    {
+      "id": "C3",
+      "impact": "unsupported"
+    },
+    {
+      "id": "C4",
+      "impact": "supported_for_frozen_proxy_only"
+    },
+    {
+      "id": "C5",
+      "impact": "untested"
+    }
+  ],
+  "date": "2026-08-31",
+  "independent_external_review": false,
+  "integrity_status": "warn",
+  "overall_verdict": "warn",
+  "schema_version": "experiment-integrity-audit-v1"
+}

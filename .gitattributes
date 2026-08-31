@@ -1,0 +1,30 @@
+.gitattributes text eol=lf
+.gitignore text eol=lf
+LICENSE text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.ndjson text eol=lf
+*.csv text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.cff text eol=lf
+*.jinja text eol=lf
+*.log text eol=lf
+*.sh text eol=lf
+requirements*.txt text eol=lf
+
+# Frozen experiment artifacts and licensed fixtures are byte-addressed. Do not
+# normalize their producer-specific line endings. CRLF is valid preserved data.
+.aris/** -text whitespace=cr-at-eol
+artifacts/state_dependence_candidate_panel48_v3.json -text whitespace=cr-at-eol
+artifacts/state_dependence_overlap_audit_v3.json -text whitespace=cr-at-eol
+artifacts/state_dependence_preflight_v3.json -text whitespace=cr-at-eol
+artifacts/state_drift_adapter_evidence_index_v2.json -text whitespace=cr-at-eol
+results/** -text whitespace=cr-at-eol
+releases/phase2_v8/** -text whitespace=cr-at-eol
+tests/fixtures/phase2_v7_anchor/** -text whitespace=cr-at-eol
+results/**/provenance/original_process.*.log -diff

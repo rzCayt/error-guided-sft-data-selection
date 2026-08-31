@@ -1,0 +1,84 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\run_h1a_utility_reliability.py",
+    "--config",
+    "configs\\public_gsm8k_v1.json",
+    "--data-manifest-dir",
+    "results\\research_public_gsm8k_v1\\data_manifest_full_v2_fuzzy",
+    "--scoring-run-dir",
+    "results\\checkpoints\\public_gsm8k_v1\\20260723T133051Z_rds_h1a_scoring_533c708443_s20260722",
+    "--output-root",
+    "results\\checkpoints\\public_gsm8k_v1",
+    "--max-length",
+    "512",
+    "--eval-batch-size",
+    "4",
+    "--learning-rate",
+    "0.0002",
+    "--repeat-seeds",
+    "17",
+    "29"
+  ],
+  "config": {
+    "candidate_count": 10,
+    "candidate_pool": {
+      "config": "default",
+      "license": "not_specified_on_dataset_card",
+      "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+      "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+    },
+    "eval_batch_size": 4,
+    "gradient_clipping": 1.0,
+    "gsm8k": {
+      "config": "main",
+      "license": "mit",
+      "repo_id": "openai/gsm8k",
+      "revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    "learning_rate": 0.0002,
+    "lora": {
+      "alpha": 32,
+      "bias": "none",
+      "dropout": 0.05,
+      "r": 16,
+      "target_modules": "all-linear"
+    },
+    "max_length": 512,
+    "measurement": "one_adamw_step_then_response_loss_reduction",
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "reliability_gate": {
+      "icc_a1_at_least": 0.9
+    },
+    "repeat_seeds": [
+      17,
+      29
+    ],
+    "utility_set_size": 128
+  },
+  "config_hash": "cacfde00116a17c18928f9f0fa39a75f911b5f9ac32034df621e9d154fe93e6b",
+  "dataset_revisions": {
+    "Harvard-DCML/tulu-v2-197K-processed": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "cuda_version": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "scoring_run_dir": "E:\\RA准备\\12_gsm8k_clean_run\\results\\checkpoints\\public_gsm8k_v1\\20260723T133051Z_rds_h1a_scoring_533c708443_s20260722",
+    "torch_version": "2.8.0+cu128"
+  },
+  "git_commit": "e214446011c5feedde74a50e1c0059eaafc7c766",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T133411Z_h1a_utility_reliability10_cacfde0011_s20260722",
+  "seed": 20260722,
+  "stage": "h1a_utility_reliability10",
+  "started_at_utc": "2026-07-23T13:34:11.766486+00:00"
+}

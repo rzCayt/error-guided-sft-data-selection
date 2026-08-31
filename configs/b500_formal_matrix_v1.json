@@ -1,0 +1,103 @@
+{
+  "matrix_version": "b500-formal-comparison-v1",
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "recipe_config": {
+    "path": "configs/b500_lora_frozen_v1.json",
+    "sha256": "c2059c2b397792513edf55b5326b5ddcd09b63dfdafb0f0fd6b031b5a00a16b1"
+  },
+  "runner": {
+    "path": "scripts/run_b500_formal_resumable.py",
+    "sha256": "28efb1295196b6473383df71a63a5b1c0219b7d012a6aea84406217c5fa0d2fd"
+  },
+  "execution_config": {
+    "path": "configs/b500_formal_local_execution_v1.json",
+    "sha256": "4a6717837d33b673d87f9318726f5f5391cd9c8c4b11c19827347b033f06d276"
+  },
+  "data_manifest": {
+    "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+    "required_files": {
+      "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+      "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    }
+  },
+  "h1a_gate": {
+    "path": "results/research_public_gsm8k_v1/h1a_formal_tulu96_clean_3fdb8b5/metrics.json",
+    "sha256": "f27c91c8067e36bead8a3583681a9839e1cc90c092a61fe4934f31230b91c496",
+    "required_field": "h1a_gate_passed",
+    "required_value": true
+  },
+  "output_root": "results/research_public_gsm8k_v1/b500_formal_runs_v1",
+  "formal_training_seeds": [
+    17,
+    29,
+    41
+  ],
+  "selections": {
+    "random": {
+      "path": "results/research_public_gsm8k_v1/b500_random_selection_v1/selection_manifest.json",
+      "sha256": "f4f0c1a466ee17738583b25a7c623396a19e9525f0233b3995f7d2d8eaf074e0"
+    },
+    "rds_all": {
+      "path": "results/research_public_gsm8k_v1/b500_rds_all_selection_v1/selection_manifest.json",
+      "sha256": "891ca5b51840f3a914659c825b698222ee5943e5f4b0d3433635fa7813098f65"
+    },
+    "rds_error": {
+      "path": "results/research_public_gsm8k_v1/b500_rds_error_selection_v1/selection_manifest.json",
+      "sha256": "ac050c659e09dfd0fbd40608ab2fa092ebfba90bff0a838a79053363cbaeff13"
+    }
+  },
+  "job_order": [
+    {
+      "strategy": "random",
+      "seed": 17
+    },
+    {
+      "strategy": "rds_all",
+      "seed": 17
+    },
+    {
+      "strategy": "rds_error",
+      "seed": 17
+    },
+    {
+      "strategy": "rds_all",
+      "seed": 29
+    },
+    {
+      "strategy": "rds_error",
+      "seed": 29
+    },
+    {
+      "strategy": "random",
+      "seed": 29
+    },
+    {
+      "strategy": "rds_error",
+      "seed": 41
+    },
+    {
+      "strategy": "random",
+      "seed": 41
+    },
+    {
+      "strategy": "rds_all",
+      "seed": 41
+    }
+  ],
+  "execution_policy": {
+    "automatic_execution": false,
+    "one_job_per_manual_invocation": true,
+    "require_all_selection_hashes_frozen_before_first_formal_run": true,
+    "require_clean_git_worktree_before_each_formal_run": true,
+    "allowed_job_differences": [
+      "strategy",
+      "selection_manifest",
+      "selection_manifest_sha256",
+      "selected_id_sha256",
+      "training_seed"
+    ]
+  }
+}

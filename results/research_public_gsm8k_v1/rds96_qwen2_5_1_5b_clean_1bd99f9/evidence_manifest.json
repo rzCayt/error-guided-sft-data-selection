@@ -1,0 +1,17 @@
+{
+  "artifact_role": "scaled_rds_candidate_scoring",
+  "claim_boundary": "This is a 96-candidate Qwen2.5-1.5B scaled RDS+ diagnostic. It is not the official Llama-2-7B result and does not establish candidate utility.",
+  "code_commit": "1bd99f95fec774cddff039026c90878153625cec",
+  "code_was_clean": true,
+  "candidate_count": 96,
+  "all_query_count": 448,
+  "error_query_count": 99,
+  "response_only_trainable_candidate_count": 76,
+  "files": {
+    "candidate_scores.jsonl": "3395d4383fdb98b84b27d5e4147ce6d0b1040fa48d46e3b5bc5c38c2a7899027",
+    "manifest.json": "df472c97541d0a55c189c76e3e0ffe7701a88db30de0127c703b7002358750d1",
+    "metrics.json": "b57ba6307cb30a7ccff770ac14a49307c92139c4f9946e4bc63845c7f124bd31",
+    "reliability_candidates.json": "b6113fe118b0a8d73a2159ed72a2fd0f691afca4b023282c2dfe0c858b962b64",
+    "local_embeddings.pt": "e6ee9370918a15314c5a29fdfcc3f64c919f7d18113097c33cbc17ddf67d5884"
+  }
+}

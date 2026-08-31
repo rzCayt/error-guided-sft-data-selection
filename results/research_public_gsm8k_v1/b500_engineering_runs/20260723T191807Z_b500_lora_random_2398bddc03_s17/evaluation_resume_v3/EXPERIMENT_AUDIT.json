@@ -1,0 +1,41 @@
+{
+  "date": "2026-07-29",
+  "auditor": "isolated-gpt-5.6-terra-xhigh-read-only",
+  "overall_verdict": "warn",
+  "integrity_status": "warn",
+  "reviewer_independence": "isolated_context_and_distinct_model_variant",
+  "checks": {
+    "gt_provenance": {
+      "status": "pass",
+      "details": "Pinned openai/gsm8k test answers; 1319 source hashes and saved row scores independently reproduced."
+    },
+    "score_normalization": {
+      "status": "pass",
+      "details": "Counts are divided only by example count; no prediction-statistic denominator."
+    },
+    "result_existence": {
+      "status": "warn",
+      "details": "All requested artifacts and hashes match; provenance warnings remain for the inherited 48-row prefix, missing original root telemetry, untracked audit code at review time, and a stale absolute manifest path."
+    },
+    "dead_code": {
+      "status": "warn",
+      "details": "Final resumable metrics are live; original interrupted monolithic evaluation outputs were not preserved."
+    },
+    "scope": {
+      "status": "pass",
+      "details": "One model/config, random strategy only, seed 17 only, 1319 GSM8K test rows; claim boundary is explicit."
+    },
+    "eval_type": "real_gt"
+  },
+  "claims": [
+    {
+      "id": "random_b500_engineering_closure",
+      "impact": "supported_with_provenance_warnings"
+    },
+    {
+      "id": "three_strategy_comparison",
+      "impact": "unsupported"
+    }
+  ],
+  "trace_path": ".aris/traces/experiment-audit/2026-07-29_run01/"
+}

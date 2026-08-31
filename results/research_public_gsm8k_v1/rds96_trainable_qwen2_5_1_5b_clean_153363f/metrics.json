@@ -1,0 +1,21 @@
+{
+  "all_query_count": 448,
+  "all_vs_error_order_identical": false,
+  "all_vs_error_rank_spearman": 0.9871134020618557,
+  "all_vs_error_top_quartile_jaccard": 0.7777777777777778,
+  "candidate_count": 96,
+  "candidate_embeddings_sha256": "e00a5a12080a0e808bce43d5ab8eb80294f699a505034b9d6f5bb32b60e29833",
+  "candidate_scan_count": 121,
+  "claim_boundary": "Scores are a 96-candidate scaled RDS+ diagnostic. They do not establish candidate utility or selector effectiveness.",
+  "elapsed_seconds": 21.09235869999975,
+  "embedding_dimension": 1536,
+  "error_query_count": 99,
+  "excluded_before_filling_trainable_count": 25,
+  "peak_memory_bytes": 4707524096,
+  "peak_memory_gib": 4.384223461151123,
+  "query_embeddings_sha256": "cb0d269f54747331a6b5a931be1a854bb9cafd00efa1b949e7f836672ae1c568",
+  "representation_version": "qwen2_5_rds_weighted_mean_v1",
+  "response_only_trainable_candidate_count": 96,
+  "response_only_untrainable_candidate_count": 0,
+  "top_quartile_count": 24
+}

@@ -1,0 +1,9 @@
+{
+  "clean_git_commit": "7af04b168b089c88318031018b0d2f8ba134566c",
+  "generation_content_sha256": "467f6d0882163600fefc112de2718b3af00a2a5d6f8b42ace486ea5ef6e08d61",
+  "manifest_sha256": "d2094cd0b8a46e4625ecc8f864f33a9c75c99cab511889c45baced64e244eb42",
+  "metrics_sha256": "74ee01848386fd005b36aff375d192b809f6c8c6a029d6f0eeec3d58eb64dd1a",
+  "raw_outputs_sha256": "dd7cdeea28427463bf5295ded0875080fadae28696c01a9695c933bf7f169dde",
+  "generation_content_reproduced_exactly": true,
+  "claim_boundary": "This calibration set was used to freeze the prompt and parser. It is not a held-out estimate of final model accuracy."
+}

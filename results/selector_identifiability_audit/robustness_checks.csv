@@ -1,0 +1,8 @@
+metric,value,interpretation
+input_order_invariant,True,Reversing and shuffling input order do not change selected IDs.
+candidate_id_rename_jaccard,0.319588,Content is unchanged; only candidate IDs are renamed.
+fixed_quota_hash_mean_jaccard,0.297394,Hash selections use the primary targeted stratum quotas.
+fixed_quota_random_null_mean_jaccard,0.315317,Null uses stratified random selections with the same quotas.
+fixed_quota_random_null_p05,0.268588,Fifth percentile of pairwise null Jaccard.
+fixed_quota_random_null_p95,0.361702,Ninety-fifth percentile of pairwise null Jaccard.
+fixed_quota_hash_consistent_with_random_null,True,Hash overlap falls inside the random-null 5-95% interval.

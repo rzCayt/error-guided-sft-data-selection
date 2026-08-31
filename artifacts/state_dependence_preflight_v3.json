@@ -1,0 +1,42 @@
+{
+  "schema_version": "candidate-utility-state-dependence-preflight-v3",
+  "status": "READY_FOR_GPU_QUALIFICATION",
+  "gpu_accessed": false,
+  "gpu_authorized": false,
+  "protocol_sha256": "596162e4551ec7ba30f02d550bfded77e72dac0cfd4ac34856b6be3a933693e4",
+  "panel_sha256": "8433f7c7a76f496df9cd9e817d81f73207bef03b335d125e39a8e4788b6240b3",
+  "overlap_audit_sha256": "d4c10eb279ffe37c64abd044353db391bff02e6e1760699febb935bd970406d6",
+  "adapter_index_sha256": "0d6dade391f71d3a4f8c9f3d0170c03a59086812601010eaced70c39def954fe",
+  "candidate_count": 48,
+  "candidate_id_sha256": "eb8440744cb73ed0582becc6559463bf136fd308823fe95eb286d6adebd3bc23",
+  "utility_record_count": 128,
+  "utility_record_id_sha256": "bdc533e2b238740e7d831054ed8818c063a05d20c56f59cf7a23ca561d840271",
+  "historical_measurements_reused": false,
+  "planned_new_measurements": {
+    "u0a_fixed_state_reliability": 144,
+    "u1_initial_four_states_two_probe_seeds": 384,
+    "u1_optional_expansion_four_states": 384
+  },
+  "initial_adapter_states": [
+    "v8_rep1_random_common_mix_train17",
+    "v8_rep1_rds_error_common_mix_train17",
+    "v8_rep4_random_common_mix_train17",
+    "v8_rep4_rds_error_common_mix_train17"
+  ],
+  "expansion_adapter_states": [
+    "v8_rep2_random_common_mix_train17",
+    "v8_rep2_rds_error_common_mix_train17",
+    "v8_rep3_random_common_mix_train17",
+    "v8_rep3_rds_error_common_mix_train17"
+  ],
+  "input_files": {
+    "gsm8k_records": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+    "tulu_pool": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7",
+    "formal_token_audit": "7b8af3971f4ccbe1382cae885fac566433f6c87d4183d3d90df102723e6586e8"
+  },
+  "remaining_before_formal_gpu": [
+    "run_full_CPU_tests_and_contract_only",
+    "run_two_candidate_three_seed_GPU_qualification_after_explicit_authorization",
+    "independently_audit_qualification"
+  ]
+}

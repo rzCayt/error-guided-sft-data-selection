@@ -1,0 +1,90 @@
+{
+  "claim_boundary": "F0 is a static engineering estimate, not evidence of signal validity.",
+  "config": {
+    "config_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "hidden_size": 2048,
+    "model_type": "qwen3",
+    "num_attention_heads": 16,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 8,
+    "tokenizer_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+  },
+  "created_at_utc": "2026-07-10T18:53:11.767332+00:00",
+  "dtype": "bfloat16",
+  "f1_allowed": true,
+  "input_hashes": {
+    "candidate_pool_sha256": "7AF785CD1A4047A700A3E4B5F34794B726EE77AD8E2BC6C9622FBA521673FD00",
+    "dev_diagnostic_sha256": "D3D64C86EEEC1904D58AA2216A699DCB2FE06B0B307F2C6DAC8D7EC42D7B069E",
+    "error_membership_sha256": "9AC39B04239EA7A1198EC9BAFA07FE9A6672E032E5962CD1A17C768B5B7F7AC6",
+    "prior_inference_metadata_sha256": "FB2A9F7D4B6730247E38A0F1FD6D2FEF3F3AF6031DF5B1F52B4D0EBE2F82CFB7"
+  },
+  "longest_candidate": {
+    "content_sha256": "A2A5E12F927E8E1FC6F0EAC2FD087EA6BA468896419720C804BFA6C721823B35",
+    "equivalent_content_ids": [
+      "candidate_pool-0238"
+    ],
+    "id": "candidate_pool-0238",
+    "prefix_token_count": 76,
+    "target_token_count": 76,
+    "total_token_count": 152
+  },
+  "longest_error_query": {
+    "content_sha256": "93610BC15DD63B183B71240C43F469A9141E49810E4E1AA0335B2B1249DCDBCC",
+    "equivalent_content_ids": [
+      "dev_diagnostic-0082"
+    ],
+    "id": "dev_diagnostic-0082",
+    "prefix_token_count": 77,
+    "target_token_count": 75,
+    "total_token_count": 152
+  },
+  "memory_estimate_mib": {
+    "backward_reserve": 2048.0,
+    "estimated_peak": 5915.66,
+    "f0_limit": 6656.0,
+    "framework_safety_reserve": 512.0,
+    "prior_inference_peak_allocated": 3331.66,
+    "selected_fp32_gradient": 24.0
+  },
+  "model": "Qwen/Qwen3-1.7B",
+  "packages": {
+    "transformers": "4.57.2"
+  },
+  "parameter_spec": {
+    "fp32_gradient_bytes": 25165824,
+    "fp32_gradient_mib": 24.0,
+    "last_layer_index": 27,
+    "parameters": [
+      {
+        "fp32_gradient_bytes": 16777216,
+        "name": "model.layers.27.self_attn.q_proj.weight",
+        "parameter_count": 4194304,
+        "shape": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "fp32_gradient_bytes": 8388608,
+        "name": "model.layers.27.self_attn.v_proj.weight",
+        "parameter_count": 2097152,
+        "shape": [
+          1024,
+          2048
+        ]
+      }
+    ],
+    "total_parameter_count": 6291456
+  },
+  "phase": "f0_static_estimate",
+  "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "schema_version": 1,
+  "stage_id": "model_aware_signal_f0_f1",
+  "status": "passed",
+  "validated_counts": {
+    "correct_queries": 8,
+    "error_queries": 17,
+    "weighted_candidates": 125,
+    "weighted_dev": 25
+  }
+}

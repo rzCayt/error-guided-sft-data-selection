@@ -1,0 +1,52 @@
+{
+  "schema_version": "phase2-v8-stop-go-v1",
+  "status": "FROZEN_BEFORE_GPU_RELEASE_REVIEW",
+  "phase_q_required": [
+    "canonical_runtime_authority_pass",
+    "resolved_contract_diff_24_of_24_pass",
+    "training_input_hashes_24_of_24_pass",
+    "failure_injection_suite_pass",
+    "precision_simulation_complete",
+    "two_environment_manifests_match",
+    "two_base_exact_canaries_pass",
+    "archived_adapter_128_semantic_bridge_pass",
+    "new_worker_token_anchor_pass",
+    "gpu0_anchor_A1_pass",
+    "gpu0_anchor_A2_pass",
+    "gpu1_anchor_B1_pass",
+    "same_gpu_anchor_repeat_pass",
+    "cross_gpu_anchor_pass",
+    "release_go_human_authorized"
+  ],
+  "formal_block": {
+    "cells": 24,
+    "methods": [
+      "random_common_mix",
+      "rds_error_common_mix"
+    ],
+    "replicates": [1, 2, 3, 4],
+    "training_seeds": [17, 29, 41],
+    "historical_cells_in_primary": false,
+    "free_mix_in_block": false,
+    "adaptive_scientific_stop_forbidden": true,
+    "accuracy_blind_until_24_complete": true
+  },
+  "ra_outreach_gate": {
+    "minimum_blind_common_cells_complete": 4,
+    "preferred_blind_common_cells_complete": 8,
+    "accuracy_unblinding_required": false
+  },
+  "release_authorization": {
+    "q0_q2_do_not_start_formal_cells": true,
+    "ready_record_status": "READY_FOR_HUMAN_REVIEW",
+    "required_confirmation": "START_PHASE2_V8_COMMON24",
+    "formal_worker_requires_status": "GO"
+  },
+  "paper_extension_not_authorized": [
+    "free_mix",
+    "new_selector",
+    "second_budget",
+    "second_model",
+    "second_task_domain"
+  ]
+}

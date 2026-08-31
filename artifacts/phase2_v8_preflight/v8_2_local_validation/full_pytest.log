@@ -1,0 +1,85 @@
+
+==================================== ERRORS ====================================
+_______________ ERROR collecting tests/test_b500_formal_audit.py _______________
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_b500_formal_audit.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_b500_formal_audit.py:6: in <module>
+    from eg_sft.experiment.b500_formal_audit import (
+src/eg_sft/experiment/b500_formal_audit.py:13: in <module>
+    from transformers import PreTrainedTokenizerFast
+E   ModuleNotFoundError: No module named 'transformers'
+____ ERROR collecting tests/test_budget_equivalent_phase1_unblinded_cli.py _____
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_budget_equivalent_phase1_unblinded_cli.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_budget_equivalent_phase1_unblinded_cli.py:11: in <module>
+    SPEC.loader.exec_module(MODULE)
+scripts/analyze_budget_equivalent_phase1_unblinded.py:12: in <module>
+    from transformers import AutoTokenizer
+E   ModuleNotFoundError: No module named 'transformers'
+_____________ ERROR collecting tests/test_cloud_v2_fixed_entry.py ______________
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_cloud_v2_fixed_entry.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_cloud_v2_fixed_entry.py:6: in <module>
+    from eg_sft.experiment.cloud_v2_train_runtime import (
+src/eg_sft/experiment/cloud_v2_train_runtime.py:8: in <module>
+    from peft import LoraConfig, TaskType, get_peft_model, get_peft_model_state_dict
+E   ModuleNotFoundError: No module named 'peft'
+__________ ERROR collecting tests/test_identifiable_base_reference.py __________
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_identifiable_base_reference.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_identifiable_base_reference.py:12: in <module>
+    from run_identifiable_base_reference import TOTAL_RECORDS, _batch_outputs  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/run_identifiable_base_reference.py:15: in <module>
+    from datasets import load_dataset
+E   ModuleNotFoundError: No module named 'datasets'
+_______ ERROR collecting tests/test_identifiable_eval_worker_helpers.py ________
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_identifiable_eval_worker_helpers.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_identifiable_eval_worker_helpers.py:11: in <module>
+    import run_budget_equivalent_ood_eval_worker as ood_worker  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/run_budget_equivalent_ood_eval_worker.py:14: in <module>
+    from datasets import load_dataset
+E   ModuleNotFoundError: No module named 'datasets'
+______________ ERROR collecting tests/test_rds_scoring_helpers.py ______________
+ImportError while importing test module '/mnt/data/phase2_v8_2_revised/tests/test_rds_scoring_helpers.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../phase2_v8_review2_unpacked/tests/test_rds_scoring_helpers.py:11: in <module>
+    _SPEC.loader.exec_module(_MODULE)
+scripts/run_rds_h1a_scoring.py:15: in <module>
+    from datasets import load_dataset
+E   ModuleNotFoundError: No module named 'datasets'
+=========================== short test summary info ============================
+ERROR tests/test_b500_formal_audit.py
+ERROR tests/test_budget_equivalent_phase1_unblinded_cli.py
+ERROR tests/test_cloud_v2_fixed_entry.py
+ERROR tests/test_identifiable_base_reference.py
+ERROR tests/test_identifiable_eval_worker_helpers.py
+ERROR tests/test_rds_scoring_helpers.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!!
+6 errors in 1.21s

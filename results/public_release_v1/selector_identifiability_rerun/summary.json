@@ -1,0 +1,59 @@
+{
+  "audit_version": "selector_identifiability_audit_v2",
+  "claim_under_audit": "The current selector contains selection signal beyond the metadata used by exact matched random.",
+  "verdict": "fail",
+  "identifiability_status": "not_identifiable_beyond_matching_metadata",
+  "candidate_count": 500,
+  "profile_row_count": 22,
+  "budget": 128,
+  "seeds": [
+    20260710,
+    20260711,
+    20260712
+  ],
+  "matching_fields": [
+    "task_family",
+    "difficulty_bucket",
+    "answer_magnitude_bucket",
+    "reasoning_length_bucket"
+  ],
+  "profile_signal_fields": [
+    "task_family",
+    "difficulty_bucket",
+    "answer_magnitude_bucket",
+    "reasoning_length_bucket"
+  ],
+  "instance_level_signal_fields": [],
+  "tie_breaker_fields": [
+    "id",
+    "seed"
+  ],
+  "score_fields_fully_matched_by_primary_baseline": true,
+  "has_nonrandom_instance_level_signal": false,
+  "stratum_count": 26,
+  "strata_with_multiple_candidates": 24,
+  "max_unique_nonrandom_weight_count_within_stratum": 1,
+  "profile_covered_candidate_count": 491,
+  "profile_covered_candidate_rate": 0.982,
+  "targeted_matched_strata_l1_delta": 0,
+  "targeted_matched_overlap_count": 0,
+  "targeted_matched_overlap_rate": 0.0,
+  "mean_targeted_id_jaccard_across_seed_pairs": 0.29965,
+  "max_targeted_matching_strata_l1_across_seed_pairs": 6,
+  "selector_seed_changes_stratum_quotas": true,
+  "input_order_invariant": true,
+  "candidate_id_rename_jaccard": 0.319588,
+  "within_stratum_top_hash_match_rate": 1.0,
+  "fixed_quota_hash_mean_jaccard": 0.297394,
+  "fixed_quota_random_null_mean_jaccard": 0.315317,
+  "fixed_quota_random_null_p05": 0.268588,
+  "fixed_quota_random_null_p95": 0.361702,
+  "fixed_quota_hash_consistent_with_random_null": true,
+  "null_pairwise_jaccard_count": 1225,
+  "null_pairwise_samples_independent": false,
+  "null_interval_interpretation": "Descriptive 5-95% interval over dependent pairwise comparisons; not an independent-sample significance test.",
+  "training_allowed": false,
+  "selection_effectiveness_claim_allowed": false,
+  "required_fix": "Define a preregistered candidate-level operation/skill representation and score residual diagnostic errors after coarse metadata is controlled.",
+  "failure_reason": "All nonrandom profile score fields are included in the exact matching key. Within a matched stratum, current ordering is only an id/seed hash tie-breaker."
+}

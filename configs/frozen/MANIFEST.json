@@ -1,0 +1,47 @@
+{
+  "files": [
+    {
+      "bytes": 917,
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce",
+      "snapshot": "configs/frozen/public_gsm8k_v1.json",
+      "source": "configs/public_gsm8k_v1.json"
+    },
+    {
+      "bytes": 2152,
+      "sha256": "99235d009d4a89edfe53d8bcef1a4a83ff2b82dd31ed13ec0c8dae1549aa6e40",
+      "snapshot": "configs/frozen/budget_equivalent_ood_v1.json",
+      "source": "configs/budget_equivalent_ood_v1.json"
+    },
+    {
+      "bytes": 15732,
+      "sha256": "87110b8602f8c8d53562369767e0e774b0fecb997e33180e83edd2243689ee6a",
+      "snapshot": "configs/frozen/phase2_clean_common24_v8_canonical.json",
+      "source": "configs/phase2_clean_common24_v8_canonical.json"
+    },
+    {
+      "bytes": 2522,
+      "sha256": "20665ac54aa9aecf2d4ab11510ae64edaeebee26af9ae0f041628fa7fad9e782",
+      "snapshot": "configs/frozen/phase2_v8_statistical_protocol.json",
+      "source": "configs/phase2_v8_statistical_protocol.json"
+    },
+    {
+      "bytes": 1561,
+      "sha256": "d40ef25148d2d86dbb1e0e143cd7d0076f388b5ef0c2dec27ca004169ae2d5a3",
+      "snapshot": "configs/frozen/phase2_v8_stop_go_rules.json",
+      "source": "configs/phase2_v8_stop_go_rules.json"
+    },
+    {
+      "bytes": 2196,
+      "sha256": "c3c7a295af1d5e59046a9e18db467072af768fa8c6f12608c9c21259a3e28118",
+      "snapshot": "configs/frozen/phase2_v8_training_anchor_protocol.json",
+      "source": "configs/phase2_v8_training_anchor_protocol.json"
+    },
+    {
+      "bytes": 4841,
+      "sha256": "596162e4551ec7ba30f02d550bfded77e72dac0cfd4ac34856b6be3a933693e4",
+      "snapshot": "configs/frozen/candidate_utility_state_dependence_protocol_frozen_20260831_v3.json",
+      "source": "configs/candidate_utility_state_dependence_protocol_frozen_20260831_v3.json"
+    }
+  ],
+  "schema_version": "public-frozen-config-manifest-v1"
+}

@@ -1,0 +1,109 @@
+{
+  "artifact_file": "attempt_20260730T184923Z_5633df922482.pt",
+  "artifact_sha256": "62dc7a5c0d08fcb9e5aa7bfd4ed43f96697485dbc2f10d81f3855c0b974955d8",
+  "chunk_index": 0,
+  "claim_boundary": "This artifact contains frozen RDS+ representations only. It is not a training or downstream evaluation result.",
+  "completed_at_utc": "2026-07-30T18:49:24.037203+00:00",
+  "cuda_version": "12.8",
+  "elapsed_seconds": 4.527107599998999,
+  "embedding_dtype": "torch.float32",
+  "embedding_shape": [
+    12,
+    1536
+  ],
+  "embedding_tensor_sha256": "8751aeefba118510fb5dcef24ebe78a20fb0c5185e616a2d5fe1df49d2cb9ed9",
+  "end_index_exclusive": 12,
+  "gpu_end": {
+    "event": "after_gpu_cleanup",
+    "memory_total_mib": 8151,
+    "memory_used_mib": 152,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "observed_at_utc": "2026-07-30T18:49:23.942916+00:00",
+    "power_draw_w": 55.38,
+    "temperature_c": 68,
+    "utilization_percent": 38
+  },
+  "gpu_start": {
+    "memory_total_mib": 8151,
+    "memory_used_mib": 0,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "observed_at_utc": "2026-07-30T18:49:15.619652+00:00",
+    "power_draw_w": 15.62,
+    "temperature_c": 59,
+    "utilization_percent": 0
+  },
+  "kind": "candidate",
+  "maximum_observed_temperature_c": 68,
+  "ordered_id_sha256": "2452ae40165ea4a9e688f8653933bef753f3d764daae4b983405bae54c144d1f",
+  "peak_memory_bytes": 3471190016,
+  "peak_memory_gib": 3.232797622680664,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "representation_version": "qwen2_5_rds_weighted_mean_v1",
+  "row_count": 12,
+  "run_contract_sha256": "e3e65cc84c7dd5ae741e5819a2955562776b4ce3e146dc0ba4ff16bea95d8c7c",
+  "schema_version": "rds-full-pool-embedding-chunk-v1",
+  "source_git_commit": "962ba36b6791bd4145919a0d8eb31ba0f5f7d66c",
+  "start_index": 0,
+  "status": "COMPLETE",
+  "system_start": {
+    "available_memory_bytes": 11861368832,
+    "available_memory_gib": 11.046760559082031,
+    "cpu_percent": 15.9,
+    "total_memory_bytes": 33751425024
+  },
+  "thermal_samples": [
+    {
+      "memory_total_mib": 8151,
+      "memory_used_mib": 0,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "observed_at_utc": "2026-07-30T18:49:15.619652+00:00",
+      "power_draw_w": 15.62,
+      "temperature_c": 59,
+      "utilization_percent": 0
+    },
+    {
+      "event": "model_loaded",
+      "memory_total_mib": 8151,
+      "memory_used_mib": 3236,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "observed_at_utc": "2026-07-30T18:49:22.496434+00:00",
+      "power_draw_w": 18.66,
+      "temperature_c": 59,
+      "utilization_percent": 13
+    },
+    {
+      "batch_index": 8,
+      "batch_total": 12,
+      "memory_total_mib": 8151,
+      "memory_used_mib": 3750,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "observed_at_utc": "2026-07-30T18:49:23.426058+00:00",
+      "power_draw_w": 32.85,
+      "temperature_c": 67,
+      "utilization_percent": 71
+    },
+    {
+      "batch_index": 12,
+      "batch_total": 12,
+      "memory_total_mib": 8151,
+      "memory_used_mib": 3750,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "observed_at_utc": "2026-07-30T18:49:23.706113+00:00",
+      "power_draw_w": 55.38,
+      "temperature_c": 68,
+      "utilization_percent": 38
+    },
+    {
+      "event": "after_gpu_cleanup",
+      "memory_total_mib": 8151,
+      "memory_used_mib": 152,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "observed_at_utc": "2026-07-30T18:49:23.942916+00:00",
+      "power_draw_w": 55.38,
+      "temperature_c": 68,
+      "utilization_percent": 38
+    }
+  ],
+  "torch_version": "2.8.0+cu128"
+}

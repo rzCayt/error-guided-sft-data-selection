@@ -1,0 +1,14 @@
+{
+  "audit_scope": "candidate_utility_validation",
+  "transformers_version": "4.57.2",
+  "for_causal_lm_loss_behavior": "right-pad labels with ignore_index, then use labels[..., 1:]",
+  "example_count": 128,
+  "batch_size": 4,
+  "batch_count": 32,
+  "unshifted_supervised_label_count": 16211,
+  "shift_aligned_supervised_label_count": 16211,
+  "batches_with_count_difference": 0,
+  "maximum_batch_count_difference": 0,
+  "first_label_was_ignore_index_for_every_example": true,
+  "verdict": "The original and explicit shift-aligned batch weights are identical for this completed run. Utility values and ICC do not require rerunning for this issue."
+}

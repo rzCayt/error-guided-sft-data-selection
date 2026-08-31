@@ -1,0 +1,22 @@
+{
+  "adapter_reload_gate_difference_at_most_1e_6": true,
+  "adapter_reload_loss_absolute_difference": 0.0,
+  "elapsed_seconds": 55.11621569999261,
+  "epochs": 8,
+  "loss_ratio_post_over_pre": 0.005816321299330693,
+  "loss_reduction_fraction": 0.9941836787006693,
+  "optimizer_steps": 32,
+  "overfit_gate_loss_ratio_at_most_0_5": true,
+  "peak_memory_bytes": 4017877504,
+  "peak_memory_gib": 3.7419400215148926,
+  "perplexity_post": 1.0031967835731386,
+  "perplexity_pre": 1.7310813797744986,
+  "post_train_token_loss": 0.0031916847242529,
+  "pre_train_token_loss": 0.5487462882458333,
+  "reloaded_post_train_token_loss": 0.0031916847242529,
+  "supervised_tokens_per_second": 281.1513781052656,
+  "total_parameters": 1562179072,
+  "total_supervised_tokens_seen": 15496,
+  "trainable_fraction": 0.011819879251333359,
+  "trainable_parameters": 18464768
+}

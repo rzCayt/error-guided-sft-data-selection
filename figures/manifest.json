@@ -1,0 +1,37 @@
+{
+  "files": [
+    {
+      "bytes": 25209,
+      "path": "figures/fig_main_effects.pdf",
+      "sha256": "21460f82e9a80933872fab7aa60bcadc883d50f3187e18869ea747dc3bd9a3cf"
+    },
+    {
+      "bytes": 85571,
+      "path": "figures/fig_main_effects.png",
+      "sha256": "c74c12b9dcb7bef5e6f2de80080a63bac01fce7ac0e52143cad1b206fb27ff78"
+    },
+    {
+      "bytes": 27574,
+      "path": "figures/fig_candidate_to_set_gap.pdf",
+      "sha256": "968f9f28ab194189ef7b7020210adb948e1eede56d64861b43ceeff252bbddeb"
+    },
+    {
+      "bytes": 145275,
+      "path": "figures/fig_candidate_to_set_gap.png",
+      "sha256": "1edc8adbd1bfd04ef192104c7c719d932553444033cddf2bce66dcbe02320ec3"
+    },
+    {
+      "bytes": 26331,
+      "path": "figures/fig_state_dependence_decision.pdf",
+      "sha256": "9c77d278a1276ad2ed38b9d417c64786de9ed5cb3f348c0df9ac7c273656b46a"
+    },
+    {
+      "bytes": 159779,
+      "path": "figures/fig_state_dependence_decision.png",
+      "sha256": "ca607506b2e62d9f482431095f8a717ea712b4ff689504b420cada7601a5ff8f"
+    }
+  ],
+  "schema_version": "public-figure-manifest-v1",
+  "source": "results/public_summary/main_results.json",
+  "source_sha256": "49b741f99ae7aa5d3a3ea3e74ae3234e1ee97e5b6c1f40743896c36459e6f98f"
+}

@@ -6,6 +6,18 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+.aris/
+
+# Small, text-free frozen bindings required by the public CPU contract tests.
+!.aris/
+!.aris/compute/
+!.aris/compute/budget_equivalent_v3_selections/
+!.aris/compute/budget_equivalent_v3_selections/**
+!.aris/compute/budget_equivalent_ood_v1/
+!.aris/compute/budget_equivalent_ood_v1/ood_manifest.json
+!.aris/compute/budget_equivalent_ood_v1/svamp_records.jsonl
+!.aris/compute/budget_equivalent_ood_v1/asdiv_numeric_records.jsonl
+!.aris/compute/budget_equivalent_ood_v1/multiarith_records.jsonl
 
 # Local experiment outputs that can become large.
 data/generated/
@@ -13,6 +25,25 @@ results/adapters/
 results/checkpoints/
 results/*.jsonl
 !results/real_base_diagnostic_outputs.jsonl
+results/research_public_gsm8k_v1/data_smoke_gsm8k/
+results/research_public_gsm8k_v1/data_manifest_full_v1/
+results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy_rerun/
+results/research_public_gsm8k_v1/overfit16_qwen2_5_1_5b/
+results/research_public_gsm8k_v1/query_groups_diagnostic448_v1/
+
+# Local-only full-pool execution evidence contains machine-specific provenance
+# and tensor bindings. Track the path-clean public evidence package instead.
+results/research_public_gsm8k_v1/rds_full_pool_10k_v1/
+
+# Formal local runs contain immutable checkpoints, raw generations, absolute
+# machine provenance, and large adapters. Publish a sanitized evidence package.
+results/research_public_gsm8k_v1/b500_formal_runs_v1/
+results/research_public_gsm8k_v1/b500_formal_cloud_4090_runs_v1/
+
+# Large local B=500 adapter/tokenizer artifacts. Their hashes and manifests are
+# tracked separately; weights remain local.
+results/research_public_gsm8k_v1/b500_engineering_runs/**/adapter/
+results/research_public_gsm8k_v1/b500_engineering_runs/**/tokenizer/
 
 # Secrets and model artifacts must never be committed.
 .env

@@ -1,0 +1,18 @@
+{
+  "base_utility_loss": 0.49819309158023994,
+  "candidate_count": 96,
+  "claim_boundary": "This run measures formal candidate utility. H1a requires the preregistered partial correlation and permutation analysis.",
+  "elapsed_seconds": 1398.1253244,
+  "measurement_count": 96,
+  "mode": "formal",
+  "peak_memory_bytes": 6273131520,
+  "peak_memory_gib": 5.84230899810791,
+  "positive_utility_measurements": 50,
+  "repeat_count": 1,
+  "repeat_means": [
+    0.0004948166157300883
+  ],
+  "utility_max": 0.0052929275198814185,
+  "utility_min": -0.003863085170007219,
+  "utility_set_size": 128
+}

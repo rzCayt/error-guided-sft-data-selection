@@ -1,0 +1,68 @@
+{
+  "files": [
+    {
+      "path": "configs/budget_equivalent_lora_v3.json",
+      "role": "base_recipe",
+      "sha256": "5e89eb0dca0e04bb7a35bf11523551510c4f9e8c2b9c5dd6f2389b1997dfe4c9"
+    },
+    {
+      "path": "configs/phase2_v8_canary_contract.json",
+      "role": "canary_contract",
+      "sha256": "8b9a9cd0c3be6b31436993c2e662b01e56c431082f3ccbae1dd35dc456c4aeda"
+    },
+    {
+      "path": ".aris/compute/budget_equivalent_v3_selections/information_gates.json",
+      "role": "information_gates",
+      "sha256": "35052b720c34a3fd59c4e25f7acb6f5e438c1802ce748c16c18a348de8c0767d"
+    },
+    {
+      "path": "artifacts/phase2_v8_preflight/materialized_contract_audit_v4.json",
+      "role": "materialized_contract_audit",
+      "sha256": "934de84775178bab3a139c38e073533b0713a9d75d11d2b799d03c7c51bcceb9"
+    },
+    {
+      "path": "artifacts/phase2_v8_materialized_contracts_v4/MATERIALIZATION_COMPLETE.json",
+      "role": "materialized_contracts",
+      "sha256": "a806659074f9021d47d92e2eb3d8e8ca299c5e69a73b413ed2fdbd45254e5216"
+    },
+    {
+      "path": "configs/budget_equivalent_phase1_matrix_frozen_20260824_v2.json",
+      "role": "parent_matrix",
+      "sha256": "44d7288f4e785af61f8ebe21ec4ad1883b8b7bd542069c2fae675796724dd29a"
+    },
+    {
+      "path": "configs/phase2_clean_common24_v8_canonical.json",
+      "role": "primary_matrix",
+      "sha256": "87110b8602f8c8d53562369767e0e774b0fecb997e33180e83edd2243689ee6a"
+    },
+    {
+      "path": "configs/public_gsm8k_v1.json",
+      "role": "research_protocol",
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+    },
+    {
+      "path": "artifacts/phase2_v8_preflight/semantic_code_manifest_v8_2.json",
+      "role": "semantic_code_manifest",
+      "sha256": "3f759906adabfcba5388187dc72691c8009fa600d1df759f606c4e7a1345624e"
+    },
+    {
+      "path": "configs/phase2_v8_statistical_protocol.json",
+      "role": "statistical_protocol",
+      "sha256": "20665ac54aa9aecf2d4ab11510ae64edaeebee26af9ae0f041628fa7fad9e782"
+    },
+    {
+      "path": "configs/phase2_v8_stop_go_rules.json",
+      "role": "stop_go_rules",
+      "sha256": "d40ef25148d2d86dbb1e0e143cd7d0076f388b5ef0c2dec27ca004169ae2d5a3"
+    },
+    {
+      "path": "configs/phase2_v8_training_anchor_protocol.json",
+      "role": "training_anchor_protocol",
+      "sha256": "c3c7a295af1d5e59046a9e18db467072af768fa8c6f12608c9c21259a3e28118"
+    }
+  ],
+  "noncanonical_config_files_are_non_deployable": true,
+  "protocol_id": "phase2-clean-common24-v8",
+  "schema_version": "phase2-v8-canonical-runtime-files-v1",
+  "status": "FROZEN"
+}

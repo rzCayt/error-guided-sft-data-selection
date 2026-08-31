@@ -1,0 +1,147 @@
+{
+  "binding_note": "Cell-level resolved/tokenized scientific contracts are byte-identical to v3; only non-scientific runtime-contract hashes changed in the canonical matrix.",
+  "cell_count": 24,
+  "cells": [
+    {
+      "cell_id": "v8_rep1_random_common_mix_train17",
+      "contract_diff_sha256": "7100fa7cddeca8a92737b78ea26568daf88a041750cbed5a909e0c65f5e11612",
+      "training_input_hashes_sha256": "67f5ea2256531f39b1cac9dbdc4632353b935b716dcf56be8a138e21461d330b"
+    },
+    {
+      "cell_id": "v8_rep1_random_common_mix_train29",
+      "contract_diff_sha256": "4f4c6a9638598e060e5bd02c6903dbf3067c0447df7fbdac8ba10199a9c2122e",
+      "training_input_hashes_sha256": "1c2c5e33691fa89967fdf8fd69fd6a51dc3c0f523955915345ad2b7015aa348f"
+    },
+    {
+      "cell_id": "v8_rep1_random_common_mix_train41",
+      "contract_diff_sha256": "ef3eb88b72bd42143037b4ae470d93c75dd438f0326fc897580e3880fac2c6ed",
+      "training_input_hashes_sha256": "5af625419fec2aa9fa61fedbd0c36ee53dccbbdfae70b01f8cc7e2adbc3335ab"
+    },
+    {
+      "cell_id": "v8_rep1_rds_error_common_mix_train17",
+      "contract_diff_sha256": "55dc175465ff61b68e99fbe53e862bbc5182deb00bb76f4f1d4f6b71eeca0cb0",
+      "training_input_hashes_sha256": "90934b9b19aa731525d3cb3f9079e70407f618d2a1da93e741585ffdd089651a"
+    },
+    {
+      "cell_id": "v8_rep1_rds_error_common_mix_train29",
+      "contract_diff_sha256": "808f17a08186befc05669050642af2a0a1ccdbedc2f71ba5b37bb626eaf0d950",
+      "training_input_hashes_sha256": "2c53c6d8c14e502bfeb3eaec56291b1f2a59fea0e1f11be1160592e452dcead3"
+    },
+    {
+      "cell_id": "v8_rep1_rds_error_common_mix_train41",
+      "contract_diff_sha256": "188c6a7405ae96555b9eebabb19ce9c9b97cff2191da98256efad817a9ba3f25",
+      "training_input_hashes_sha256": "6ffefa6c93bd238689c8c2326825ef9a4a2cb37405da82d4bf2d7b88b63a8dfc"
+    },
+    {
+      "cell_id": "v8_rep2_random_common_mix_train17",
+      "contract_diff_sha256": "87b1b2c92bec760ce18e138dd96172de1f8b6ef1146763a2ab3f73dc2eded2ea",
+      "training_input_hashes_sha256": "d32c0937b655daa7772470f7641dcf82d90c228d369269d0f44f2768a0c1b948"
+    },
+    {
+      "cell_id": "v8_rep2_random_common_mix_train29",
+      "contract_diff_sha256": "4ac115dd0711b3d07e952221997cac5889ad9a1660209b4591c0cb1ae7ef6abf",
+      "training_input_hashes_sha256": "8e0d138785b0ad578614b2a3c25f05f76a8bd2effea0b53cdffdd5161c76421a"
+    },
+    {
+      "cell_id": "v8_rep2_random_common_mix_train41",
+      "contract_diff_sha256": "f362932490e23ebdfe7b98549fed647a0bfe90101b4f5157e9b2fcce5d1bffec",
+      "training_input_hashes_sha256": "91615ca57021c1e8e6d72cd56f5f5fbbb4ef254de83edf11fe2772e9fd5d0ecd"
+    },
+    {
+      "cell_id": "v8_rep2_rds_error_common_mix_train17",
+      "contract_diff_sha256": "c9853ce15f963adc16235aa227f491266e92b9428e177ef17b3a045f20f0da3a",
+      "training_input_hashes_sha256": "39be9eafaa0743355201518400371d971bf32631ff03d1561d4d395104339975"
+    },
+    {
+      "cell_id": "v8_rep2_rds_error_common_mix_train29",
+      "contract_diff_sha256": "25ca5eb4319b5af03ab1f05510faf002e5073ab48666b3e22c602ada9f2b8c61",
+      "training_input_hashes_sha256": "37ecf53adc7407b0d19c7df9819a1af92b6da67a9142be6598f64f4da09bc00d"
+    },
+    {
+      "cell_id": "v8_rep2_rds_error_common_mix_train41",
+      "contract_diff_sha256": "042d0bf28762e0f11ed4dd36018b1e2c745d0399c26fb802cc81c0a30c6eddb6",
+      "training_input_hashes_sha256": "f29f654bef14f68761d007efab1118d6e43b36773bc51139ba7f80bbc0c160c1"
+    },
+    {
+      "cell_id": "v8_rep3_random_common_mix_train17",
+      "contract_diff_sha256": "5fa26e13f4588bb3ace059eee25699efcae2ba68301e49c5f4c37606922b5e7e",
+      "training_input_hashes_sha256": "b31d96d90697b73539f54a964bdcfdfc40e5d538fea687cababdc165ec2087ba"
+    },
+    {
+      "cell_id": "v8_rep3_random_common_mix_train29",
+      "contract_diff_sha256": "f498978ef30afcd86515e71659739d730762c1b1e4aa02441bf2b47ad0ddd163",
+      "training_input_hashes_sha256": "019d84105d1eca398b92d2749b6eac608cbe2e0aa2b98488c53700476098c951"
+    },
+    {
+      "cell_id": "v8_rep3_random_common_mix_train41",
+      "contract_diff_sha256": "ff6e148ae45e9f8d6a4f364452d0be5e5541e516eeef9e52443cddef0936db86",
+      "training_input_hashes_sha256": "e1fbf6b6b88b33b9ecbc00e21ab7dd15564a96fccdd2f56fed5848116397edcc"
+    },
+    {
+      "cell_id": "v8_rep3_rds_error_common_mix_train17",
+      "contract_diff_sha256": "2dd701f5934be0e1c2798cb66a3304db0a917c0c93206942eb9d08c38e7408e1",
+      "training_input_hashes_sha256": "35f864cc3290b5f6c52c6356f34036cb4af341f8b7111886c513e1e3443ec2ba"
+    },
+    {
+      "cell_id": "v8_rep3_rds_error_common_mix_train29",
+      "contract_diff_sha256": "84bf0aa2f7e6e0c1f985764cf5f5e49d4bb15e44f45dc50315f987cce307225c",
+      "training_input_hashes_sha256": "f4bb28a707586f4d3bf75029a67125053410d6a0b979b54e0dc477250e42c63d"
+    },
+    {
+      "cell_id": "v8_rep3_rds_error_common_mix_train41",
+      "contract_diff_sha256": "ec6657339ab0d052136410251053056e4ed74b67dd0fa518f84b2404064cd269",
+      "training_input_hashes_sha256": "2514dd4afee043fd91c5f21857ed76765b54e064925103f66835179b4c3263a9"
+    },
+    {
+      "cell_id": "v8_rep4_random_common_mix_train17",
+      "contract_diff_sha256": "1858870af34e1d2d4df6a9bf548f07e9d772a205f74d6d7814152e8c302273ef",
+      "training_input_hashes_sha256": "8e9cdf73c794a2119121a7217c0abe711a499d1caa6cbf1bb4b3b70d117872f6"
+    },
+    {
+      "cell_id": "v8_rep4_random_common_mix_train29",
+      "contract_diff_sha256": "42aefeafc4300c072353bda398e1e4b742a1d7d294c4d4597116e3404300c63d",
+      "training_input_hashes_sha256": "24dac844849264c843aca880ecae8f9d6aeaf5d940359efec26d4c316909ec8c"
+    },
+    {
+      "cell_id": "v8_rep4_random_common_mix_train41",
+      "contract_diff_sha256": "5b9ed107ec0e0ac495f4de3c1f58ff9efed84ec6753f7d425b7c3f89f774e910",
+      "training_input_hashes_sha256": "41c8c405032fa4d063cbcc19ce8972afe16e6ba9844e54528f108177c3e511e6"
+    },
+    {
+      "cell_id": "v8_rep4_rds_error_common_mix_train17",
+      "contract_diff_sha256": "9f31f11ed8c9ca01042dee300fb896e6d8467f1327613b751469863d0e3282aa",
+      "training_input_hashes_sha256": "4f676bd4e313d57e4f33a501e69fcc67f1acc8d83c0c2def50dc6f3295f5e8a3"
+    },
+    {
+      "cell_id": "v8_rep4_rds_error_common_mix_train29",
+      "contract_diff_sha256": "7dac8e9d6ed5f50434aae345d4dceb63095129e6b38b0709147b7b3a02a39a27",
+      "training_input_hashes_sha256": "2641cace3fa87d073288233753536807e4ab77b5be001c7595e3770dd7ceab97"
+    },
+    {
+      "cell_id": "v8_rep4_rds_error_common_mix_train41",
+      "contract_diff_sha256": "774ca3ab7121712a3a6e8c2ff1f78cf32b9a8a6b503f95a8572aeeac3a9ba8f6",
+      "training_input_hashes_sha256": "2056be3d440688e5930e91d5e29775430a64e1dc39ed67de4032de601dddfd50"
+    }
+  ],
+  "config_sha256": "87110b8602f8c8d53562369767e0e774b0fecb997e33180e83edd2243689ee6a",
+  "gpu_accessed": false,
+  "mistral_regex_fix_applied": false,
+  "schema_version": "phase2-v8-materialized-contracts-v1",
+  "status": "PASS",
+  "tokenizer_class": "Qwen2TokenizerFast",
+  "tokenizer_files": [
+    {
+      "name": "tokenizer.json",
+      "sha256": "962b8d8c521fefa934665afddae177326e974ddd6a26e69ff31ad6bccbb5593b"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "sha256": "60f6e7bc948cedd377a20f01d022ef664d026fbc93d72e0a9bdac233f8632181"
+    },
+    {
+      "name": "special_tokens_map.json",
+      "sha256": "6676f091c8bc4d1b50146427cfde92073402866b87b6e39223227931b70083e9"
+    }
+  ],
+  "tokenizer_source_kind": "archived_qwen2_tokenizer_snapshot"
+}

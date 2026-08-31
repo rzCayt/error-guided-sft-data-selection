@@ -1,0 +1,226 @@
+{
+  "candidate_utility": {
+    "gsm8k_domain48": {
+      "candidate_count": 48,
+      "one_sided_permutation_p": 0.18581418581418582,
+      "original_gate_passed": false,
+      "partial_spearman": 0.19393496805793697,
+      "top_minus_bottom_utility": 0.0008953199776546052
+    },
+    "tulu96": {
+      "candidate_count": 96,
+      "one_sided_permutation_p": 0.07292707292707293,
+      "original_gate_passed": true,
+      "partial_spearman": 0.2277490256814716,
+      "top_minus_bottom_utility": 0.0024941336129387605
+    }
+  },
+  "claim_boundaries": {
+    "not_supported": [
+      "RDS is generally ineffective.",
+      "RDS and Random are equivalent.",
+      "State dependence has been observed.",
+      "The final-adapter local probe reconstructs the historical optimizer trajectory."
+    ],
+    "supported": [
+      "The 24-cell block found no reliable downstream advantage for the frozen RDS policy.",
+      "Tulu96 passed its original candidate-utility gate; GSM8K-domain48 did not.",
+      "The frozen response-composition mechanism did not pass its prespecified CPU gate.",
+      "The State Dependence v3 panel is universal-unseen for the four initial adapters."
+    ]
+  },
+  "completed_study": {
+    "bootstrap_replicates": 20000,
+    "cell_count": 24,
+    "examples_per_list": 500,
+    "methods": [
+      "random_common_mix",
+      "rds_error_common_mix"
+    ],
+    "model": "Qwen/Qwen2.5-1.5B",
+    "primary_estimand": "rds_error_common_mix - random_common_mix",
+    "primary_training_seed_role": "fixed_observed_blocks",
+    "selection_list_count_per_method": 4,
+    "training_method": "LoRA response-only SFT",
+    "training_seeds": [
+      17,
+      29,
+      41
+    ]
+  },
+  "cpu_composition_audit": {
+    "interpretation": "No frozen response-composition feature passed all source-sensitivity and multiplicity gates; behavior-constrained retraining was not authorized.",
+    "status": "NO_GO"
+  },
+  "downstream_results": {
+    "asdiv_numeric": {
+      "ci95_fraction": [
+        -0.011933559103370461,
+        0.00895016932752779
+      ],
+      "ci95_percentage_points": [
+        -1.193,
+        0.895
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_fraction": -0.0013304305757135815,
+      "difference_percentage_points": -0.133
+    },
+    "gsm8k": {
+      "ci95_fraction": [
+        -0.009540055597674901,
+        0.018890573666919264
+      ],
+      "ci95_percentage_points": [
+        -0.954,
+        1.889
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_fraction": 0.004801617386909207,
+      "difference_percentage_points": 0.48
+    },
+    "multiarith": {
+      "ci95_fraction": [
+        -0.010215053763441118,
+        0.01935483870967769
+      ],
+      "ci95_percentage_points": [
+        -1.022,
+        1.935
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_fraction": 0.003225806451612967,
+      "difference_percentage_points": 0.323
+    },
+    "ood_macro": {
+      "ci95_fraction": [
+        -0.013164120793038978,
+        0.011489776622917182
+      ],
+      "ci95_percentage_points": [
+        -1.316,
+        1.149
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_fraction": -0.0009422821154409325,
+      "difference_percentage_points": -0.094
+    },
+    "svamp": {
+      "ci95_fraction": [
+        -0.0313888888888888,
+        0.021666666666666612
+      ],
+      "ci95_percentage_points": [
+        -3.139,
+        2.167
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_fraction": -0.004722222222222183,
+      "difference_percentage_points": -0.472
+    }
+  },
+  "evidence": {
+    "cpu_composition": {
+      "bytes": 871,
+      "path": "results/public_summary/evidence/cpu_composition/ARTIFACT_INDEX.json",
+      "sha256": "ca8f81e5f53fe0560ba3b37936568b091f6f17b99649ab99225a0324b4680eed"
+    },
+    "h1a_domain48": {
+      "bytes": 724,
+      "path": "results/public_summary/evidence/h1a/gsm8k_domain48_metrics.json",
+      "sha256": "61069965d997996347a68ac53e714552a8529c7fb8a25236afdf8bca892c5199"
+    },
+    "h1a_tulu96": {
+      "bytes": 689,
+      "path": "results/public_summary/evidence/h1a/tulu96_metrics.json",
+      "sha256": "f27c91c8067e36bead8a3583681a9839e1cc90c092a61fe4934f31230b91c496"
+    },
+    "phase2_claims": {
+      "bytes": 803,
+      "path": "results/public_summary/evidence/phase2/final_analysis_v8_20260831/unblinded_analysis/claim_evidence_ledger.json",
+      "sha256": "d2954e58c580a0bc6b0b2b16ba6b25e7b283c67da5c85472ca818ee0f7d5e13d"
+    },
+    "phase2_primary": {
+      "bytes": 1540,
+      "path": "results/public_summary/evidence/phase2/final_analysis_v8_20260831/unblinded_analysis/accuracy_fixed_seed_primary.json",
+      "sha256": "f0047f4ee05cacbaedc7d9b7599765414d033a8e5e0827d0079b9a16b3f13c2c"
+    },
+    "phase2_sensitivity": {
+      "bytes": 1530,
+      "path": "results/public_summary/evidence/phase2/final_analysis_v8_20260831/unblinded_analysis/accuracy_seed_resampled_sensitivity.json",
+      "sha256": "8c79f80f14246b87c7916867aa0b2b0691e1ebad1af83d22f4f0a7a30c912ce5"
+    },
+    "state_overlap": {
+      "bytes": 2745,
+      "path": "artifacts/state_dependence_overlap_audit_v3.json",
+      "sha256": "d4c10eb279ffe37c64abd044353db391bff02e6e1760699febb935bd970406d6"
+    },
+    "state_panel": {
+      "bytes": 26455,
+      "path": "artifacts/state_dependence_candidate_panel48_v3.json",
+      "sha256": "8433f7c7a76f496df9cd9e817d81f73207bef03b335d125e39a8e4788b6240b3"
+    },
+    "state_preflight": {
+      "bytes": 1945,
+      "path": "artifacts/state_dependence_preflight_v3.json",
+      "sha256": "dfab86c41455cde5477bb7ec4e6e2c6cd066b7cf68e1a787b7ac2608753c1f65"
+    }
+  },
+  "research_question": "Under matched sample count, response-supervision tokens, and data composition, does targeted instruction selection outperform matched random selection?",
+  "schema_version": "public-research-summary-v1",
+  "seed_resampled_sensitivity": {
+    "asdiv_numeric": {
+      "ci95_percentage_points": [
+        -1.355,
+        1.068
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_percentage_points": -0.133
+    },
+    "gsm8k": {
+      "ci95_percentage_points": [
+        -1.301,
+        2.205
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_percentage_points": 0.48
+    },
+    "multiarith": {
+      "ci95_percentage_points": [
+        -1.399,
+        2.258
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_percentage_points": 0.323
+    },
+    "ood_macro": {
+      "ci95_percentage_points": [
+        -1.544,
+        1.324
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_percentage_points": -0.094
+    },
+    "svamp": {
+      "ci95_percentage_points": [
+        -3.639,
+        2.583
+      ],
+      "diagnostic": "insufficient_evidence",
+      "difference_percentage_points": -0.472
+    }
+  },
+  "state_dependence_v3": {
+    "frozen_panel_count": 48,
+    "gpu_result_available": false,
+    "original_candidate_count": 96,
+    "selected_id_sha256": "eb8440744cb73ed0582becc6559463bf136fd308823fe95eb286d6adebd3bc23",
+    "status": "READY_FOR_GPU_QUALIFICATION",
+    "training_exposed_candidates_removed": 14,
+    "training_overlap_count": 0,
+    "u0a_planned_measurements": 144,
+    "u1_initial_planned_measurements": 384,
+    "unseen_candidates_available": 82
+  },
+  "study_date": "2026-08-31"
+}

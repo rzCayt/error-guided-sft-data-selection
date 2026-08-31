@@ -1,0 +1,20 @@
+{
+  "artifact_role": "candidate_utility_test_retest_reliability",
+  "claim_boundary": "This ten-candidate run validates measurement reliability only. The exploratory score correlations are not the preregistered 96-candidate H1a effect test.",
+  "code_commit": "e214446011c5feedde74a50e1c0059eaafc7c766",
+  "code_was_clean": true,
+  "candidate_count": 10,
+  "repeat_seeds": [17, 29],
+  "measurement_count": 20,
+  "utility_set_size": 128,
+  "icc_absolute_agreement_a1": 0.9728822444011759,
+  "reliability_gate_icc_at_least_0_90": true,
+  "files": {
+    "manifest.json": "668af15ffb02b925e8d7eaeb08305c14f8f2eeef58fdb5a8aeedaddbc2074897",
+    "metrics.json": "94dff98e6a002140d71405d6c152db6c46737b4f18bd084f7c36a7f5c8701288",
+    "token_audit.json": "ae85fb7325939ace360b43ca70ee2912fa4342e2c1d62d46b7fe05da775a0b1a",
+    "utility_measurements.jsonl": "94645b5f32fcfa28f53a5b56c4d9f8b7c29c4a8688cd1f3647b194c654534736",
+    "loss_weighting_equivalence_audit.json": "c7a7495cd4b54cf3ef3e2640429703c0fe3535ea23d5390b86855ce5fc085063",
+    "gsm8k_source_hash_audit.json": "41501f2ab4795aa05caa808c9cf24f1fa070a71c512deb3191855b1fa79a2b0a"
+  }
+}

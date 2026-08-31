@@ -1,0 +1,13 @@
+{
+  "cell_file_count": 96,
+  "cell_files_copied_byte_exact": true,
+  "gpu_accessed": false,
+  "new_matrix_sha256": "87110b8602f8c8d53562369767e0e774b0fecb997e33180e83edd2243689ee6a",
+  "old_matrix_sha256": "68cd159fc6308fdafe03cb863751d700d836d63989c309890f25acd04ca101c2",
+  "only_changed_top_level_field": "runtime_contracts",
+  "schema_version": "phase2-v8-materialized-contract-rebinding-proof-v1",
+  "scientific_matrix_fields_byte_equivalent_after_json_canonicalization": true,
+  "source_materialization": "artifacts/phase2_v8_materialized_contracts_v3",
+  "status": "PASS",
+  "target_materialization": "artifacts/phase2_v8_materialized_contracts_v4"
+}

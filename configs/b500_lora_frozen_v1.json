@@ -1,0 +1,57 @@
+{
+  "protocol_version": "b500-lora-v1",
+  "selection": {
+    "budget": 500,
+    "candidate_pool_size": 10000,
+    "selection_seed": 20260722,
+    "allowed_strategies": [
+      "random",
+      "rds_all",
+      "rds_error"
+    ],
+    "random_rule": "source_stratified_stable_hash_round_robin_then_skip_fully_truncated_responses"
+  },
+  "training": {
+    "epochs": 2,
+    "max_length": 512,
+    "micro_batch_size": 1,
+    "gradient_accumulation_steps": 16,
+    "nominal_effective_batch_size": 16,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "scheduler": "linear",
+    "gradient_clipping": 1.0,
+    "dtype": "bfloat16",
+    "response_only_loss": true,
+    "gradient_checkpointing": true,
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "target_modules": "all-linear",
+      "bias": "none"
+    }
+  },
+  "evaluation": {
+    "split": "held_out_test",
+    "example_count": 1319,
+    "batch_size": 4,
+    "max_input_length": 512,
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+    "parser_policy": "strict_final_marker_then_last_numeric_fallback"
+  },
+  "formal_training_seeds": [
+    17,
+    29,
+    41
+  ],
+  "engineering_closure": {
+    "strategy": "random",
+    "training_seed": 17
+  }
+}

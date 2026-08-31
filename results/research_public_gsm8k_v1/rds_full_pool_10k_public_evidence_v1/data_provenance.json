@@ -1,0 +1,69 @@
+{
+  "all_query_count": 448,
+  "audited_candidate_count": 10000,
+  "data_provenance_sha256": "e25514d44ff8d8a9afc60c55469016254c89f6ed1504281b8c99a07d54dac6ad",
+  "eligible_candidate_count": 8542,
+  "error_query_count": 99,
+  "excluded_fully_truncated_count": 1458,
+  "input_bindings": {
+    "all_queries": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/all_queries.jsonl",
+      "sha256": "8f2de0f120117ef3d695fbaefc536e669ae048f7fa60f0f98def722cc4740c97"
+    },
+    "candidate_pool": {
+      "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/tulu_candidate_pool.jsonl",
+      "sha256": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    },
+    "error_queries": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/error_queries.jsonl",
+      "sha256": "50346e6c673a714f2913f4e668203feb467ad27365e6f216fa7a2e8ccbd0be4c"
+    },
+    "execution_config": {
+      "path": "configs/rds_full_pool_thermal_v1.json",
+      "sha256": "c196dee73e41ee6bb353ffc9e28adb4a0402e68d7fe6c71961dd68013eeaebbc"
+    },
+    "gsm8k_records": {
+      "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/gsm8k_records.jsonl",
+      "sha256": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7"
+    },
+    "protocol_config": {
+      "path": "configs/public_gsm8k_v1.json",
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+    },
+    "query_group_manifest": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/query_group_manifest.json",
+      "sha256": "f39efc1ffd008089659e53400d0aa812c6a9110d7bb9a668f91173c59e9c1f90"
+    }
+  },
+  "legacy_local_metadata_excluded": [
+    {
+      "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/data_manifest.json",
+      "reason": "Legacy local metadata contains a machine-specific path and is not an input binding of the full-pool scoring run."
+    }
+  ],
+  "protocol": {
+    "candidate_pool_size": 10000,
+    "datasets": {
+      "candidate_pool": {
+        "config": "default",
+        "license": "not_specified_on_dataset_card",
+        "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+        "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+      },
+      "gsm8k": {
+        "config": "main",
+        "license": "mit",
+        "repo_id": "openai/gsm8k",
+        "revision": "740312add88f781978c0658806c59bc2815b9866"
+      }
+    },
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "seed": 20260722
+  },
+  "public_text_policy": "Only IDs, hashes, numeric audit fields, and generated ranking metadata are included; source prompts and responses are omitted.",
+  "schema_version": "rds-public-data-provenance-v1"
+}

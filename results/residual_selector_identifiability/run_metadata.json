@@ -1,0 +1,38 @@
+{
+  "audit_version": "residual_selector_identifiability_v1",
+  "generated_at_utc": "2026-07-10T01:53:55.193222+00:00",
+  "offline_only": true,
+  "model_generation_run": false,
+  "training_run": false,
+  "candidate_path": "data\\samples\\candidate_pool.jsonl",
+  "candidate_sha256": "7af785cd1a4047a700a3e4b5f34794b726ee77ad8e2bc6c9622fba521673fd00",
+  "diagnostic_examples_path": "data\\samples\\dev_diagnostic.jsonl",
+  "diagnostic_examples_sha256": "d3d64c86eeec1904d58aa2216a699dcb2fe06b0b307f2c6dac8d7ec42d7b069e",
+  "diagnostic_path": "results\\qwen3_interface_diagnostic\\qwen3_1_7b_chat_no_think_answer_only\\scale_model_diagnostic_outputs.jsonl",
+  "diagnostic_sha256": "c5326c52693087d05a4bebb92af333555afd35a1e5f40541d511fa94e513e6cf",
+  "allowed_splits": [
+    "candidate_pool",
+    "dev_diagnostic"
+  ],
+  "forbidden_split": "test_*",
+  "main_signal": "contrastive_operation_structure_residual_v1",
+  "control_signal": "bm25_prompt_contrastive_residual_v1",
+  "main_formula": "mean_top3_jaccard_to_failures - mean_top3_jaccard_to_corrects, then subtract exact-stratum mean",
+  "tie_breaker": "sha256(canonical prompt + metadata + buckets), independent of candidate id and input order",
+  "candidate_fields_read_by_main_signal": [
+    "task_family",
+    "metadata.params",
+    "buckets"
+  ],
+  "candidate_fields_explicitly_not_read": [
+    "answer",
+    "rationale",
+    "id as signal"
+  ],
+  "diagnostic_outcome_field": "offline strict parser v3 rescore of frozen Qwen3-1.7B chat-no-think outputs",
+  "diagnostic_outcome_eligibility": "strict parser v3 must produce a numeric value; format failures are excluded from numeric-error contrast",
+  "measurement_warning": "Only one frozen target-model diagnostic run is available; bootstrap is not an independent replicate.",
+  "random_reference": "30 fixed-quota random replicates; dependent pairwise Jaccard is descriptive only",
+  "diagnostic_bootstrap": "30 stratified-within-family-and-outcome resamples; dependent pairwise Jaccard is descriptive only",
+  "permutation_control": "100 within-family label permutations; exploratory because added after adversarial review"
+}

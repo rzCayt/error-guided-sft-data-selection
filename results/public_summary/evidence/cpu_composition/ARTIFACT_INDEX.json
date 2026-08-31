@@ -1,0 +1,26 @@
+{
+  "schema_version": "cpu-behavior-composition-artifact-index-v1",
+  "status": "NO_GO",
+  "files": {
+    "candidate_response_features.jsonl": {
+      "sha256": "44f1b0a4e551aab9f8092aac567a57714a24a8b17abd77decf98eb7a13e3c7f2",
+      "bytes": 6117373
+    },
+    "CPU_COMPOSITION_NO_GO.json": {
+      "sha256": "2cd909e519fd41de861c6561737fde0f048939a5168ff9ea2063c0ddc48fe31b",
+      "bytes": 4947
+    },
+    "feature_effects.csv": {
+      "sha256": "e1b11ce2442d35f21cc77fd1486c46325e9f1ac957cc8b62932d421a8348891f",
+      "bytes": 1474
+    },
+    "list_level_composition.csv": {
+      "sha256": "432bc23dcb0c8e6fbd7f81d7b362bc16b6138c0b1255ccd4bb9275ce1c709601",
+      "bytes": 3335
+    },
+    "stratum_feature_means.json": {
+      "sha256": "8c3fb8d6433df72a9c44b897b3bd9da18f9e25d37e01bb4b833d7d35da608f2d",
+      "bytes": 5802
+    }
+  }
+}

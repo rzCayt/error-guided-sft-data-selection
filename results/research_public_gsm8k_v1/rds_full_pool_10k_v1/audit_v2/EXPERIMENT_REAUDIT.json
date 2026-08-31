@@ -1,0 +1,34 @@
+{
+  "schema_version": "rds-public-evidence-reaudit-v1",
+  "date": "2026-07-31",
+  "auditor": "independent read-only audit agent",
+  "overall_verdict": "pass",
+  "integrity_status": "pass",
+  "verdict_basis": "The path-hygiene issue in local-only v1 evidence is explicitly excluded from the public package. All public-package integrity, privacy, selection-identity, and independent recomputation checks passed.",
+  "checks": {
+    "public_manifest_self_hash": {"status": "pass", "claimed": "19f9b406e2268b0124017126b636f70e0872178956122249ff051526d43ac2ee", "recomputed": "19f9b406e2268b0124017126b636f70e0872178956122249ff051526d43ac2ee"},
+    "public_package_file_hashes": {"status": "pass", "listed_file_count": 85, "hash_mismatch_count": 0, "extra_files": []},
+    "public_json_self_hashes": {"status": "pass", "public_contract_content_sha256": "067cb89ef6e0e5ea89372e2627a2313a07f4a0fa089738037cdedce17e195086", "data_provenance_content_sha256": "e25514d44ff8d8a9afc60c55469016254c89f6ed1504281b8c99a07d54dac6ad", "scoring_summary_content_sha256": "a37c3cb27b038db5edda619e0ec5da1f78a0f20338f2b522f8d4b8bf23479752"},
+    "selection_byte_identity": {"status": "pass", "rds_all_original_and_public_sha256": "891ca5b51840f3a914659c825b698222ee5943e5f4b0d3433635fa7813098f65", "rds_error_original_and_public_sha256": "ac050c659e09dfd0fbd40608ab2fa092ebfba90bff0a838a79053363cbaeff13"},
+    "public_privacy_scan": {"status": "pass", "windows_absolute_path_hits": [], "unix_private_path_hits": [], "username_hits": [], "secret_like_hits": [], "raw_source_text_field_hits": []},
+    "sanitized_contract_and_exclusions": {"status": "pass", "public_command_0": "python", "package_pt_files": [], "package_local_run_contract_files": [], "package_legacy_data_manifest_files": [], "source_local_run_contract_file_sha256": "006b4e50c954ab1c1b25bbb5bc7ee4b2d4570e791c7aa7832bf51400013eddff", "source_local_run_contract_self_sha256": "175add6c3083f7d1e697819a8db1fbeee57d91b33e6907b313a38749f9cfeb5d", "immutable_local_evidence_changed": false},
+    "local_immutable_evidence": {"status": "pass", "candidate_inventory_sha256": "4fe81283dccc9f630daf1c6db9f3716ca5a6785fa2be9fe35b067f2a573a04d9", "query_inventory_sha256": "344b1065d2bfa1e621705dc36b30dc15f2089490c4114fa90646a7d3e29c1e85", "candidate_scores_sha256": "a16de31a08ee9aeba059a60e25ea3fac26c459bf6814bf163bc1cc5f4459556b", "metrics_sha256": "3c60a5c02a994d2a2fcd195c29b46da516510447ae138515f0b4eaf7e65e9fc6", "finalization_manifest_sha256": "86407cb1b206137112edcca22d1730e6f94b43a6ed1a0728096ea5e751d6cd32"},
+    "public_recomputation": {"status": "pass", "candidate_count": 10000, "eligible_count": 8542, "excluded_count": 1458, "query_count": 448, "error_query_count": 99, "candidate_order_sha256": "dba131171a3f434ef1f1f7a2fdb459a5da3dffbaab8f50687c8ef06cf5120beb", "eligible_order_sha256": "7006e65ba427644bc2b538f3a313dcb161cb0e97aae47657719b2fa55b639335", "query_order_sha256": "45db76acb8edd5d641b9b227e56ac87011e110a82155c362d1ab207991209d6d", "score_count": 8542, "all_rank_complete_permutation": true, "error_rank_complete_permutation": true, "score_inventory_mismatch_count": 0, "rank_score_formula_mismatch_count": 0, "spearman": 0.9975506350397658, "top500_intersection_count": 458, "jaccard": 0.8450184501845018},
+    "top500_rds_all": {"status": "pass", "selected_count": 500, "unique_candidate_count": 500, "top500_row_mismatch_count": 0, "selected_id_sha256": "e043829d1a5cf8c6eb65253632ac6a7d151082eb08d252c5fc96a172cf53b7b0", "manifest_self_hash": "0814243ce1abf3c3b0d76474861fa63176c71cc661ed29c9cc6af39adcf57849", "source_counts": {"code_alpaca": 12, "cot": 26, "dolly": 3, "flan_v2": 199, "gpt4_alpaca": 12, "open_orca": 238, "sharegpt": 2, "wizardlm": 8}, "total_tokens": 99453, "supervised_tokens": 32008},
+    "top500_rds_error": {"status": "pass", "selected_count": 500, "unique_candidate_count": 500, "top500_row_mismatch_count": 0, "selected_id_sha256": "6442105cec94c6b2f461e534a0df177fbb4edc03d733f9bd87de8770a65bf4d8", "manifest_self_hash": "f4213b203a1f4f809e4638e8493828caee32619635b42b06c181bc53e30cb0ef", "source_counts": {"code_alpaca": 9, "cot": 29, "dolly": 3, "flan_v2": 198, "gpt4_alpaca": 12, "open_orca": 239, "sharegpt": 2, "wizardlm": 8}, "total_tokens": 101279, "supervised_tokens": 32701}
+  },
+  "audit_trace": {
+    "trace_mode": "full_embedded",
+    "reviewer_call": {"status": "not_available", "reason": "No mcp__codex__codex or manual-review backend is available to this audit agent."},
+    "read_only_operations": [
+      "Read experiment-audit and review-tracing instructions; read specified package, original manifests, v1 audit and public-package builder implementation.",
+      "Recomputed PUBLIC_EVIDENCE_MANIFEST canonical self-hash and verified every listed file SHA-256 and byte count.",
+      "Recomputed public-contract, data-provenance and scoring-summary self-hashes; compared public selection files byte-for-byte by SHA-256 against originals.",
+      "Scanned every UTF-8 package file for Windows/Unix private paths, usernames, secret-like values and raw messages/question/answer/completion/prompt fields.",
+      "Recomputed counts, IDs, token invariants, rank permutations, Spearman, Jaccard, top-500 selections, source distributions, token totals and selection self-hashes using public package inventories, score rows and selection manifests only.",
+      "Compared local immutable evidence hashes with v1 audit record and verified package exclusions. No original evidence, code or configuration was modified."
+    ],
+    "report_artifacts": ["EXPERIMENT_REAUDIT.md", "EXPERIMENT_REAUDIT.json"]
+  },
+  "limitations": ["External reviewer MCP unavailable; this is an independent deterministic re-audit by a separate agent, not a cross-model reviewer verdict."]
+}

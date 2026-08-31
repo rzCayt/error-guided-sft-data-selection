@@ -1,0 +1,4 @@
+left_seed,right_seed,selected_id_jaccard,matching_strata_l1_delta,interpretation
+20260710,20260711,0.286432,6,Differences can only come from the id/seed hash tie-breaker.
+20260710,20260712,0.292929,4,Differences can only come from the id/seed hash tie-breaker.
+20260711,20260712,0.319588,6,Differences can only come from the id/seed hash tie-breaker.

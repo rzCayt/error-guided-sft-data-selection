@@ -1,0 +1,73 @@
+{
+  "canonical_model": "Qwen/Qwen3-1.7B",
+  "claim_boundary": "This bundle supports deterministic selector-audit reproduction and a bounded model pipeline check only; it does not show selection or SFT effectiveness.",
+  "files": [
+    {
+      "bytes": 53056,
+      "path": "results/public_release_v1/model_pipeline_check_25/scale_model_diagnostic_outputs.jsonl",
+      "sha256": "CC9B77B3CC9AEB41172D0A430309820461D4C96CCF43B15E0723F6AF133801EB"
+    },
+    {
+      "bytes": 2390,
+      "path": "results/public_release_v1/model_pipeline_check_25/scale_model_diagnostic_run_metadata.json",
+      "sha256": "0E675034DB011F7942E9716FCBC892404370A84EC42984453448AF1237BD35D2"
+    },
+    {
+      "bytes": 1200,
+      "path": "results/public_release_v1/model_pipeline_check_25/scale_model_diagnostic_summary.csv",
+      "sha256": "EE19BC71E39D750C618CD8DF9D5A3798D924766E5824AA08BE1D59B182AE00F1"
+    },
+    {
+      "bytes": 921,
+      "path": "results/public_release_v1/model_pipeline_check_25/scale_model_error_profile.csv",
+      "sha256": "9B1428361C619E57CF7A4FB66208907104AA0AAA297635973DC0835B275F17D8"
+    },
+    {
+      "bytes": 1150,
+      "path": "results/public_release_v1/model_pipeline_check_25/scale_model_error_profile_by_type.csv",
+      "sha256": "00C318071DD7AE66B6476C9C50674EB4099AAD99F260A0A3286203CE10917D5D"
+    },
+    {
+      "bytes": 23055,
+      "path": "results/public_release_v1/selector_identifiability_rerun/id_rename_map.csv",
+      "sha256": "9B87A5C3A88F31036BC49A7DF932508FC9D135F99A941FB8C4281A77099275C8"
+    },
+    {
+      "bytes": 77177,
+      "path": "results/public_release_v1/selector_identifiability_rerun/null_jaccard.csv",
+      "sha256": "4C9F1EB06FF97586075575FD92E353FDFB94196E52116128249C85CC9339A217"
+    },
+    {
+      "bytes": 696,
+      "path": "results/public_release_v1/selector_identifiability_rerun/robustness_checks.csv",
+      "sha256": "22A3C905DC26694EF6ADF22DBB4DAAC696694B33AFACFC475C5CB567058D75FC"
+    },
+    {
+      "bytes": 1250,
+      "path": "results/public_release_v1/selector_identifiability_rerun/run_metadata.json",
+      "sha256": "CEA0FEFC4FB35E71C549DA44F32007E98F784ED46BB4C17541C07A03131F5F6E"
+    },
+    {
+      "bytes": 355,
+      "path": "results/public_release_v1/selector_identifiability_rerun/seed_sensitivity.csv",
+      "sha256": "E1BEAC7A97A6BBE26411C4C43B12D18BDF0809A2D143AC3AE40EC79BFDB3289E"
+    },
+    {
+      "bytes": 2286,
+      "path": "results/public_release_v1/selector_identifiability_rerun/stratum_audit.csv",
+      "sha256": "BD17003DEFE66C733863A37546830021E23450DA51A9739D69813E723DC847DA"
+    },
+    {
+      "bytes": 2434,
+      "path": "results/public_release_v1/selector_identifiability_rerun/summary.json",
+      "sha256": "08A26ADEE7A3305BB4084B18F62BAE7B347C69B9D42EFAE4F41865262A0B40B5"
+    },
+    {
+      "bytes": 700,
+      "path": "results/public_release_v1/selector_identifiability_rerun/within_stratum_rank.csv",
+      "sha256": "95476B22264C2E56DFFFF6975EA0DE0ACA760FFBCB4CA31769CCA25BB9977A64"
+    }
+  ],
+  "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "schema_version": 1
+}

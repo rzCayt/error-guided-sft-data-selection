@@ -1,0 +1,82 @@
+[
+  {
+    "record_id": "gsm8k-train-0030-e7f61733c918",
+    "supervised_tokens": 141,
+    "total_tokens": 224
+  },
+  {
+    "record_id": "gsm8k-train-0147-e08ff50872ea",
+    "supervised_tokens": 72,
+    "total_tokens": 144
+  },
+  {
+    "record_id": "gsm8k-train-0161-5aff1e43f9ba",
+    "supervised_tokens": 91,
+    "total_tokens": 157
+  },
+  {
+    "record_id": "gsm8k-train-0219-2004d6b03416",
+    "supervised_tokens": 177,
+    "total_tokens": 280
+  },
+  {
+    "record_id": "gsm8k-train-0339-81ff4541cee9",
+    "supervised_tokens": 32,
+    "total_tokens": 104
+  },
+  {
+    "record_id": "gsm8k-train-0375-47777653c6b1",
+    "supervised_tokens": 62,
+    "total_tokens": 131
+  },
+  {
+    "record_id": "gsm8k-train-0400-24b25c972445",
+    "supervised_tokens": 207,
+    "total_tokens": 311
+  },
+  {
+    "record_id": "gsm8k-train-0476-9ccd9699fd3e",
+    "supervised_tokens": 122,
+    "total_tokens": 234
+  },
+  {
+    "record_id": "gsm8k-train-0519-73dffaca1c40",
+    "supervised_tokens": 115,
+    "total_tokens": 186
+  },
+  {
+    "record_id": "gsm8k-train-0537-6316c6944eba",
+    "supervised_tokens": 230,
+    "total_tokens": 322
+  },
+  {
+    "record_id": "gsm8k-train-0555-c5662144e080",
+    "supervised_tokens": 95,
+    "total_tokens": 166
+  },
+  {
+    "record_id": "gsm8k-train-0577-f21436d193c2",
+    "supervised_tokens": 154,
+    "total_tokens": 265
+  },
+  {
+    "record_id": "gsm8k-train-0727-eaf8741479b7",
+    "supervised_tokens": 88,
+    "total_tokens": 167
+  },
+  {
+    "record_id": "gsm8k-train-0776-5f9652726c44",
+    "supervised_tokens": 97,
+    "total_tokens": 162
+  },
+  {
+    "record_id": "gsm8k-train-0837-de5bc7d8101a",
+    "supervised_tokens": 183,
+    "total_tokens": 266
+  },
+  {
+    "record_id": "gsm8k-train-0882-66529a346b57",
+    "supervised_tokens": 71,
+    "total_tokens": 129
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "candidate_mean_utility_min": -0.003278425560720555,
+  "candidate_mean_utility_max": 0.004226083448958168,
+  "positive_candidate_mean_count": 4,
+  "negative_candidate_mean_count": 6,
+  "maximum_zero_adapter_probe_loss_difference": 0.0,
+  "trainable_parameter_count": 18464768,
+  "error_score_mean_utility_spearman": 0.41818181818181815,
+  "all_query_score_mean_utility_spearman": 0.41818181818181815,
+  "interpretation": "The ten candidates were selected to span the error-score range for reliability testing. These correlations are exploratory and cannot pass or fail preregistered H1a."
+}

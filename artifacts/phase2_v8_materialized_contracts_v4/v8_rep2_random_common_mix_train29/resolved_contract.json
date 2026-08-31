@@ -1,0 +1,66 @@
+{
+  "cell_id": "v8_rep2_random_common_mix_train29",
+  "schema_version": "phase2-v8-resolved-contract-v1",
+  "static_view": {
+    "base_recipe_sha256": "f5f59156fc328a7cbb69a0939a5cc163c46a0957cf9a67bfb585e1549e3cfdc4",
+    "data_manifest": {
+      "directory": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+      "required_files": {
+        "gsm8k_records.jsonl": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7",
+        "tulu_candidate_pool.jsonl": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+      }
+    },
+    "evaluation": {
+      "cuda_device_index": 0,
+      "do_sample": false,
+      "expected_record_count": 1319,
+      "forbid_batch_size_above_one": true,
+      "max_input_length": 512,
+      "max_new_tokens": 256,
+      "num_beams": 1,
+      "padding_side": "left",
+      "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+      "physical_batch_size_per_worker": 1,
+      "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+      "secondary_datasets": [
+        "svamp",
+        "asdiv_numeric",
+        "multiarith"
+      ],
+      "shards": [
+        {
+          "end_index": 660,
+          "shard_id": "test_shard0",
+          "start_index": 0
+        },
+        {
+          "end_index": 1319,
+          "shard_id": "test_shard1",
+          "start_index": 660
+        }
+      ],
+      "split": "held_out_test",
+      "worker_count": 2
+    },
+    "method": "random_common_mix",
+    "protocol_sha256": "efff086024850819fb766c766415afb4b4e86ab0feff8296000c78be016af191",
+    "replicate_index": 2,
+    "selected_id_order_sha256": "d682bff0c73689e1537619e61fb32b0cf0d4de05ee9b11d187482ed4029cd4cd",
+    "selected_id_sha256": "29492f4469ebb4d8a7aba44d56fe1b3b4936e606226ef5952cd3e5568a7860aa",
+    "selection_manifest_sha256": "f5b6da35b88505a4d92e3a29056f5d0e0dbdb13eb5a636b4ec9cd1a56c4527ec",
+    "training": {
+      "attention_implementation": "sdpa",
+      "checkpoint_every_optimizer_steps": 8,
+      "epochs": 2,
+      "gradient_checkpointing": false,
+      "loss_normalization": "optimizer_step_response_token_sum_over_count",
+      "max_length": 512,
+      "micro_batch_size": 1,
+      "optimizer_steps": 64,
+      "selection_budget": 500,
+      "single_training_process": true
+    }
+  },
+  "study": "clean_new_environment_common_block",
+  "train_seed": 29
+}

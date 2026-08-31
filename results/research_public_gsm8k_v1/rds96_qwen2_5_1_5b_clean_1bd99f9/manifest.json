@@ -1,0 +1,74 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\run_rds_h1a_scoring.py",
+    "--config",
+    "configs\\public_gsm8k_v1.json",
+    "--data-manifest-dir",
+    "results\\research_public_gsm8k_v1\\data_manifest_full_v2_fuzzy",
+    "--query-groups-dir",
+    "results\\research_public_gsm8k_v1\\query_groups_diagnostic448_clean_8b5273d",
+    "--output-root",
+    "results\\checkpoints\\public_gsm8k_v1",
+    "--candidate-count",
+    "96",
+    "--batch-size",
+    "4",
+    "--max-length",
+    "512",
+    "--seed",
+    "20260722"
+  ],
+  "config": {
+    "candidate_config": {
+      "config": "default",
+      "license": "not_specified_on_dataset_card",
+      "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+      "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+    },
+    "candidate_count": 96,
+    "candidate_sampling": "source_stratified_stable_hash_round_robin",
+    "gsm8k_config": {
+      "config": "main",
+      "license": "mit",
+      "repo_id": "openai/gsm8k",
+      "revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    "query_groups": [
+      "all_query",
+      "error_query"
+    ],
+    "representation": {
+      "batch_size": 4,
+      "max_length": 512,
+      "model": {
+        "license": "apache-2.0",
+        "repo_id": "Qwen/Qwen2.5-1.5B",
+        "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+      },
+      "padding_tokens_excluded": true,
+      "pooling": "last_hidden_state_weighted_mean",
+      "version": "qwen2_5_rds_weighted_mean_v1"
+    }
+  },
+  "config_hash": "533c7084435ae155ab7a2aa163fad7ef23f6add7d93c3f0d045d4d777d788db1",
+  "dataset_revisions": {
+    "Harvard-DCML/tulu-v2-197K-processed": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "cuda_version": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.8.0+cu128"
+  },
+  "git_commit": "1bd99f95fec774cddff039026c90878153625cec",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T133051Z_rds_h1a_scoring_533c708443_s20260722",
+  "seed": 20260722,
+  "stage": "rds_h1a_scoring",
+  "started_at_utc": "2026-07-23T13:30:51.204029+00:00"
+}

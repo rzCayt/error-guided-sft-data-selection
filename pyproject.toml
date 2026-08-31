@@ -4,14 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "error-guided-sft-data-selection"
-version = "0.1.0"
-description = "Error-guided data selection for data-efficient LoRA SFT in small numerical reasoning language models."
+version = "0.5.0"
+description = "Controlled evaluation of targeted data selection for LoRA post-training."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.5"]
+dev = [
+  "pytest>=8.0",
+  "ruff==0.15.22",
+  "numpy==2.3.2",
+  "scipy>=1.11",
+  "torch==2.8.0",
+  "transformers==4.57.2",
+  "datasets==4.4.1",
+  "peft==0.18.0",
+  "safetensors==0.7.0",
+]
 train = [
   "torch",
   "transformers",
@@ -29,4 +39,4 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"

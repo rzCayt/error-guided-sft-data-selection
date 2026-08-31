@@ -1,0 +1,99 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\run_b500_lora.py",
+    "--protocol-config",
+    "configs\\public_gsm8k_v1.json",
+    "--recipe-config",
+    "configs\\b500_lora_frozen_v1.json",
+    "--selection-manifest",
+    "results\\research_public_gsm8k_v1\\b500_random_selection_v1\\selection_manifest.json",
+    "--data-manifest-dir",
+    "results\\research_public_gsm8k_v1\\data_manifest_full_v2_fuzzy",
+    "--output-root",
+    "results\\research_public_gsm8k_v1\\b500_engineering_runs",
+    "--strategy",
+    "random",
+    "--seed",
+    "17"
+  ],
+  "config": {
+    "datasets": {
+      "candidate_pool": {
+        "config": "default",
+        "license": "not_specified_on_dataset_card",
+        "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+        "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+      },
+      "gsm8k": {
+        "config": "main",
+        "license": "mit",
+        "repo_id": "openai/gsm8k",
+        "revision": "740312add88f781978c0658806c59bc2815b9866"
+      }
+    },
+    "evaluation": {
+      "batch_size": 4,
+      "do_sample": false,
+      "example_count": 1319,
+      "max_input_length": 512,
+      "max_new_tokens": 256,
+      "num_beams": 1,
+      "parser_policy": "strict_final_marker_then_last_numeric_fallback",
+      "prompt_version": "gsm8k_base_completion_v2_one_shot_frozen",
+      "split": "held_out_test"
+    },
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "protocol_version": "b500-lora-v1",
+    "selected_id_sha256": "9eecf2afdcb74b47f4cfa3c5f2432973a7676f29d8b07e9ab04c59b55e553182",
+    "selection_manifest_sha256": "f4f0c1a466ee17738583b25a7c623396a19e9525f0233b3995f7d2d8eaf074e0",
+    "strategy": "random",
+    "training": {
+      "dtype": "bfloat16",
+      "epochs": 2,
+      "gradient_accumulation_steps": 16,
+      "gradient_checkpointing": true,
+      "gradient_clipping": 1.0,
+      "learning_rate": 0.0002,
+      "lora": {
+        "alpha": 32,
+        "bias": "none",
+        "dropout": 0.05,
+        "r": 16,
+        "target_modules": "all-linear"
+      },
+      "max_length": 512,
+      "micro_batch_size": 1,
+      "nominal_effective_batch_size": 16,
+      "optimizer": "AdamW",
+      "response_only_loss": true,
+      "scheduler": "linear",
+      "warmup_ratio": 0.03,
+      "weight_decay": 0.0
+    }
+  },
+  "config_hash": "2398bddc0379b7e5b3bb6cf56e5b36d084cb68544046de049d35ee3d04dd4f6f",
+  "dataset_revisions": {
+    "Harvard-DCML/tulu-v2-197K-processed": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "cuda_version": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.8.0+cu128"
+  },
+  "git_commit": "7d4b8f9aa3764b20bc54cca4f7d36dd74d82345d",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T191807Z_b500_lora_random_2398bddc03_s17",
+  "seed": 17,
+  "stage": "b500_lora_random",
+  "started_at_utc": "2026-07-23T19:18:07.957471+00:00"
+}

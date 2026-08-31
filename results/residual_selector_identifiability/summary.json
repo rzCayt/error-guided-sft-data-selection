@@ -1,0 +1,60 @@
+{
+  "audit_version": "residual_selector_identifiability_v1",
+  "signal_version": "contrastive_operation_structure_residual_v1",
+  "control_version": "bm25_prompt_contrastive_residual_v1",
+  "verdict": "fail",
+  "identifiability_status": "not_identifiable_beyond_static_operation_metadata",
+  "candidate_count": 500,
+  "diagnostic_count": 100,
+  "diagnostic_signal_eligible_count": 30,
+  "diagnostic_failure_count": 13,
+  "budget": 128,
+  "matching_fields": [
+    "task_family",
+    "difficulty_bucket",
+    "answer_magnitude_bucket",
+    "reasoning_length_bucket"
+  ],
+  "eligible_families": [
+    "ratio_change",
+    "temporal_numeric_constraint"
+  ],
+  "ineligible_families": [
+    "multiplicative_relation",
+    "weighted_aggregation"
+  ],
+  "eligible_stratum_count": 12,
+  "varying_eligible_stratum_count": 12,
+  "input_order_invariant": true,
+  "candidate_id_rename_invariant": true,
+  "main_vs_lexical_selected_jaccard": 0.56097561,
+  "operation_signature_count": 178,
+  "multi_candidate_operation_signature_count": 90,
+  "max_unique_score_count_within_operation_signature": 1,
+  "candidate_level_variation_beyond_operation_signature": false,
+  "main_selection_deterministic_jaccard": 1.0,
+  "diagnostic_bootstrap_mean_pairwise_jaccard": 0.72149016,
+  "diagnostic_bootstrap_pairwise_comparisons_independent": false,
+  "fixed_quota_random_mean_pairwise_jaccard": 0.14991679,
+  "random_pairwise_comparisons_independent": false,
+  "observed_residual_mean_square": 0.0263027872,
+  "permuted_error_profile_mean_residual_mean_square": 0.0162946999,
+  "permuted_error_profile_tail_rate": 0.05940594,
+  "permuted_profile_mean_selected_jaccard": 0.56601214,
+  "permutation_interpretation": "exploratory_label_permutation_control_not_preregistered_significance_test",
+  "max_absolute_coarse_bucket_spearman": 0.04369474,
+  "test_split_accessed": false,
+  "gold_test_information_used": false,
+  "candidate_answer_or_rationale_used": false,
+  "training_allowed": false,
+  "stability_validation_allowed": false,
+  "selection_effectiveness_claim_allowed": false,
+  "claim_boundary": "The current failure means the score is identifiable only at a static operation-metadata level, not at a candidate-specific residual level. It provides no training evidence.",
+  "known_blockers": [
+    "Some families lack both strict-parser-correct and strict-parser-incorrect examples.",
+    "The score is constant after exact stratum plus full operation signature are fixed.",
+    "The exploratory observed-profile variance does not clear the 0.05 permutation gate.",
+    "Only one frozen target-model diagnostic run is available."
+  ],
+  "required_next_step": "Create a human-audited step-level error representation or a model-aware candidate signal, then preregister independent target-model diagnostic replicates."
+}

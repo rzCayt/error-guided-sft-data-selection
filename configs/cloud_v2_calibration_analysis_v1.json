@@ -1,0 +1,35 @@
+{
+  "analysis_version": "cloud-v2-calibration-analysis-v1",
+  "training": {
+    "reference_profile": "mb1_ga16",
+    "expected_optimizer_steps": 4,
+    "expected_temperature_sample_count": 5,
+    "adapter_reload_loss_difference_max": 0.000001,
+    "update_cosine_min": 0.999,
+    "update_relative_l2_error_max": 0.01,
+    "gradient_history_proxy_cosine_min": 0.999,
+    "loss_relative_difference_max": 0.01,
+    "mb8_speed_advantage_required": 0.15,
+    "decision_boundary": "engineering equivalence only; never a selector-effect result"
+  },
+  "generation": {
+    "reference_batch_size": 1,
+    "expected_example_count": 128,
+    "required_batch_sizes": [
+      1,
+      4,
+      8,
+      16
+    ],
+    "max_difference_examples": 20,
+    "required_equal_fields": [
+      "record_id order",
+      "raw_output",
+      "parse_status",
+      "parsed_prediction",
+      "numeric_correct"
+    ],
+    "primary_throughput_metric": "wall_examples_per_second",
+    "generated_token_policy": "exclude token throughput unless unpadded count is explicitly recorded"
+  }
+}

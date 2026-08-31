@@ -1,0 +1,54 @@
+{
+  "bootstrap": {
+    "bca_or_calibrated_interval": "sensitivity_only",
+    "common_free_shared_priority_rule": "if_future_free_block_is_added_share_list_draw_within_selector",
+    "intervals": [
+      "90%",
+      "95%"
+    ],
+    "item_resampling": "one_draw_per_dataset_shared_across_all_cells",
+    "ood_aggregation": "equal_weight_dataset_macro_not_pooled_items",
+    "primary_random_list_resampling": "independent_within_random_selector",
+    "primary_rds_list_resampling": "independent_within_rds_selector",
+    "primary_training_seed_handling": "fixed_observed_seed_blocks",
+    "random_and_rds_replicate_numbers_are_paired": false,
+    "replicates": 20000,
+    "sensitivity_training_seed_resampling": "one_global_seed_block_draw_shared_across_all_conditions_and_tasks"
+  },
+  "effect_rules": {
+    "directional_gain": "ci95_lower_gt_0",
+    "equivalence_within_1pp": "exploratory_90pct_ci_entirely_inside_minus0.01_plus0.01_never_primary_claim",
+    "meaningful_gain_at_least_1pp": "ci95_lower_gt_0.01",
+    "meaningful_harm_at_least_1pp": "ci95_upper_lt_minus0.01",
+    "nonsignificance_is_equivalence": false,
+    "otherwise": "insufficient_evidence"
+  },
+  "equivalence_policy": {
+    "decision_cost_interpretation": "one percentage point must offset selector computation and operational complexity",
+    "delta": 0.01,
+    "status_before_precision_simulation": "EXPLORATORY_ONLY"
+  },
+  "historical_seed17_role": "external_replication_only",
+  "ood_guardrail": {
+    "interpretation": "report each task interval; do not claim safety from nonsignificance",
+    "status": "DESCRIPTIVE_NOT_A_PRIMARY_STOP_RULE",
+    "task_level_harm_reference": -0.02
+  },
+  "primary_analysis_cells": 24,
+  "primary_estimand": "rds_error_common_mix - random_common_mix",
+  "primary_metric": "gsm8k_exact_numeric_accuracy",
+  "schema_version": "phase2-v8-statistical-protocol-v1",
+  "sensitivity": {
+    "cell_level_model_primary": true,
+    "item_level_model_secondary_requires_cell_random_intercept": true,
+    "leave_one_list_out": "complete_enumeration_separately_by_selector",
+    "leave_one_seed_out": "complete_enumeration",
+    "ood_per_task": true,
+    "pooled_3841_primary_forbidden": true,
+    "rds_effective_list_count": "report_overlap_adjusted_sensitivity",
+    "strict_parser_decomposition": true,
+    "training_seed_model_role": "fixed_observed_block_primary; seed_population_bootstrap_exploratory_only"
+  },
+  "status": "FROZEN_BEFORE_GPU",
+  "study_label": "preregistered clean-environment replication block"
+}

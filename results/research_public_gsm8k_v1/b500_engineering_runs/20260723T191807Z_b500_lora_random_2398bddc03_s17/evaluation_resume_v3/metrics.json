@@ -1,0 +1,22 @@
+{
+  "adapter_model_sha256": "a4231f7124ab5b225698218e43660c0083be4545ebe19d60fe7092ef426701fa",
+  "claim_boundary": "This is one random B=500 engineering run. It does not compare selectors or estimate seed variance.",
+  "completed_at_utc": "2026-07-29T02:22:57.999279+00:00",
+  "elapsed_seconds_this_invocation": 937.4042210000007,
+  "example_count": 1319,
+  "fallback_parsed_count": 673,
+  "generated_tokens_this_invocation": 6638,
+  "numeric_accuracy": 0.6125852918877938,
+  "numeric_correct_count": 808,
+  "parse_rate": 1.0,
+  "parse_status_counts": {
+    "ok": 1319
+  },
+  "parsed_count": 1319,
+  "peak_memory_bytes": 3210418688,
+  "peak_memory_gib": 2.9899353981018066,
+  "raw_outputs_sha256": "b8ac83f17b868f9a3fd0c7ffda132a0ae7847909c5385538fa38d6d890230d21",
+  "source_run_id": "20260723T191807Z_b500_lora_random_2398bddc03_s17",
+  "strict_parse_rate": 0.489764973464746,
+  "strict_parsed_count": 646
+}

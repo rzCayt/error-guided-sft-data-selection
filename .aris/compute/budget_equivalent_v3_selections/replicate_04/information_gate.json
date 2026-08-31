@@ -1,0 +1,15 @@
+{
+  "all_bootstrap_count": 448,
+  "all_bootstrap_index_sha256": "463a275c849a45e419326579ad2f83139b3536ae249930a347085115a388465c",
+  "error_bootstrap_count": 99,
+  "error_bootstrap_index_sha256": "c856ccd234a63c40d4ad10a89448c2766f45060dd52b64a58a54d7a1fd45c5ca",
+  "error_vs_all_full_rank_spearman": 0.9975267625939374,
+  "error_vs_all_top500_changed_fraction": 0.07599999999999996,
+  "random_seed": 1404,
+  "rds_all_gate_selected_id_sha256": "6ba752585fdc2082e28d973996aa694916e00c3d0444216d2078fbccedbc1b78",
+  "rds_error_vs_random_common_jaccard": 0.06837606837606838,
+  "rds_error_vs_random_free_jaccard": 0.0395010395010395,
+  "rds_seed": 404,
+  "replicate_index": 4,
+  "selection_replicate_seed": 404
+}

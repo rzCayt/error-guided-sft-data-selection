@@ -1,0 +1,27 @@
+{
+  "schema_version": "phase2-v7-stop-go-v1",
+  "engineering_stop": [
+    "base_canary_mismatch",
+    "adapter_semantic_bootstrap_mismatch",
+    "adapter_token_canary_mismatch",
+    "environment_contract_mismatch",
+    "wrong_parent_gpu_sku",
+    "nan_or_inf",
+    "gpu_xid_or_reset",
+    "output_overwrite_risk",
+    "adapter_reload_mismatch",
+    "missing_evaluation_rows",
+    "formal_or_ood_audit_failure"
+  ],
+  "scientific_rules_after_full_unblind": {
+    "improvement": "estimate >= +1.0pp and 95% CI lower > 0",
+    "equivalence": "90% CI entirely inside [-1.0pp,+1.0pp]",
+    "worse": "estimate <= -1.0pp and 95% CI upper < 0",
+    "otherwise": "inconclusive"
+  },
+  "no_adaptive_scientific_stop": true,
+  "no_method_level_accuracy_before_32_complete": true,
+  "no_new_selector_in_current_block": true,
+  "no_batch_gt1_in_current_block": true,
+  "no_ddp": true
+}

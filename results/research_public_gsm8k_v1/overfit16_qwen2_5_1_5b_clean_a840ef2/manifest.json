@@ -1,0 +1,68 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\run_gsm8k_lora_overfit.py",
+    "--config",
+    "configs\\public_gsm8k_v1.json",
+    "--data-manifest-dir",
+    "results\\research_public_gsm8k_v1\\data_manifest_full_v2_fuzzy",
+    "--output-root",
+    "results\\checkpoints\\public_gsm8k_v1",
+    "--examples",
+    "16",
+    "--epochs",
+    "8",
+    "--max-length",
+    "512",
+    "--learning-rate",
+    "2e-4",
+    "--gradient-accumulation",
+    "4",
+    "--seed",
+    "20260722"
+  ],
+  "config": {
+    "dtype": "bfloat16",
+    "epochs": 8,
+    "examples": 16,
+    "gradient_accumulation": 4,
+    "gsm8k": {
+      "config": "main",
+      "license": "mit",
+      "repo_id": "openai/gsm8k",
+      "revision": "740312add88f781978c0658806c59bc2815b9866"
+    },
+    "learning_rate": 0.0002,
+    "lora": {
+      "alpha": 32,
+      "dropout": 0.05,
+      "r": 16,
+      "target_modules": "all-linear"
+    },
+    "max_length": 512,
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    }
+  },
+  "config_hash": "986293b560df7441a71c0b04d0a65858bbff58a9a9820ae5aa98023b3c0fae10",
+  "dataset_revisions": {
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "cuda_version": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.8.0+cu128"
+  },
+  "git_commit": "a840ef25bebceec567e5f883b0a02ec78533a30d",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T092634Z_gsm8k_lora_overfit16_986293b560_s20260722",
+  "seed": 20260722,
+  "stage": "gsm8k_lora_overfit16",
+  "started_at_utc": "2026-07-23T09:26:34.997329+00:00"
+}

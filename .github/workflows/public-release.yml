@@ -1,0 +1,43 @@
+name: Public release verification
+
+on:
+  push:
+    branches: [main, release/public-research-v0.1]
+  pull_request:
+
+jobs:
+  cpu-release:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install CPU development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0
+          python -m pip install -e ".[dev]"
+      - name: Verify canonical public results
+        run: python scripts/reproduce_public_summary.py --check
+      - name: Verify frozen config snapshots
+        run: python scripts/snapshot_public_configs.py --check
+      - name: Verify historical markers
+        run: python scripts/mark_historical_snapshots.py --check
+      - name: Verify 24-cell public registry
+        run: python scripts/generate_experiment_registry.py --check
+      - name: Verify figure provenance
+        run: python figures/generate_public_figures.py --check
+      - name: Verify full release manifest
+        run: python scripts/build_public_release_manifest.py --check
+      - name: Verify public release
+        run: python scripts/verify_public_release.py
+      - name: Run CPU tests
+        run: python -m pytest -q
+      - name: Run Ruff
+        run: python -m ruff check .

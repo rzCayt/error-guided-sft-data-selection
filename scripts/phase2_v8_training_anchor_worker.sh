@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 12 ]]; then
+  echo "usage: $0 REPO_ROOT WORKER_ID ANCHOR_ID ENVIRONMENT_MANIFEST EXPECTED_GPU_UUID MODEL_SNAPSHOT MODEL_MANIFEST TOKENIZER_MANIFEST MATERIALIZED_CONTRACTS OUTPUT_ROOT RESUME_RUN_DIR_OR_NONE CANONICAL_MANIFEST" >&2
+  exit 2
+fi
+
+REPO_ROOT="$1"
+WORKER_ID="$2"
+ANCHOR_ID="$3"
+ENVIRONMENT_MANIFEST="$4"
+EXPECTED_GPU_UUID="$5"
+MODEL_SNAPSHOT="$6"
+MODEL_MANIFEST="$7"
+TOKENIZER_MANIFEST="$8"
+MATERIALIZED_CONTRACTS="$9"
+OUTPUT_ROOT="${10}"
+RESUME_RUN_DIR="${11}"
+CANONICAL_MANIFEST="${12}"
+export CUDA_VISIBLE_DEVICES=0
+export TOKENIZERS_PARALLELISM=false
+export PYTHONHASHSEED=17
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export HF_DATASETS_OFFLINE=1
+cd "$REPO_ROOT"
+
+COMMAND=(python scripts/run_phase2_v8_training_anchor.py
+  --worker-id "$WORKER_ID"
+  --anchor-id "$ANCHOR_ID"
+  --environment-manifest "$ENVIRONMENT_MANIFEST"
+  --expected-gpu-uuid "$EXPECTED_GPU_UUID"
+  --model-snapshot "$MODEL_SNAPSHOT"
+  --model-files-manifest "$MODEL_MANIFEST"
+  --tokenizer-files-manifest "$TOKENIZER_MANIFEST"
+  --training-input-contract-root "$MATERIALIZED_CONTRACTS"
+  --canonical-runtime-files "$CANONICAL_MANIFEST"
+  --output-root "$OUTPUT_ROOT")
+if [[ "$RESUME_RUN_DIR" != "NONE" ]]; then
+  COMMAND+=(--resume-run-dir "$RESUME_RUN_DIR")
+fi
+"${COMMAND[@]}"
+
+echo "PHASE2_V8_TRAINING_ANCHOR_READY worker=$WORKER_ID anchor=$ANCHOR_ID"

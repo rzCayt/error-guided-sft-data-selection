@@ -1,0 +1,138 @@
+{
+  "claim_boundary": "This protocol computes frozen full-pool RDS+ rankings and B=500 selection manifests. It does not train LoRA models or establish downstream accuracy gains.",
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts/run_rds_full_pool.py",
+    "prepare",
+    "--protocol-config",
+    "configs/public_gsm8k_v1.json",
+    "--execution-config",
+    "configs/rds_full_pool_thermal_v1.json",
+    "--data-manifest-dir",
+    "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy",
+    "--query-groups-dir",
+    "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d",
+    "--run-dir",
+    "results/research_public_gsm8k_v1/rds_full_pool_smoke_b_v1",
+    "--smoke",
+    "--candidate-limit",
+    "16",
+    "--query-limit",
+    "32"
+  ],
+  "created_at_utc": "2026-07-30T18:49:01.858513+00:00",
+  "git_status_at_prepare": "?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/candidate_inventory.jsonl\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/embedding_chunks/candidate/chunk_0000.json\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/embedding_chunks/query/chunk_0000.json\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/finalization_attempts/20260730T184825Z_2dae70680913/candidate_scores.jsonl\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/finalization_attempts/20260730T184825Z_2dae70680913/metrics.json\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/finalization_manifest.json\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/prepared.json\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/query_inventory.jsonl\n?? results/research_public_gsm8k_v1/rds_full_pool_smoke_a_v1/run_contract.json\n",
+  "implementation_bindings": {
+    "scripts/run_rds_full_pool.py": {
+      "path": "scripts/run_rds_full_pool.py",
+      "sha256": "a35368b13bc473df13d0908d4e4081f8b9481450e38319afeba8ac8fda1a24c7"
+    },
+    "src/eg_sft/experiment/rds_full_pool.py": {
+      "path": "src/eg_sft/experiment/rds_full_pool.py",
+      "sha256": "7bea713250dae12cb2a8a8989c9390fb11c6f74167f4d999d08eedc1b23d8dea"
+    },
+    "src/eg_sft/selection/h1a_sample.py": {
+      "path": "src/eg_sft/selection/h1a_sample.py",
+      "sha256": "63188c9b63fc8318fa4f2110b135a984fb9b2e750a7e7be3146f36c3e06ad748"
+    },
+    "src/eg_sft/selection/rds.py": {
+      "path": "src/eg_sft/selection/rds.py",
+      "sha256": "74ff5dc63047dca7b92a8428e9f9509747927b91d713d95ca608f04b995f37f4"
+    },
+    "src/eg_sft/training/b500.py": {
+      "path": "src/eg_sft/training/b500.py",
+      "sha256": "0cbe0ba268370fd9f1209e3f95e9ad10d0a23a78ced2a0f55e1276e3455c133c"
+    }
+  },
+  "input_bindings": {
+    "all_queries": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/all_queries.jsonl",
+      "sha256": "8f2de0f120117ef3d695fbaefc536e669ae048f7fa60f0f98def722cc4740c97"
+    },
+    "candidate_pool": {
+      "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/tulu_candidate_pool.jsonl",
+      "sha256": "3c461693dcf1d7dafb8c40fa10a43dd63bedbdcd8f802ef8ad8ca29d6f4190e7"
+    },
+    "error_queries": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/error_queries.jsonl",
+      "sha256": "50346e6c673a714f2913f4e668203feb467ad27365e6f216fa7a2e8ccbd0be4c"
+    },
+    "execution_config": {
+      "path": "configs/rds_full_pool_thermal_v1.json",
+      "sha256": "c196dee73e41ee6bb353ffc9e28adb4a0402e68d7fe6c71961dd68013eeaebbc"
+    },
+    "gsm8k_records": {
+      "path": "results/research_public_gsm8k_v1/data_manifest_full_v2_fuzzy/gsm8k_records.jsonl",
+      "sha256": "888669bd443e688993c51488e9e0bca2e460df7b53ac490c2d4e0836bbca6be7"
+    },
+    "protocol_config": {
+      "path": "configs/public_gsm8k_v1.json",
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+    },
+    "query_group_manifest": {
+      "path": "results/research_public_gsm8k_v1/query_groups_diagnostic448_clean_8b5273d/query_group_manifest.json",
+      "sha256": "f39efc1ffd008089659e53400d0aa812c6a9110d7bb9a668f91173c59e9c1f90"
+    }
+  },
+  "prepared_candidate_scope_count": 16,
+  "prepared_query_scope_count": 32,
+  "protocol": {
+    "candidate_pool_size": 10000,
+    "datasets": {
+      "candidate_pool": {
+        "config": "default",
+        "license": "not_specified_on_dataset_card",
+        "repo_id": "Harvard-DCML/tulu-v2-197K-processed",
+        "revision": "e217e5f72f7a0d10748d4c61abc5856338d90c7f"
+      },
+      "gsm8k": {
+        "config": "main",
+        "license": "mit",
+        "repo_id": "openai/gsm8k",
+        "revision": "740312add88f781978c0658806c59bc2815b9866"
+      }
+    },
+    "model": {
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen2.5-1.5B",
+      "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+    },
+    "seed": 20260722
+  },
+  "representation": {
+    "batch_size": 1,
+    "candidate_chunk_size": 128,
+    "candidate_eligibility": "response_only_supervised_tokens_gt_0_at_max_length",
+    "candidate_order": "source_stratified_stable_hash_round_robin",
+    "dtype": "bfloat16",
+    "max_length": 512,
+    "padding_tokens_excluded": true,
+    "pooling": "last_hidden_state_weighted_mean",
+    "query_chunk_size": 64,
+    "tokenizer_fix_mistral_regex": false,
+    "version": "qwen2_5_rds_weighted_mean_v1"
+  },
+  "run_contract_sha256": "e3e65cc84c7dd5ae741e5819a2955562776b4ce3e146dc0ba4ff16bea95d8c7c",
+  "schema_version": "rds-full-pool-run-contract-v1",
+  "scope": "engineering_smoke",
+  "selection": {
+    "budget": 500,
+    "candidate_tie_break": "frozen_eligible_candidate_order",
+    "query_order": "frozen_query_file_order",
+    "selection_seed": 20260722,
+    "strategies": [
+      "rds_all",
+      "rds_error"
+    ]
+  },
+  "source_git_commit": "962ba36b6791bd4145919a0d8eb31ba0f5f7d66c",
+  "thermal": {
+    "abort_temperature_c": 82,
+    "cpu_threads": 2,
+    "max_start_temperature_c": 65,
+    "maximum_peak_memory_gib": 5.5,
+    "maximum_start_memory_mib": 512,
+    "minimum_free_system_memory_gib": 6.0,
+    "temperature_sample_every_batches": 8
+  }
+}

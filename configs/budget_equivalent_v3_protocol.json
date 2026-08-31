@@ -1,0 +1,57 @@
+{
+  "protocol_version": "budget-equivalent-selection-v3",
+  "base_commit": "6d5bcea76af0d46bfd773f93e8eda072a63e2596",
+  "protocol_config": {
+    "path": "configs/public_gsm8k_v1.json",
+    "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+  },
+  "candidate_inventory": {
+    "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/artifacts/candidate_inventory.jsonl",
+    "sha256": "4fe81283dccc9f630daf1c6db9f3716ca5a6785fa2be9fe35b067f2a573a04d9",
+    "expected_count": 8542
+  },
+  "query_inventory": {
+    "path": "results/research_public_gsm8k_v1/rds_full_pool_10k_public_evidence_v1/artifacts/query_inventory.jsonl",
+    "sha256": "344b1065d2bfa1e621705dc36b30dc15f2089490c4114fa90646a7d3e29c1e85",
+    "expected_count": 448,
+    "expected_error_count": 99
+  },
+  "similarity_artifact": {
+    "path": ".aris/compute/budget_equivalent_v3_inputs/query_candidate_similarity.pt",
+    "sha256": null,
+    "required_shape": [448, 8542]
+  },
+  "near_duplicate_clusters": {
+    "path": ".aris/compute/budget_equivalent_v3_inputs/near_duplicate_clusters.jsonl",
+    "sha256": null,
+    "expected_count": 8542,
+    "formal_required": true
+  },
+  "selection": {
+    "selected_example_count": 500,
+    "target_response_supervision_tokens": 32000,
+    "response_tolerance_fraction": 0.005,
+    "common_prompt_tolerance_fraction": 0.01,
+    "common_total_tolerance_fraction": 0.01,
+    "requested_response_length_bins": 5,
+    "minimum_source_quota": 4,
+    "minimum_freedom_ratio": 4.0,
+    "maximum_forced_selected_fraction": 0.10,
+    "selection_replicate_seeds": [101, 202, 303, 404],
+    "random_priority_seeds": [1101, 1202, 1303, 1404],
+    "phase1_train_seed": 17
+  },
+  "information_gates": {
+    "minimum_error_vs_all_top500_changed_fraction": 0.15,
+    "maximum_error_vs_all_rank_spearman": 0.95,
+    "minimum_error_selection_stability_jaccard": 0.70
+  },
+  "methods": [
+    "random_free_mix",
+    "rds_error_free_mix",
+    "random_common_mix",
+    "rds_error_common_mix"
+  ],
+  "output_root": ".aris/compute/budget_equivalent_v3_selections",
+  "formal_exact_cluster_fallback_allowed": false
+}

@@ -1,0 +1,58 @@
+{
+  "files": [
+    {
+      "path": "configs/budget_equivalent_lora_v3.json",
+      "role": "base_recipe",
+      "sha256": "5e89eb0dca0e04bb7a35bf11523551510c4f9e8c2b9c5dd6f2389b1997dfe4c9"
+    },
+    {
+      "path": "configs/phase2_v8_canary_contract.json",
+      "role": "canary_contract",
+      "sha256": "8b9a9cd0c3be6b31436993c2e662b01e56c431082f3ccbae1dd35dc456c4aeda"
+    },
+    {
+      "path": ".aris/compute/budget_equivalent_v3_selections/information_gates.json",
+      "role": "information_gates",
+      "sha256": "35052b720c34a3fd59c4e25f7acb6f5e438c1802ce748c16c18a348de8c0767d"
+    },
+    {
+      "path": "configs/budget_equivalent_phase1_matrix_frozen_20260824_v2.json",
+      "role": "parent_matrix",
+      "sha256": "44d7288f4e785af61f8ebe21ec4ad1883b8b7bd542069c2fae675796724dd29a"
+    },
+    {
+      "path": "configs/phase2_clean_common24_v8_canonical.json",
+      "role": "primary_matrix",
+      "sha256": "c07fb10218e596d342a594b0aad3abbbab640d2e4999fe5f33fd065a9196f5dd"
+    },
+    {
+      "path": "configs/public_gsm8k_v1.json",
+      "role": "research_protocol",
+      "sha256": "4c80d4e3cb887c9f9ded53197e9f17b5c482694c8688ff1e92ed090eb38a41ce"
+    },
+    {
+      "path": "artifacts/phase2_v8_preflight/semantic_code_manifest.json",
+      "role": "semantic_code_manifest",
+      "sha256": "069260ae7be31051e59ce8e07046f470386fc8910f76eca16dce6109fb761b01"
+    },
+    {
+      "path": "configs/phase2_v8_statistical_protocol.json",
+      "role": "statistical_protocol",
+      "sha256": "bbc610a675d27468082710d2eab71abdc779f2c02046f67695ba114b53c5d394"
+    },
+    {
+      "path": "configs/phase2_v8_stop_go_rules.json",
+      "role": "stop_go_rules",
+      "sha256": "6bcbb35f6b8c934c942bae880bbed7656b04347cb61b7bcc5df53b14f72d7f37"
+    },
+    {
+      "path": "configs/phase2_v8_training_anchor_protocol.json",
+      "role": "training_anchor_protocol",
+      "sha256": "5f0e2933bfb5ff3dec3b177b2c0649c45b33fd4e9d464fb692c7445a0541c225"
+    }
+  ],
+  "noncanonical_config_files_are_non_deployable": true,
+  "protocol_id": "phase2-clean-common24-v8",
+  "schema_version": "phase2-v8-canonical-runtime-files-v1",
+  "status": "FROZEN"
+}

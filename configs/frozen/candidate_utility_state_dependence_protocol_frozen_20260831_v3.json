@@ -1,0 +1,123 @@
+{
+  "schema_version": "candidate-utility-state-dependence-protocol-v3",
+  "protocol_id": "candidate_utility_state_dependence_20260831_v3",
+  "research_mode": "prospective_confirmatory_followup",
+  "execution_status": "CPU_CONTRACT_ONLY_GPU_NOT_AUTHORIZED",
+  "supersedes": "candidate_utility_state_drift_20260831_v2",
+  "research_question": "Does one-step candidate utility transfer from a standardized zero-LoRA state to realistic final LoRA post-training states?",
+  "primary_claim_if_supported": "In this frozen LoRA SFT setting, zero-state local utility rankings do not transfer reliably to final adapter states.",
+  "anti_claim": "State dependence explains the complete H1a-to-H1b gap or represents the historical optimizer trajectory.",
+  "model": {
+    "repo_id": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "dtype": "bfloat16",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "lora_target_modules": "all-linear"
+  },
+  "candidate_panel": {
+    "path": "artifacts/state_dependence_candidate_panel48_v3.json",
+    "overlap_audit_path": "artifacts/state_dependence_overlap_audit_v3.json",
+    "candidate_count": 48,
+    "selection_uses_utility_outcomes": false,
+    "error_score_quartile_count": 4,
+    "candidates_per_quartile": 12,
+    "must_be_unseen_by_all_initial_states": true,
+    "must_include_historical_reliability_candidates": false
+  },
+  "utility_measurement": {
+    "definition": "utility_set_gold_response_loss_before_minus_after_one_candidate_probe_step",
+    "utility_set_size": 128,
+    "learning_rate": 0.0002,
+    "optimizer": "AdamW_with_fresh_zero_moments_for_every_probe",
+    "gradient_clipping": 1.0,
+    "response_only_loss": true,
+    "max_length": 512,
+    "evaluation_batch_size": 4,
+    "cleanup_interval_probes": 16,
+    "important_boundary": "This is state-conditioned local utility with a fresh optimizer, not continuation of the historical optimizer trajectory."
+  },
+  "stage_u0a_fixed_state_reliability": {
+    "state_id": "zero_initialized_lora",
+    "zero_adapter_initialization_seed": 17,
+    "probe_seeds": [17, 29, 41],
+    "historical_measurements_in_primary": false,
+    "new_measurements": 144,
+    "bootstrap_repetitions": 10000,
+    "go_gate": {
+      "minimum_icc_a1_point": 0.75,
+      "minimum_icc_a1_ci_lower": 0.60,
+      "minimum_median_pairwise_spearman": 0.75,
+      "minimum_pairwise_spearman": 0.65
+    },
+    "stop_gate": {
+      "icc_a1_below": 0.60,
+      "any_pairwise_spearman_below": 0.50
+    }
+  },
+  "stage_u0b_initialization_sensitivity": {
+    "status": "OPTIONAL_AFTER_U0A",
+    "zero_adapter_initialization_seeds": [17, 29, 41],
+    "fixed_probe_seed": 17,
+    "purpose": "Separate fixed-state probe noise from zero-LoRA initialization sensitivity."
+  },
+  "stage_u1_cross_state_transfer": {
+    "probe_seeds": [17, 41],
+    "initial_adapter_states": [
+      "v8_rep1_random_common_mix_train17",
+      "v8_rep1_rds_error_common_mix_train17",
+      "v8_rep4_random_common_mix_train17",
+      "v8_rep4_rds_error_common_mix_train17"
+    ],
+    "initial_new_measurements": 384,
+    "expansion_adapter_states": [
+      "v8_rep2_random_common_mix_train17",
+      "v8_rep2_rds_error_common_mix_train17",
+      "v8_rep3_random_common_mix_train17",
+      "v8_rep3_rds_error_common_mix_train17"
+    ],
+    "expansion_new_measurements": 384,
+    "bootstrap_repetitions": 10000,
+    "state_dependence_gate": {
+      "minimum_states_with_spearman_below_0_75": 3,
+      "maximum_state_ci_upper": 0.90,
+      "maximum_median_top12_jaccard": 0.50,
+      "requires_two_probe_seed_direction_agreement": true
+    },
+    "state_stability_gate": {
+      "minimum_all_state_spearman": 0.85,
+      "minimum_all_state_ci_lower": 0.70,
+      "minimum_all_state_top12_jaccard": 0.67,
+      "maximum_all_state_practical_sign_flip": 0.10
+    },
+    "ambiguous_action": "run_the_four_frozen_expansion_states_without_changing_panel_or_thresholds"
+  },
+  "compute": {
+    "default_gpu": "one_RTX_4090_or_4090D",
+    "second_gpu": "optional_only_for_independent_U1_state_shards",
+    "ddp": false,
+    "gpu_must_not_start_until": [
+      "universal_unseen_panel_and_overlap_audit_are_frozen",
+      "adapter_evidence_SHA_index_is_complete",
+      "CPU_contract_and_tests_pass",
+      "two_candidate_three_seed_GPU_qualification_passes",
+      "user_explicitly_authorizes_GPU"
+    ]
+  },
+  "prohibited_changes_after_GPU_start": [
+    "candidate_panel",
+    "utility_set",
+    "probe_step_definition",
+    "state_dependence_thresholds",
+    "state_order",
+    "probe_seed_semantics"
+  ],
+  "prohibited_claims": [
+    "optimizer_trajectory_continuation",
+    "causal_explanation_of_all_H1b_results",
+    "state_drift_without_intermediate_checkpoints",
+    "set_nonadditivity_before_set_measurements",
+    "new_selector_effectiveness"
+  ]
+}

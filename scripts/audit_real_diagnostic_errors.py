@@ -11,7 +11,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from _bootstrap import add_src_to_path
+from _bootstrap import add_src_to_path  # noqa: E402  # sibling import after path bootstrap
 
 ROOT = add_src_to_path()
 

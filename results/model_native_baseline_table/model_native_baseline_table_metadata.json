@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "created_at_utc": "2026-07-09T11:27:49.597122+00:00",
+  "table_version": "model_native_baseline_table_v1",
+  "n_baselines": 4,
+  "outputs": {
+    "csv": "results/model_native_baseline_table/model_native_baseline_table.csv",
+    "jsonl": "results/model_native_baseline_table/model_native_baseline_table.jsonl",
+    "metadata": "results/model_native_baseline_table/model_native_baseline_table_metadata.json"
+  },
+  "policy": {
+    "qwen3": "Use chat-native no-thinking final-answer protocol.",
+    "qwen2_5_math": "Report math-native auxiliary signal separately; do not add it to strict score.",
+    "fallback_proxy": "Runner fallback accuracy is diagnostic only.",
+    "forbidden_claim": "No LoRA/SFT/Targeted-vs-Random/selection effectiveness claim."
+  },
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0"
+}

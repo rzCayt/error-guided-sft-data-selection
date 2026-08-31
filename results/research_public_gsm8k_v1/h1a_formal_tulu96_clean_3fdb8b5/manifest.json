@@ -1,0 +1,61 @@
+{
+  "command": [
+    "C:\\Users\\crz03\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "scripts\\analyze_h1a_formal.py",
+    "--scoring-run-dir",
+    "E:\\RA准备\\h1a_formal_inputs\\rds96_scoring",
+    "--utility-run-dir",
+    "E:\\RA准备\\h1a_formal_clean_outputs\\20260723T153715Z_h1a_utility_formal96_25df5f1813_s20260722",
+    "--query-groups-dir",
+    "results\\research_public_gsm8k_v1\\query_groups_diagnostic448_clean_8b5273d",
+    "--output-root",
+    "E:\\RA准备\\h1a_formal_clean_outputs",
+    "--permutations",
+    "1000",
+    "--seed",
+    "20260722"
+  ],
+  "config": {
+    "candidate_count": 96,
+    "controls": [
+      "all_query_score",
+      "training_total_tokens"
+    ],
+    "error_query_count": 99,
+    "gates": {
+      "one_sided_permutation_p_at_most": 0.1,
+      "partial_spearman_at_least": 0.15,
+      "top_minus_bottom_utility_positive": true
+    },
+    "permutation_p_value": "one_sided_plus_one_correction",
+    "permutation_rule": "sample_99_of_448_without_replacement",
+    "permutations": 1000,
+    "query_count": 448,
+    "statistic": "partial_spearman_of_rank_residuals",
+    "top_bottom_group_count": 24,
+    "utility_seed": 17
+  },
+  "config_hash": "c638d506cd3abcab10798603f92f2e320a433ff9564f1d5c816a2bfcc2663fc5",
+  "dataset_revisions": {
+    "Harvard-DCML/tulu-v2-197K-processed": "e217e5f72f7a0d10748d4c61abc5856338d90c7f",
+    "openai/gsm8k": "740312add88f781978c0658806c59bc2815b9866"
+  },
+  "extra": {
+    "embeddings_sha256": "6a8b21a6d9c451ace59cd3af546b916349d1a7fe0d7bb1baf8abae3b128bb5dd",
+    "scoring_git_commit": "153363f6026f7c0cd998b8ed3e1500d87cc88e82",
+    "scoring_run_dir": "E:\\RA准备\\h1a_formal_inputs\\rds96_scoring",
+    "utility_git_commit": "3fdb8b556bb97bf990e30e8ecd11a7fd809f6536",
+    "utility_measurements_sha256": "db8b384ede5ca21de95a0108ddda19430c65758cc90b245faf0b0372ab788c75",
+    "utility_run_dir": "E:\\RA准备\\h1a_formal_clean_outputs\\20260723T153715Z_h1a_utility_formal96_25df5f1813_s20260722"
+  },
+  "git_commit": "3fdb8b556bb97bf990e30e8ecd11a7fd809f6536",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "git_is_dirty": false,
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "run_id": "20260723T160232Z_h1a_formal_tulu96_c638d506cd_s20260722",
+  "seed": 20260722,
+  "stage": "h1a_formal_tulu96",
+  "started_at_utc": "2026-07-23T16:02:32.494889+00:00"
+}
