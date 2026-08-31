@@ -16,6 +16,8 @@ LICENSE text eol=lf
 *.log text eol=lf
 *.sh text eol=lf
 requirements*.txt text eol=lf
+*.pdf -text -diff
+*.png -text -diff
 
 # Frozen experiment artifacts and licensed fixtures are byte-addressed. Do not
 # normalize their producer-specific line endings. CRLF is valid preserved data.
