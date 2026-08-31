@@ -40,25 +40,63 @@ def configure_plotting() -> None:
 
     plt.rcParams.update(
         {
-            "font.family": "serif",
-            "font.serif": ["DejaVu Serif"],
-            "font.size": 9.5,
-            "axes.titlesize": 10.5,
+            "font.family": "sans-serif",
+            "font.sans-serif": ["DejaVu Sans"],
+            "font.size": 9.0,
+            "axes.titlesize": 10.0,
             "axes.titleweight": "bold",
-            "axes.labelsize": 9.5,
+            "axes.labelsize": 9.0,
+            "xtick.labelsize": 8.5,
+            "ytick.labelsize": 8.5,
             "figure.dpi": 160,
             "savefig.dpi": 300,
             "savefig.bbox": "tight",
+            "savefig.pad_inches": 0.08,
             "axes.spines.top": False,
             "axes.spines.right": False,
             "axes.grid": True,
-            "grid.alpha": 0.16,
+            "grid.alpha": 0.14,
             "grid.linestyle": "-",
         }
     )
 
 
+def validate_text_layout(fig, stem: str) -> None:
+    """Fail figure generation when visible text overlaps or leaves the canvas."""
+    from matplotlib.text import Text
+
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    canvas = fig.bbox
+    items = []
+    for artist in fig.findobj(match=Text):
+        label = artist.get_text().strip()
+        if not artist.get_visible() or not label:
+            continue
+        bbox = artist.get_window_extent(renderer=renderer)
+        if bbox.width <= 0 or bbox.height <= 0:
+            continue
+        if (
+            bbox.x0 < canvas.x0 - 1
+            or bbox.y0 < canvas.y0 - 1
+            or bbox.x1 > canvas.x1 + 1
+            or bbox.y1 > canvas.y1 + 1
+        ):
+            raise RuntimeError(f"{stem}: text leaves canvas: {label!r}")
+        items.append((label, bbox))
+
+    for index, (left_label, left_box) in enumerate(items):
+        for right_label, right_box in items[index + 1 :]:
+            overlap_x = min(left_box.x1, right_box.x1) - max(left_box.x0, right_box.x0)
+            overlap_y = min(left_box.y1, right_box.y1) - max(left_box.y0, right_box.y0)
+            if overlap_x > 2 and overlap_y > 2:
+                raise RuntimeError(
+                    f"{stem}: text overlap: {left_label!r} vs {right_label!r}"
+                )
+
+
 def save_figure(fig, stem: str) -> None:
+    validate_text_layout(fig, stem)
     png = FIGURE_DIR / f"{stem}.png"
     pdf = FIGURE_DIR / f"{stem}.pdf"
     fig.savefig(png, dpi=300, facecolor="white")
@@ -85,7 +123,8 @@ def main_effects(data: dict) -> None:
     upper = intervals[:, 1] - values
     y = np.arange(len(keys))[::-1]
 
-    fig, ax = plt.subplots(figsize=(6.75, 3.0))
+    fig, ax = plt.subplots(figsize=(7.2, 3.45))
+    fig.subplots_adjust(left=0.20, right=0.98, top=0.84, bottom=0.24)
     ax.axvline(0, color="#2E3440", linewidth=1.1, zorder=1)
     ax.errorbar(
         values,
@@ -100,17 +139,20 @@ def main_effects(data: dict) -> None:
         zorder=3,
     )
     ax.set_yticks(y, labels)
+    ax.set_xlim(-3.4, 2.4)
+    ax.set_xticks(np.arange(-3, 3, 1))
     ax.set_xlabel("RDS − matched Random (accuracy percentage points)")
-    ax.set_title("Estimated downstream differences remain uncertain")
-    ax.text(
-        0.99,
-        0.02,
-        "Dots: point estimates; bars: 95% intervals",
-        transform=ax.transAxes,
-        ha="right",
-        va="bottom",
-        fontsize=8,
-        color="#555555",
+    ax.set_title("Estimated downstream effects remain uncertain", pad=10)
+    ax.grid(axis="y", visible=False)
+    ax.margins(y=0.12)
+    fig.text(
+        0.59,
+        0.065,
+        "Point = estimated difference; horizontal bar = 95% interval",
+        ha="center",
+        va="center",
+        fontsize=7.7,
+        color="#5B616B",
     )
     save_figure(fig, "fig_main_effects")
     plt.close(fig)
@@ -122,20 +164,39 @@ def candidate_to_set_gap(data: dict) -> None:
 
     candidate = data["candidate_utility"]
     downstream = data["downstream_results"]
-    fig, axes = plt.subplots(1, 2, figsize=(6.75, 2.9))
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.7))
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.20, top=0.76, wspace=0.34)
 
-    names = ["Tulu96", "GSM8K-domain48"]
+    names = ["Tulu\n(n=96)", "GSM8K domain\n(n=48)"]
     rhos = [candidate["tulu96"]["partial_spearman"], candidate["gsm8k_domain48"]["partial_spearman"]]
     passed = [candidate["tulu96"]["original_gate_passed"], candidate["gsm8k_domain48"]["original_gate_passed"]]
     colors = ["#009E73" if value else "#B0BEC5" for value in passed]
     axes[0].bar(np.arange(2), rhos, color=colors, width=0.58)
-    axes[0].axhline(0.15, color="#D55E00", linestyle="--", linewidth=1, label="frozen ρ gate")
-    axes[0].set_xticks(np.arange(2), names, rotation=12)
+    axes[0].axhline(0.15, color="#D55E00", linestyle="--", linewidth=1.2)
+    axes[0].set_xticks(np.arange(2), names)
     axes[0].set_ylabel("Partial Spearman ρ")
-    axes[0].set_title("Candidate-level screening")
-    axes[0].legend(fontsize=7.5, frameon=False)
-    for idx, (rho, label) in enumerate(zip(rhos, ["passed", "did not pass"])):
-        axes[0].text(idx, rho + 0.012, f"{rho:.3f}\n{label}", ha="center", fontsize=7.5)
+    axes[0].set_title("(a) Candidate-level screening", pad=9)
+    axes[0].set_ylim(0, 0.27)
+    axes[0].grid(axis="x", visible=False)
+    axes[0].text(
+        1.46,
+        0.153,
+        "gate: ρ = 0.15",
+        ha="right",
+        va="bottom",
+        fontsize=7.2,
+        color="#A44900",
+    )
+    for idx, (rho, label) in enumerate(zip(rhos, ["pass", "not passed"])):
+        axes[0].text(
+            idx,
+            rho + 0.009,
+            f"{rho:.3f}  ({label})",
+            ha="center",
+            va="bottom",
+            fontsize=7.4,
+            color="#333940",
+        )
 
     values = [
         downstream["gsm8k"]["difference_percentage_points"],
@@ -146,13 +207,26 @@ def candidate_to_set_gap(data: dict) -> None:
     axes[1].bar(np.arange(2), values, color=colors, width=0.58)
     axes[1].axhline(0, color="#2E3440", linewidth=1)
     axes[1].set_xticks(np.arange(2), labels)
-    axes[1].set_ylabel("RDS − Random (percentage points)")
-    axes[1].set_title("500-example downstream training")
+    axes[1].set_ylabel("Accuracy difference (pp)")
+    axes[1].set_title("(b) 500-example downstream training", pad=9)
+    axes[1].set_ylim(-0.18, 0.62)
+    axes[1].grid(axis="x", visible=False)
     for idx, value in enumerate(values):
-        offset = 0.06 if value >= 0 else -0.11
-        axes[1].text(idx, value + offset, f"{value:+.3f}", ha="center", fontsize=8)
+        if value >= 0:
+            y = value + 0.025
+            va = "bottom"
+        else:
+            y = value - 0.025
+            va = "top"
+        axes[1].text(idx, y, f"{value:+.3f} pp", ha="center", va=va, fontsize=7.8)
 
-    fig.suptitle("A local screening signal did not become a reliable set-level gain", y=1.03, fontweight="bold")
+    fig.suptitle(
+        "Candidate-level signal did not yield a reliable set-level gain",
+        x=0.54,
+        y=0.96,
+        fontsize=12,
+        fontweight="bold",
+    )
     save_figure(fig, "fig_candidate_to_set_gap")
     plt.close(fig)
 
@@ -162,18 +236,19 @@ def state_dependence_decision(data: dict) -> None:
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
     state = data["state_dependence_v3"]
-    fig, ax = plt.subplots(figsize=(6.75, 3.5))
+    fig, ax = plt.subplots(figsize=(7.4, 4.25))
+    fig.subplots_adjust(left=0.03, right=0.97, top=0.84, bottom=0.10)
     ax.set_xlim(0, 10)
-    ax.set_ylim(0, 7)
+    ax.set_ylim(0, 6.8)
     ax.axis("off")
 
-    def box(x, y, width, height, text, color, fontsize=8.5):
+    def box(x, y, width, height, text, color, fontsize=8.2):
         patch = FancyBboxPatch(
             (x, y),
             width,
             height,
             boxstyle="round,pad=0.08,rounding_size=0.12",
-            linewidth=1,
+            linewidth=1.2,
             edgecolor=color,
             facecolor=color + "18",
         )
@@ -184,17 +259,68 @@ def state_dependence_decision(data: dict) -> None:
     def arrow(start, end):
         ax.add_patch(FancyArrowPatch(start, end, arrowstyle="-|>", mutation_scale=11, linewidth=1.1, color="#6B7280"))
 
-    box(3.0, 5.4, 4.0, 1.0, f"Frozen unseen panel\n{state['frozen_panel_count']} candidates; overlap = {state['training_overlap_count']}", "#0072B2")
-    box(3.0, 3.7, 4.0, 1.0, f"U0a: fixed-state reliability\n{state['u0a_planned_measurements']} planned measurements", "#E69F00")
-    box(0.2, 1.1, 2.8, 1.35, "Unreliable\nStudy measurement uncertainty\nand stop cross-state claims", "#D55E00", 8)
-    box(3.6, 1.1, 2.8, 1.35, "Reliable, rankings change\nStudy when examples\nneed revaluation", "#CC79A7", 8)
-    box(7.0, 1.1, 2.8, 1.35, "Reliable, rankings stable\nStudy redundancy, conflict,\nand complementarity", "#009E73", 8)
-    arrow((5.0, 5.4), (5.0, 4.72))
-    arrow((4.1, 3.7), (1.6, 2.48))
-    arrow((5.0, 3.7), (5.0, 2.48))
-    arrow((5.9, 3.7), (8.4, 2.48))
-    ax.text(5.0, 6.75, "State Dependence v3: measure reliability before mechanism", ha="center", va="top", fontsize=11, fontweight="bold")
-    ax.text(5.0, 0.35, "Current status: CPU preflight complete; no GPU result", ha="center", color="#555555", fontsize=8.5)
+    box(
+        3.0,
+        5.25,
+        4.0,
+        0.9,
+        f"Frozen unseen panel\n{state['frozen_panel_count']} candidates · training overlap = {state['training_overlap_count']}",
+        "#0072B2",
+    )
+    box(
+        3.0,
+        3.65,
+        4.0,
+        0.9,
+        f"U0a · fixed-state reliability\n{state['u0a_planned_measurements']} planned measurements",
+        "#E69F00",
+    )
+    box(
+        0.15,
+        0.95,
+        2.95,
+        1.45,
+        "Unreliable\nQuantify measurement noise;\nstop cross-state claims",
+        "#D55E00",
+        7.7,
+    )
+    box(
+        3.525,
+        0.95,
+        2.95,
+        1.45,
+        "Reliable; rankings change\nStudy when candidates\nneed revaluation",
+        "#CC79A7",
+        7.7,
+    )
+    box(
+        6.90,
+        0.95,
+        2.95,
+        1.45,
+        "Reliable; rankings stable\nStudy redundancy, conflict,\nand complementarity",
+        "#009E73",
+        7.7,
+    )
+    arrow((5.0, 5.25), (5.0, 4.57))
+    arrow((4.15, 3.65), (1.63, 2.43))
+    arrow((5.0, 3.65), (5.0, 2.43))
+    arrow((5.85, 3.65), (8.37, 2.43))
+    fig.suptitle(
+        "State Dependence v3: measure reliability before mechanism",
+        x=0.50,
+        y=0.965,
+        fontsize=12,
+        fontweight="bold",
+    )
+    ax.text(
+        5.0,
+        0.30,
+        "Current status · CPU preflight complete · no GPU result",
+        ha="center",
+        color="#5B616B",
+        fontsize=8.2,
+    )
     save_figure(fig, "fig_state_dependence_decision")
     plt.close(fig)
 

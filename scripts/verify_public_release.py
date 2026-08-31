@@ -44,6 +44,8 @@ REQUIRED_PATHS = (
     "configs/frozen/MANIFEST.json",
     "releases/v0.5-public-research/README.md",
     "releases/v0.5-public-research/MANIFEST.json",
+    "releases/v0.5.1-public-research/README.md",
+    "releases/v0.5.1-public-research/MANIFEST.json",
 )
 PUBLIC_FACING_ROOT_FILES = {
     "README.md",

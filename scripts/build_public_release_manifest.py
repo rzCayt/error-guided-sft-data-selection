@@ -10,7 +10,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "releases" / "v0.5-public-research" / "MANIFEST.json"
+RELEASE = "v0.5.1-public-research"
+OUTPUT = ROOT / "releases" / RELEASE / "MANIFEST.json"
 EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv"}
 
 
@@ -45,7 +46,7 @@ def payload() -> dict:
     ]
     return {
         "schema_version": "public-research-release-manifest-v1",
-        "release": "v0.5-public-research",
+        "release": RELEASE,
         "files": files,
     }
 
