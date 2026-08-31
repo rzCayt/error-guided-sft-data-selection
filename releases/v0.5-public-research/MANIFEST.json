@@ -148,7 +148,7 @@
     {
       "bytes": 1537,
       "path": ".github/workflows/public-release.yml",
-      "sha256": "af8c64e6c2d68a52529261ca72a5e61f47d8da4e9c725c0df4854d2d02f53808"
+      "sha256": "83ffc8a13ebc9e718629386be4c52c224cb230ee570ffcae9a371cf5ec4c1e2e"
     },
     {
       "bytes": 1897,
@@ -198,7 +198,7 @@
     {
       "bytes": 2303,
       "path": "REPRODUCE.md",
-      "sha256": "c9dac3ffd474a03f210964fd1b494344902000c2d203e637316d6ba9fab7f313"
+      "sha256": "a2deaeffc44159cac6c77a4d3e5a9886a7376be5148a8b00dc2547989afe471b"
     },
     {
       "bytes": 1856,
@@ -1616,9 +1616,9 @@
       "sha256": "61a8c4f2d31810d383fa7dd1e1e1953c3ff441a71b0623ba4a9e9c16dfda1299"
     },
     {
-      "bytes": 831,
+      "bytes": 783,
       "path": "pyproject.toml",
-      "sha256": "98b82271f6b20a005d0d490692eb7261a5850e8782808e03dc2ec51002977c3c"
+      "sha256": "e2e78bc41129fa2871ae6404f85aa81b81ff4c830d5b1c5fdadc660288a5ae39"
     },
     {
       "bytes": 2831,

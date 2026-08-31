@@ -10,7 +10,7 @@ The public repository supports three different levels of verification:
 
 ## CPU setup
 
-Use Python 3.10 or 3.11 in a fresh environment:
+Use Python 3.11 or 3.12 in a fresh environment:
 
 ```bash
 python -m venv .venv
