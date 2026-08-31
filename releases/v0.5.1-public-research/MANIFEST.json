@@ -1606,14 +1606,14 @@
       "sha256": "c3563a2672ecc6f4370cfca672478757d72bcf6abb788869a69b526ee679fdb0"
     },
     {
-      "bytes": 12269,
+      "bytes": 12314,
       "path": "figures/generate_public_figures.py",
-      "sha256": "ae55b12561d5e7b08dcc92b86372832690795c50e95e140e30177791dc4da10d"
+      "sha256": "9fa8e9a26b3ee92384ec53ad0cbe812aad03ba279d072a554003e1c58b3bfc73"
     },
     {
-      "bytes": 1277,
+      "bytes": 1240,
       "path": "figures/manifest.json",
-      "sha256": "f9a786ffacb5a17f599689793a1cc19ada433f80198a5894b0b15da34c0dfddb"
+      "sha256": "cf3764e99adc78a950ab467ef1a934a6cbc3c507045a3d1505fcb3c1fc99ca11"
     },
     {
       "bytes": 787,

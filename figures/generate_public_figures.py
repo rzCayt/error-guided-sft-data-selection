@@ -352,7 +352,11 @@ def write_figures() -> None:
         "source_sha256": sha256(SOURCE),
         "files": files,
     }
-    MANIFEST.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    MANIFEST.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     print(f"WRITTEN figures={len(files)}")
 
 
