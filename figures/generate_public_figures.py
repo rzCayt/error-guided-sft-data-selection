@@ -187,7 +187,7 @@ def candidate_to_set_gap(data: dict) -> None:
         fontsize=7.2,
         color="#A44900",
     )
-    for idx, (rho, label) in enumerate(zip(rhos, ["pass", "not passed"])):
+    for idx, (rho, label) in enumerate(zip(rhos, ["gate met", "gate not met"])):
         axes[0].text(
             idx,
             rho + 0.009,
@@ -264,7 +264,7 @@ def state_dependence_decision(data: dict) -> None:
         5.25,
         4.0,
         0.9,
-        f"Frozen unseen panel\n{state['frozen_panel_count']} candidates · training overlap = {state['training_overlap_count']}",
+        f"Predefined unseen panel\n{state['frozen_panel_count']} candidates · training overlap = {state['training_overlap_count']}",
         "#0072B2",
     )
     box(
@@ -272,7 +272,10 @@ def state_dependence_decision(data: dict) -> None:
         3.65,
         4.0,
         0.9,
-        f"U0a · fixed-state reliability\n{state['u0a_planned_measurements']} planned measurements",
+        (
+            f"{state['frozen_panel_count']} candidates × 3 repeated\n"
+            "fixed-state measurements"
+        ),
         "#E69F00",
     )
     box(
@@ -307,7 +310,7 @@ def state_dependence_decision(data: dict) -> None:
     arrow((5.0, 3.65), (5.0, 2.43))
     arrow((5.85, 3.65), (8.37, 2.43))
     fig.suptitle(
-        "State Dependence v3: measure reliability before mechanism",
+        "Fixed-state reliability follow-up: measure before cross-state comparison",
         x=0.50,
         y=0.965,
         fontsize=12,

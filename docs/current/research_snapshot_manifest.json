@@ -11,26 +11,26 @@
       "sha256": "8e046586a2f8e98684e8fd0051e7826fb7289b3e71c14a85f999ba87a2f72be3"
     },
     {
-      "bytes": 130323,
+      "bytes": 131921,
       "path": "figures/fig_candidate_to_set_gap.png",
-      "sha256": "c94ed162a0567786c9976b4cea238916f4387d81c4bd4c97d2aed3a8c1be4742"
+      "sha256": "519d9a02cc6afa8f782a2f1c4ed722ce55c10a90131d56228bc3d2833c623258"
     },
     {
-      "bytes": 160928,
+      "bytes": 167341,
       "path": "figures/fig_state_dependence_decision.png",
-      "sha256": "c3563a2672ecc6f4370cfca672478757d72bcf6abb788869a69b526ee679fdb0"
+      "sha256": "ca68a87e08134fc304863035ccd15137b431a989b857261d1310d85dabf55c0a"
     }
   ],
   "outputs": [
     {
-      "bytes": 2944,
+      "bytes": 3153,
       "path": "docs/current/research_snapshot_2p.md",
-      "sha256": "7a4767880b6467d63a3eae6ace1087b0d4b487a5eb22debadd3f6395f693d6a4"
+      "sha256": "7385e964c31b838fff75686b433b63d7edff586ab6f0fc871b219f8c96a9290d"
     },
     {
-      "bytes": 413596,
+      "bytes": 421065,
       "path": "docs/current/research_snapshot_2p.pdf",
-      "sha256": "b412f448233e70a8cccad12c9b50ac1ff2aefc11d194502d39c1a4e652137ac5"
+      "sha256": "e8cc01c48d070dd04d321ba3cc325faf3c1c9724e6d6b3552096274aaa5728b7"
     }
   ],
   "schema_version": "research-snapshot-manifest-v1"

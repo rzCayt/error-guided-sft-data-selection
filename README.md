@@ -90,9 +90,9 @@ Fixed-state measurement is reliable and rankings remain stable
 → study redundancy, conflict, and complementarity within training sets
 ```
 
-![State Dependence v3 decision flow](figures/fig_state_dependence_decision.png)
+![Fixed-state reliability follow-up decision flow](figures/fig_state_dependence_decision.png)
 
-**State Dependence v3 status: CPU contracts, panel freezing, overlap checks, and preflight are complete; GPU qualification and formal measurements have not started.** The frozen panel contains 48 candidates that are unseen by all four initial target adapters. Fourteen candidates with direct training exposure were removed before the panel was frozen.
+**Fixed-state reliability follow-up: CPU contracts, panel freezing, overlap checks, and preflight are complete; GPU qualification and formal measurements have not started.** The predefined panel contains 48 candidates that are unseen by all four initial target adapters. Fourteen candidates with direct training exposure were removed before the panel was fixed.
 
 ## How can the results be verified?
 
@@ -129,6 +129,6 @@ releases/                Release-specific manifests and historical notes
 
 ## Limitations and AI assistance
 
-The main limitations are the single model family and scale, one 500-example budget, a single candidate pool, arithmetic-focused evaluation, highly overlapping targeted-list replicates, and the absence of completed State Dependence v3 measurements. The internal [experiment-integrity audit](EXPERIMENT_AUDIT.md) remains WARN because raw cell generations and adapters are not stored in Git and no independent external reviewer backend was available. Full claim boundaries are listed in [`CLAIMS_AND_LIMITATIONS.md`](CLAIMS_AND_LIMITATIONS.md).
+The main limitations are the single model family and scale, one 500-example budget, a single candidate pool, arithmetic-focused evaluation, highly overlapping targeted-list replicates, and the absence of completed fixed-state reliability measurements. The internal [experiment-integrity audit](EXPERIMENT_AUDIT.md) remains WARN because raw cell generations and adapters are not stored in Git and no independent external reviewer backend was available. Full claim boundaries are listed in [`CLAIMS_AND_LIMITATIONS.md`](CLAIMS_AND_LIMITATIONS.md).
 
 LLM tools contributed substantially to code scaffolding, debugging, documentation, and adversarial review. The project owner selected the research questions, authorized protocol freezes and executions, inspected evidence, accepted or rejected research branches, and is responsible for the reported claims. This repository does not describe all code as independently authored without AI. See [`AI_ASSISTANCE.md`](AI_ASSISTANCE.md) for the detailed disclosure.

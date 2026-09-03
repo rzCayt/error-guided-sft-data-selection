@@ -90,9 +90,9 @@
 → 研究样本组合时的重复、冲突和互补
 ```
 
-![State Dependence v3决策流程](figures/fig_state_dependence_decision.png)
+![固定状态可靠性后续实验决策流程](figures/fig_state_dependence_decision.png)
 
-**State Dependence v3 当前状态：CPU 合同、候选面板冻结、重合检查和预检已经完成；GPU qualification 和正式测量尚未开始。** 冻结面板包含 48 个没有被四个初始目标 adapter 训练过的候选。另有 14 个存在直接训练暴露的候选已经在冻结前移除。
+**固定状态可靠性后续实验：CPU 合同、候选面板冻结、重合检查和预检已经完成；GPU qualification 和正式测量尚未开始。** 预先固定的面板包含 48 个没有被四个初始目标 adapter 训练过的候选。另有 14 个存在直接训练暴露的候选已经在面板固定前移除。
 
 ## 怎样验证结果？
 
@@ -129,6 +129,6 @@ releases/                特定发布版本的清单与历史说明
 
 ## 局限与AI协助
 
-主要局限包括：单一模型系列和规模、单一 500 样本预算、单一候选池、以算术为主的评估、高度重合的 RDS 名单重复，以及 State Dependence v3 尚未完成。 当前[实验完整性检查](EXPERIMENT_AUDIT.md)保持 WARN：Git 中没有保存每格原始生成和 adapter，而且本轮没有可用的独立外部 reviewer 后端。完整结论边界见 [`CLAIMS_AND_LIMITATIONS.md`](CLAIMS_AND_LIMITATIONS.md)。
+主要局限包括：单一模型系列和规模、单一 500 样本预算、单一候选池、以算术为主的评估、高度重合的 RDS 名单重复，以及固定状态可靠性测量尚未完成。 当前[实验完整性检查](EXPERIMENT_AUDIT.md)保持 WARN：Git 中没有保存每格原始生成和 adapter，而且本轮没有可用的独立外部 reviewer 后端。完整结论边界见 [`CLAIMS_AND_LIMITATIONS.md`](CLAIMS_AND_LIMITATIONS.md)。
 
 LLM 工具对代码脚手架、调试、文档和对抗审阅提供了大量协助。项目负责人选择研究问题，授权协议冻结与实验执行，检查证据，决定研究路线继续或停止，并对公开结论负责。本仓库不会把全部代码表述成“完全不借助 AI 独立编写”。详细说明见 [`AI_ASSISTANCE.md`](AI_ASSISTANCE.md)。
