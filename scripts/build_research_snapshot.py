@@ -78,7 +78,7 @@ count; training seeds do not create new selection policies.
 | Three-task OOD macro accuracy | {signed(ood["difference_percentage_points"])} pp | [{signed(ood["ci95_percentage_points"][0])}, {signed(ood["ci95_percentage_points"][1])}] pp | Insufficient evidence |
 
 The controlled block found no reliable downstream accuracy advantage for the
-frozen RDS policy. The intervals still include practically relevant positive
+frozen error-conditioned selection policy. The intervals still include practically relevant positive
 and negative effects, so the study does not establish ineffectiveness or
 equivalence.
 
@@ -86,20 +86,22 @@ equivalence.
 
 - Tulu96 partial Spearman: {candidate["tulu96"]["partial_spearman"]:.3f};
   one-sided permutation p = {candidate["tulu96"]["one_sided_permutation_p"]:.3f};
-  original screening gate passed.
+  met the preregistered screen: partial Spearman >= 0.15, one-sided p <= 0.10,
+  and positive top-minus-bottom utility.
 - GSM8K-domain48 partial Spearman:
-  {candidate["gsm8k_domain48"]["partial_spearman"]:.3f}; original screening
-  gate did not pass.
+  {candidate["gsm8k_domain48"]["partial_spearman"]:.3f}; one-sided permutation
+  p = {candidate["gsm8k_domain48"]["one_sided_permutation_p"]:.3f}; did not meet
+  the same screen because p exceeded 0.10.
 - The limited candidate-level signal did not become a stable downstream gain
   when 500 selected examples were trained together.
 
-## Frozen next stage
+## Fixed-state reliability follow-up
 
-State Dependence v3 first measures fixed-state candidate-utility reliability:
+The next study first measures fixed-state candidate-utility reliability:
 
 - frozen panel: {state["frozen_panel_count"]} candidates;
 - direct training overlap: {state["training_overlap_count"]};
-- U0a: {state["u0a_planned_measurements"]} planned measurements;
+- {state["frozen_panel_count"]} candidates × 3 repeated fixed-state measurements;
 - status: CPU preflight complete; GPU qualification and formal measurement
   have not started.
 
@@ -113,15 +115,15 @@ Decision rule:
 ## Four-week research module
 
 1. qualify the fresh-process utility runner and seed semantics;
-2. complete and audit the 48 x 3 fixed-state reliability panel;
-3. apply the frozen stop/go decision before any cross-state run;
+2. complete and audit the 48 × 3 fixed-state reliability panel;
+3. apply the predefined stop/go decision before any cross-state evaluation;
 4. deliver code, evidence manifests, a bounded result memo, and the next
    falsifiable experiment.
 
 ## Claim boundaries
 
 Supported: no reliable RDS advantage was observed in this setting; Tulu96
-passed its original candidate screen while GSM8K-domain48 did not.
+met the preregistered candidate screen while GSM8K-domain48 did not.
 
 Not supported: RDS is generally ineffective; RDS and Random are equivalent;
 state dependence has been observed; a local final-adapter probe reconstructs
@@ -369,7 +371,10 @@ def build_pdf(data: dict) -> None:
     y = 179
     y = draw_bullet(
         pdf,
-        "No reliable downstream advantage was observed for the frozen RDS policy.",
+        (
+            "No reliable downstream advantage was observed for the frozen "
+            "error-conditioned selection policy."
+        ),
         x=54,
         y=y,
         width=480,
@@ -402,10 +407,11 @@ def build_pdf(data: dict) -> None:
     pdf.setFont("Helvetica-Bold", 9.5)
     pdf.drawString(53, 487, "OBSERVED GAP")
     gap_text = (
-        f"Tulu96 passed its original screen "
-        f"(partial Spearman {candidate['tulu96']['partial_spearman']:.3f}, "
-        f"p = {candidate['tulu96']['one_sided_permutation_p']:.3f}), "
-        "but the 500-example downstream study did not show a stable gain."
+        "Tulu96 met the preregistered screen "
+        f"(partial Spearman {candidate['tulu96']['partial_spearman']:.3f} >= 0.15; "
+        f"one-sided p = {candidate['tulu96']['one_sided_permutation_p']:.3f} <= 0.10; "
+        "positive top-minus-bottom utility), but the 500-example downstream "
+        "study did not show a stable gain."
     )
     draw_wrapped(
         pdf,
@@ -420,16 +426,16 @@ def build_pdf(data: dict) -> None:
 
     pdf.setFillColor(HexColor("#172033"))
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(40, 421, "Frozen next stage")
+    pdf.drawString(40, 421, "Next validation step")
     draw_scaled_image(pdf, STATE_FIGURE, 40, 188, 355, 218)
     draw_card(pdf, 410, 188, 145, 218, "#F8FAFC")
     pdf.setFillColor(HexColor("#0072B2"))
     pdf.setFont("Helvetica-Bold", 8.5)
-    pdf.drawString(423, 386, "STATE DEPENDENCE v3")
+    pdf.drawString(423, 386, "FIXED-STATE RELIABILITY")
     y = 365
     y = draw_bullet(
         pdf,
-        f"{state['frozen_panel_count']} frozen candidates",
+        f"{state['frozen_panel_count']} predefined candidates",
         x=423,
         y=y,
         width=120,
@@ -443,7 +449,7 @@ def build_pdf(data: dict) -> None:
     )
     y = draw_bullet(
         pdf,
-        f"U0a = {state['u0a_planned_measurements']} probes",
+        f"{state['frozen_panel_count']} × 3 repeated measures",
         x=423,
         y=y,
         width=120,
@@ -464,7 +470,7 @@ def build_pdf(data: dict) -> None:
     )
     pdf.setFillColor(HexColor("#A44900"))
     pdf.setFont("Helvetica-Bold", 7.8)
-    pdf.drawString(423, 215, "STOP/GO ORDER IS FROZEN")
+    pdf.drawString(423, 215, "CROSS-STATE TESTING IS GATED")
 
     pdf.setFillColor(HexColor("#172033"))
     pdf.setFont("Helvetica-Bold", 12)
@@ -472,8 +478,8 @@ def build_pdf(data: dict) -> None:
     week_titles = ["Week 1", "Week 2", "Week 3", "Week 4"]
     week_text = [
         "Qualify fresh-process probes and seed semantics.",
-        "Run and audit 48 x 3 fixed-state reliability.",
-        "Apply the frozen stop/go decision before U1.",
+        "Run and audit 48 × 3 fixed-state reliability.",
+        "Apply the predefined stop/go decision before any cross-state evaluation.",
         "Deliver evidence, bounded claims, and next protocol.",
     ]
     for x, title, text in zip(card_x, week_titles, week_text):
@@ -561,7 +567,7 @@ def check_snapshot() -> None:
         "LLM Post-training Data Selection",
         "+0.480 pp",
         "-0.094 pp",
-        "144 probes",
+        "48 × 3 repeated measures",
         "no GPU result",
         "Four-week research module",
     )
