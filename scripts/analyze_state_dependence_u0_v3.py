@@ -119,7 +119,7 @@ def analyze(
         "gate": gate,
         "next_action": {
             "GO": "RUN_FROZEN_U1_INITIAL_FOUR_STATES_TWO_PROBE_SEEDS",
-            "AMBIGUOUS": "ADD_TWO_FROZEN_PROBE_SEEDS_THEN_REASSESS_ONCE",
+            "AMBIGUOUS": "FREEZE_NEW_DIAGNOSTIC_PROTOCOL_WITHOUT_RELABELING_U0",
             "STOP": "STOP_CROSS_STATE_CLAIMS_AND_STUDY_MEASUREMENT_UNCERTAINTY",
         }[verdict],
     }
