@@ -1,5 +1,10 @@
 # Documentation map
 
+The Chinese project homepage is [README.md](../README.md), with [English](../README_EN.md).
+The current upgrade is tracked in [the three-month roadmap](current/research_upgrade_20261013.md)
+and [AutoDL handoff](current/autodl_research_upgrade.md). Existing evidence summaries below
+describe the frozen historical study; no new GPU result has been added.
+
 The current GitHub Pages entry point is [`index.html`](index.html). Historical
 HTML under [`history/`](history/) is retained for provenance, marked as
 superseded, and excluded from search indexing.

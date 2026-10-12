@@ -1,0 +1,10 @@
+{
+  "primary_skill": "engineering-development-governance",
+  "supporting_skills": ["scientific-research-lifecycle", "llm-research-router", "grpo-rl-training"],
+  "workflow": "repository upgrade and locally tested AutoDL handoff",
+  "mode": "implement",
+  "required_inputs": ["Existing frozen public evidence", "Owner-approved plan"],
+  "quality_gates": ["Canonical summary unchanged", "Release verification", "CPU tests", "Offline trainer integration", "Ruff", "Bundle hashes"],
+  "handoff_artifacts": ["Chinese README", "New-study registry", "Compute admission CLI", "SFT-GRPO runner", "AutoDL archive"],
+  "blocked_reason": null
+}

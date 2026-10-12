@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-upgrade-registry-v1",
+  "as_of": "2026-10-13",
+  "maximum_research_pilots": 3,
+  "novelty_claimed": false,
+  "historical_registry": "results/public_summary/experiment_registry.csv",
+  "studies": [
+    {
+      "study_id": "utility_reliability",
+      "kind": "research_pilot",
+      "mode": "confirmatory",
+      "question": "Is fixed-state local candidate utility repeatable under frozen 48x3 measurement?",
+      "status": "blocked_input",
+      "depends_on": [],
+      "frozen_inputs": [
+        {
+          "path": "configs/frozen/candidate_utility_state_dependence_protocol_frozen_20260831_v3.json",
+          "sha256": "596162e4551ec7ba30f02d550bfded77e72dac0cfd4ac34856b6be3a933693e4"
+        },
+        {
+          "path": "artifacts/state_dependence_candidate_panel48_v3.json",
+          "sha256": "8433f7c7a76f496df9cd9e817d81f73207bef03b335d125e39a8e4788b6240b3"
+        },
+        {
+          "path": "artifacts/state_dependence_overlap_audit_v3.json",
+          "sha256": "d4c10eb279ffe37c64abd044353db391bff02e6e1760699febb935bd970406d6"
+        },
+        {
+          "path": "artifacts/state_drift_adapter_evidence_index_v2.json",
+          "sha256": "0d6dade391f71d3a4f8c9f3d0170c03a59086812601010eaced70c39def954fe"
+        },
+        {
+          "path": "results/public_summary/main_results.json",
+          "sha256": "49b741f99ae7aa5d3a3ea3e74ae3234e1ee97e5b6c1f40743896c36459e6f98f"
+        }
+      ],
+      "blocker": "No AutoDL instance; GPU qualification and formal measurements not run",
+      "gpu_result_available": false,
+      "result_artifacts": []
+    },
+    {
+      "study_id": "state_revaluation",
+      "kind": "research_pilot",
+      "mode": "confirmatory",
+      "question": "Do rankings transfer to final adapters, and is re-scoring cost justified?",
+      "status": "planned",
+      "depends_on": [
+        "utility_reliability"
+      ],
+      "frozen_inputs": [
+        {
+          "path": "configs/frozen/candidate_utility_state_dependence_protocol_frozen_20260831_v3.json",
+          "sha256": "596162e4551ec7ba30f02d550bfded77e72dac0cfd4ac34856b6be3a933693e4"
+        },
+        {
+          "path": "artifacts/state_dependence_candidate_panel48_v3.json",
+          "sha256": "8433f7c7a76f496df9cd9e817d81f73207bef03b335d125e39a8e4788b6240b3"
+        },
+        {
+          "path": "artifacts/state_dependence_overlap_audit_v3.json",
+          "sha256": "d4c10eb279ffe37c64abd044353db391bff02e6e1760699febb935bd970406d6"
+        },
+        {
+          "path": "artifacts/state_drift_adapter_evidence_index_v2.json",
+          "sha256": "0d6dade391f71d3a4f8c9f3d0170c03a59086812601010eaced70c39def954fe"
+        }
+      ],
+      "blocker": "Requires U0A GO and restored hash-verified adapters; cost-benefit extension not frozen",
+      "gpu_result_available": false,
+      "result_artifacts": []
+    },
+    {
+      "study_id": "candidate_to_set",
+      "kind": "research_pilot",
+      "mode": "exploratory",
+      "question": "Do redundancy, complementarity or order account for candidate-to-set differences?",
+      "status": "planned",
+      "depends_on": [
+        "utility_reliability"
+      ],
+      "frozen_inputs": [],
+      "blocker": "Requires reliable measurement, method-difference check and a new frozen protocol",
+      "gpu_result_available": false,
+      "result_artifacts": []
+    },
+    {
+      "study_id": "sft_grpo_feasibility",
+      "kind": "capability_practice",
+      "mode": "feasibility",
+      "question": "Can the pinned SFT adapter be continued with correctness-reward GRPO and evaluated?",
+      "status": "blocked_input",
+      "depends_on": [],
+      "frozen_inputs": [
+        {
+          "path": "configs/reasoning_post_training_smoke.json",
+          "sha256": "2df80420214ce3b76cc63ea2cbf13394815a34262f2ffc03da15b850281136c0"
+        }
+      ],
+      "blocker": "No AutoDL instance; offline CPU integration is separate engineering evidence",
+      "gpu_result_available": false,
+      "result_artifacts": []
+    }
+  ],
+  "main_direction": "utility_reliability_gate_then_state_transfer",
+  "main_direction_decision": "docs/current/direction_decision_20261013.md",
+  "maximum_simultaneous_main_questions": 1,
+  "claude_calls_enabled": false
+}

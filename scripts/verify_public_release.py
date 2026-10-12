@@ -15,9 +15,10 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT_SUFFIXES = {".md", ".txt", ".json", ".jsonl", ".csv", ".py", ".sh", ".toml", ".yml", ".yaml", ".cff", ".html"}
-EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv"}
+EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv", "work"}
 REQUIRED_PATHS = (
     "README.md",
+    "README_EN.md",
     "README_CN.md",
     "LICENSE",
     "CITATION.cff",
@@ -55,6 +56,7 @@ REQUIRED_PATHS = (
 )
 PUBLIC_FACING_ROOT_FILES = {
     "README.md",
+    "README_EN.md",
     "README_CN.md",
     "THIRD_PARTY_NOTICES.md",
     "AI_ASSISTANCE.md",
@@ -103,15 +105,14 @@ def check_evidence_hashes(summary: dict) -> None:
 
 
 def check_readme_results(summary: dict) -> None:
-    english = (ROOT / "README.md").read_text(encoding="utf-8")
-    chinese = (ROOT / "README_CN.md").read_text(encoding="utf-8")
+    english = (ROOT / "README_EN.md").read_text(encoding="utf-8")
+    chinese = (ROOT / "README.md").read_text(encoding="utf-8")
     required_english = (
         "+0.480 percentage points",
         "[-0.954, +1.889]",
         "-0.094 percentage points",
         "[-1.316, +1.149]",
         "24 cells",
-        "GPU qualification and formal measurements have not started",
     )
     required_chinese = (
         "+0.480个百分点",
@@ -119,7 +120,6 @@ def check_readme_results(summary: dict) -> None:
         "-0.094个百分点",
         "[-1.316, +1.149]",
         "24组实验",
-        "GPU qualification 和正式测量尚未开始",
     )
     for token in required_english:
         if token not in english:
@@ -127,6 +127,17 @@ def check_readme_results(summary: dict) -> None:
     for token in required_chinese:
         if token not in chinese:
             raise RuntimeError(f"Chinese README missing canonical token: {token}")
+
+    compatibility = (ROOT / "README_CN.md").read_text(encoding="utf-8")
+    if "README.md" not in compatibility or "README_EN.md" not in compatibility:
+        raise RuntimeError("Old Chinese entry must point to the two current README files")
+    registry = json.loads((ROOT / "results/research_upgrade/registry.json").read_text(encoding="utf-8"))
+    reliability = next(row for row in registry["studies"] if row["study_id"] == "utility_reliability")
+    if not reliability["gpu_result_available"]:
+        for text, token in ((english, "GPU qualification and formal measurements have not started"),
+                            (chinese, "GPU 资格测试和正式测量尚未开始")):
+            if token not in text:
+                raise RuntimeError("README must disclose that the reliability GPU study is unrun")
 
     gsm = summary["downstream_results"]["gsm8k"]
     ood = summary["downstream_results"]["ood_macro"]
@@ -181,6 +192,21 @@ def check_sensitive_content(files: list[Path]) -> None:
                 findings.append(f"{relative}: {match.group(0)[:80]}")
     if findings:
         raise RuntimeError("sensitive or personal content found:\n" + "\n".join(findings))
+
+
+def check_private_work_is_untracked() -> None:
+    if not (ROOT / ".git").exists():
+        sys.path.insert(0, str(ROOT / "src"))
+        from eg_sft.experiment.research_upgrade import source_identity
+
+        identity = source_identity(ROOT)
+        if identity["kind"] != "verified_source_bundle":
+            raise RuntimeError("A source archive requires verified BUNDLE.json provenance")
+        return
+    tracked = subprocess.run(["git", "ls-files", "--", "work"], cwd=ROOT,
+                             capture_output=True, text=True, check=True).stdout.strip()
+    if tracked:
+        raise RuntimeError("Private work directory must never be tracked in Git")
 
 
 def check_public_absolute_paths(files: list[Path]) -> None:
@@ -285,6 +311,11 @@ def check_full_release_manifest() -> None:
     )
 
 
+def check_research_upgrade() -> None:
+    subprocess.run([sys.executable, str(ROOT / "scripts/verify_research_upgrade.py")],
+                   cwd=ROOT, check=True)
+
+
 def check_internal_audit_disclosure() -> None:
     audit = json.loads((ROOT / "EXPERIMENT_AUDIT.json").read_text(encoding="utf-8"))
     if audit.get("independent_external_review") is not False:
@@ -327,17 +358,20 @@ def check_public_pages_entry() -> None:
             f"historical Pages entry lacks deindexing: {missing_historical}"
         )
 
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README_EN.md").read_text(encoding="utf-8")
     if "independently constructed lists" in readme:
         raise RuntimeError("README still overstates list independence")
     if "targeted lists overlap substantially" not in readme:
         raise RuntimeError("README does not disclose targeted-list overlap")
+    if "RDS 名单之间存在较高重合" not in (ROOT / "README.md").read_text(encoding="utf-8"):
+        raise RuntimeError("Chinese README does not disclose targeted-list overlap")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.parse_args()
     check_required_paths()
+    check_research_upgrade()
     check_internal_audit_disclosure()
     check_public_pages_entry()
     summary = json.loads((ROOT / "results" / "public_summary" / "main_results.json").read_text(encoding="utf-8"))
@@ -348,6 +382,7 @@ def main() -> int:
     check_readme_results(summary)
     check_historical_banners()
     check_sensitive_content(files)
+    check_private_work_is_untracked()
     check_public_absolute_paths(files)
     check_markdown_links()
     check_restricted_artifacts(files)

@@ -2,7 +2,7 @@ name: Public release verification
 
 on:
   push:
-    branches: [main, release/public-research-v0.1]
+    branches: [main, release/public-research-v0.1, 'research/**']
   pull_request:
 
 jobs:
@@ -31,6 +31,10 @@ jobs:
         run: python scripts/mark_historical_snapshots.py --check
       - name: Verify 24-cell public registry
         run: python scripts/generate_experiment_registry.py --check
+      - name: Verify new research status and budget
+        run: python scripts/verify_research_upgrade.py
+      - name: Install pinned GRPO dependency
+        run: python -m pip install "trl==0.26.2" "accelerate==1.12.0"
       - name: Verify figure provenance
         run: python figures/generate_public_figures.py --check
       - name: Verify two-page research snapshot

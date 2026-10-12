@@ -1,0 +1,8 @@
+{
+  "schema_version": "research-upgrade-budget-v1",
+  "currency": "CNY",
+  "scope": "New AutoDL expenses for the authorized three-month upgrade only",
+  "total_cap_cny": "7500",
+  "phase_caps_cny": {"weeks_1_3": "2000", "weeks_4_8": "3500", "weeks_9_12": "1500", "reserve": "500"},
+  "entries": []
+}
