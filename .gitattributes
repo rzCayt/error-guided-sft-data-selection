@@ -16,6 +16,7 @@ LICENSE text eol=lf
 *.log text eol=lf
 *.sh text eol=lf
 requirements*.txt text eol=lf
+requirements/*.txt text eol=lf
 *.pdf -text -diff
 *.png -text -diff
 

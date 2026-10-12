@@ -1,0 +1,13 @@
+{
+  "schema_version": "reasoning-post-training-v1",
+  "mode": "feasibility",
+  "source_config": "configs/public_gsm8k_v1.json",
+  "partition": {"source_split": "development", "train_count": 96, "validation_count": 32, "seed": 20261013},
+  "lora": {"r": 16, "lora_alpha": 32, "lora_dropout": 0.05, "target_modules": "all-linear"},
+  "max_length": 1024,
+  "max_prompt_length": 512,
+  "evaluation_max_new_tokens": 256,
+  "sft": {"seed": 17, "max_steps": 16, "batch_size": 1, "gradient_accumulation": 4, "learning_rate": 0.0002, "save_steps": 8, "max_wall_seconds": 3600},
+  "grpo": {"seed": 17, "max_steps": 8, "batch_size": 1, "gradient_accumulation": 4, "learning_rate": 0.000005, "num_generations": 4, "max_completion_length": 256, "temperature": 0.9, "reward_weights": [1.0, 0.0], "save_steps": 4, "max_wall_seconds": 3600},
+  "claim_boundary": "Engineering feasibility on the pre-existing development partition; not a new performance or novelty claim."
+}

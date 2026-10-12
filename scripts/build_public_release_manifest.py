@@ -10,9 +10,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE = "ra-review-v1"
+RELEASE = "research-upgrade-20261013"
 OUTPUT = ROOT / "releases" / RELEASE / "MANIFEST.json"
-EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv"}
+EXCLUDED_DIRS = {".git", ".pytest_cache", ".ruff_cache", "__pycache__", ".venv", "work"}
 
 
 def sha256(path: Path) -> str:
@@ -26,7 +26,7 @@ def sha256(path: Path) -> str:
 def repository_files() -> list[Path]:
     files = []
     for path in ROOT.rglob("*"):
-        if not path.is_file() or path == OUTPUT:
+        if not path.is_file() or path in {OUTPUT, ROOT / "BUNDLE.json"}:
             continue
         relative = path.relative_to(ROOT)
         if any(part in EXCLUDED_DIRS or part.endswith(".egg-info") for part in relative.parts):

@@ -234,3 +234,24 @@ def test_u0_and_u1_v3_use_only_new_two_seed_audited_measurements(tmp_path: Path)
     )
     assert u1["status"] == "STATE_STABILITY"
     assert u1["probe_seeds"] == [17, 41]
+
+
+def test_ambiguous_reliability_requires_new_diagnostic_protocol(tmp_path: Path) -> None:
+    protocol = tmp_path / "protocol.json"
+    _write_json(protocol, _analysis_protocol([]))
+    ids = [f"c{index:02d}" for index in range(48)]
+    panel = tmp_path / "panel.json"
+    _write_json(panel, {"candidates": [{"candidate_id": value} for value in ids]})
+    run = tmp_path / "run"
+    _write_json(run / "INDEPENDENT_AUDIT.json", {
+        "schema_version": "candidate-utility-state-probe-audit-v3", "status": "PASS",
+        "state_id": "zero_initialized_lora", "historical_measurements_reused": False,
+    })
+    rows = [{"candidate_id": cid, "probe_seed": seed, "utility": index / 1000 + shift}
+            for index, cid in enumerate(ids)
+            for seed, shift in ((17, 0), (29, 0.009), (41, -0.009))]
+    _write_jsonl(run / "utility_measurements.jsonl", rows)
+    result = U0.analyze(protocol_path=protocol, panel_path=panel, run_dir=run,
+                         output_root=tmp_path / "result")
+    assert result["status"] == "AMBIGUOUS"
+    assert result["next_action"] == "FREEZE_NEW_DIAGNOSTIC_PROTOCOL_WITHOUT_RELABELING_U0"

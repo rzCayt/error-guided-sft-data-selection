@@ -1,5 +1,9 @@
 # Reproduction and verification
 
+For the current upgrade, use the [separate research registry and roadmap](docs/current/research_upgrade_20261013.md)
+and [AutoDL SFT/GRPO deployment guide](docs/current/autodl_research_upgrade.md).
+Historical 24-cell evidence below is unchanged; the new pilots have no GPU results.
+
 ## Scope
 
 The public repository supports three different levels of verification:
@@ -25,7 +29,8 @@ Run the public checks:
 python scripts/reproduce_public_summary.py --check
 python scripts/verify_public_release.py
 python scripts/build_public_release_manifest.py --check
-python -m pytest -q
+python -m pip install "trl==0.26.2" "accelerate==1.12.0"
+python -m pytest -q --basetemp ../fresh-preserved-test-output -o tmp_path_retention_policy=all -p no:cacheprovider
 python -m ruff check .
 ```
 
@@ -35,6 +40,10 @@ Expected behavior:
 - `verify_public_release.py` exits nonzero on missing files, hash drift, unsupported public claims, secrets, absolute local paths, restricted artifacts, or broken Markdown links;
 - the full CPU test suite completes without skipped failures replacing current evidence;
 - Ruff reports no violations.
+
+Use a new, nonexistent test-output directory on each run. Preserve it after the run;
+pytest may replace an existing `--basetemp` directory. The new tiny-model SFT/GRPO
+integration test uses random weights and synthetic rewards, not benchmark evidence.
 
 ## Canonical result flow
 
